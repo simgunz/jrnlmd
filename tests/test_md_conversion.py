@@ -22,6 +22,29 @@ class TestMdConversion(unittest.TestCase):
         d = md_to_dict(text)
         self.assertEqual({"2021-01-01": {"topic1": "first line\nsecond line\n"}}, d)
 
+    def test_md_to_dict_two_topics(self):
+        text = """
+# 2021-01-01
+## topic1
+
+- first line
+- second line
+
+## topic2
+
+- third line
+"""
+        d = md_to_dict(text)
+        self.assertEqual(
+            {
+                "2021-01-01": {
+                    "topic1": "first line\nsecond line\n",
+                    "topic2": "third line\n",
+                }
+            },
+            d,
+        )
+
     def test_md_to_dict_malformed_journal(self):
         text = """
 ## topic1
