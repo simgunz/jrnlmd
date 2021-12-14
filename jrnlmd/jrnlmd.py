@@ -1,10 +1,10 @@
 import sys
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import DefaultDict
 
 
 def md_to_dict(text: str) -> DefaultDict:
-    d: DefaultDict[str, DefaultDict[str, List]] = defaultdict(lambda: defaultdict(list))
+    d: DefaultDict[str, DefaultDict[str, str]] = defaultdict(lambda: defaultdict(str))
     current_day = ""
     current_topic = ""
     for line in text.splitlines():
@@ -17,5 +17,5 @@ def md_to_dict(text: str) -> DefaultDict:
             if not (current_day and current_topic):
                 raise ValueError("malformed journal")
             content = line.removeprefix("-").strip()
-            d[current_day][current_topic].append(content)
+            d[current_day][current_topic] += f"{content}\n"
     return d
