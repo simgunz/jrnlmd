@@ -8,7 +8,6 @@ def md_to_dict(text: str) -> DefaultDict:
     current_day = ""
     current_topic = ""
     for line in text.splitlines():
-        line = line.strip()
         if line.startswith("##"):
             current_topic = line.removeprefix("##").strip()
         elif line.startswith("#"):
@@ -16,6 +15,5 @@ def md_to_dict(text: str) -> DefaultDict:
         elif line:
             if not (current_day and current_topic):
                 raise ValueError("malformed journal")
-            content = line.removeprefix("-").strip()
-            d[current_day][current_topic] += f"{content}\n"
+            d[current_day][current_topic] += f"{line}\n"
     return d
