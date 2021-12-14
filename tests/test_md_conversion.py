@@ -45,6 +45,23 @@ class TestMdConversion(unittest.TestCase):
             d,
         )
 
+    def test_md_to_dict_wrapped_lines(self):
+        text = """
+# 2021-01-01
+## topic1
+
+- first line
+  wrapped
+- second line
+  ```bash
+  sudo pacman -S bash
+  ```
+"""
+        d = md_to_dict(text)
+        self.assertEqual(
+            {
+                "2021-01-01": {
+                    "topic1": "- first line\n  wrapped\n- second line\n  ```bash\n  sudo pacman -S bash\n  ```\n"
                 }
             },
             d,
