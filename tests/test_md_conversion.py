@@ -1,3 +1,4 @@
+import pytest
 import tempfile
 import unittest
 
@@ -20,3 +21,13 @@ class TestMdConversion(unittest.TestCase):
 """
         d = md_to_dict(text)
         self.assertEqual({"2021-01-01": {"topic1": ["first line", "second line"]}}, d)
+
+    def test_md_to_dict_malformed_journal(self):
+        text = """
+## topic1
+
+- first line
+- second line
+"""
+        with pytest.raises(ValueError):
+            md_to_dict(text)
