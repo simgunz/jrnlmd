@@ -20,7 +20,7 @@ class TestMdConversion(unittest.TestCase):
 - second line
 """
         d = md_to_dict(text)
-        self.assertEqual({"2021-01-01": {"topic1": "first line\nsecond line\n"}}, d)
+        self.assertEqual({"2021-01-01": {"topic1": "- first line\n- second line\n"}}, d)
 
     def test_md_to_dict_two_topics(self):
         text = """
@@ -38,8 +38,13 @@ class TestMdConversion(unittest.TestCase):
         self.assertEqual(
             {
                 "2021-01-01": {
-                    "topic1": "first line\nsecond line\n",
-                    "topic2": "third line\n",
+                    "topic1": "- first line\n- second line\n",
+                    "topic2": "- third line\n",
+                }
+            },
+            d,
+        )
+
                 }
             },
             d,
