@@ -250,6 +250,11 @@ class TestDateParser(unittest.TestCase):
         iso_date = parse_date(txt_date)
         self.assertEqual("2021-11-12", iso_date)
 
+    def test_date_parser_unparsable(self):
+        txt_date = "aaaa"
+        iso_date = parse_date(txt_date)
+        self.assertEqual(None, iso_date)
+
 
 class TestInputParser(unittest.TestCase):
     def setUp(self):

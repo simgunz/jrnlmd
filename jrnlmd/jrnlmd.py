@@ -1,7 +1,7 @@
 import dateparser
 import datetime
 from collections import defaultdict
-from typing import DefaultDict, Tuple
+from typing import DefaultDict, Tuple, Union
 
 
 def md_to_dict(text: str) -> DefaultDict:
@@ -47,7 +47,7 @@ def parse_note(note: str) -> str:
     return f"{rstripped_parsed_note}\n"
 
 
-def parse_date(text: str) -> str:
+def parse_date(text: str) -> Union[None, str]:
     import warnings
 
     # Ignore dateparser warnings regarding pytz
@@ -56,6 +56,8 @@ def parse_date(text: str) -> str:
         message="The localize method is no longer necessary, as this time zone supports the fold attribute",
     )
     a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
+    if a_date is None:
+        return None
     return a_date.strftime("%Y-%m-%d")
 
 
