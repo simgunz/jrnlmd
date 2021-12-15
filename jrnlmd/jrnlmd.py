@@ -79,6 +79,11 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     return date, topic, note
 
 
+def join_notes(notes_tokens, prefix="- "):
+    notes = [" ".join(tokens) for tokens in notes_tokens]
+    return prefix + f"\n{prefix}".join(notes)
+
+
 def split_list_on_delimiter(tokens, delimiter):
     return tuple(
         list(y) for x, y in itertools.groupby(tokens, lambda z: z == delimiter) if not x
