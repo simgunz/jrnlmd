@@ -10,8 +10,8 @@ def write_md_file(text):
     open(f, "w").write(text)
 
 
-class TestMdConversion(unittest.TestCase):
-    def test_md_to_dict(self):
+class TestMdToDictConversion(unittest.TestCase):
+    def test_md_to_dict_one_level(self):
         text = """
 # 2021-01-01
 ## topic1
