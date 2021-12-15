@@ -105,8 +105,13 @@ def split_list_on_delimiter(tokens, delimiter):
 
 def main(argv):
     argparser = ArgumentParser()
-    argparser.add_argument("journal", type=Path, help="The journal")
-    argparser.add_argument("note_input", type=str, nargs="+", help="The other params")
+    argparser.add_argument("journal", type=Path, help="The journal file")
+    argparser.add_argument(
+        "note_input",
+        type=str,
+        nargs="+",
+        help="[date] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
+    )
     args = argparser.parse_args(argv)
     journal_file = argv[0]
     date, topic, note = parse_input(" ".join(args.note_input))
