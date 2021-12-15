@@ -1,13 +1,20 @@
+import argparse
 import dateparser
 import datetime
 import itertools
 import re
+from argparse import ArgumentParser
 from collections import defaultdict
+from pathlib import Path
 from typing import DefaultDict, Tuple, Union
 
 
+def empty_md_dict() -> DefaultDict[str, DefaultDict[str, str]]:
+    return defaultdict(lambda: defaultdict(str))
+
+
 def md_to_dict(text: str) -> DefaultDict:
-    d: DefaultDict[str, DefaultDict[str, str]] = defaultdict(lambda: defaultdict(str))
+    d = empty_md_dict()
     current_day = ""
     current_topic = ""
     for line in text.splitlines():
@@ -94,3 +101,27 @@ def split_list_on_delimiter(tokens, delimiter):
     return tuple(
         list(y) for x, y in itertools.groupby(tokens, lambda z: z == delimiter) if not x
     )
+
+
+def main(argv):
+    argparser = ArgumentParser()
+    argparser.add_argument("journal", type=Path, help="The journal")
+    argparser.add_argument("note_input", type=str, nargs="+", help="The other params")
+    args = argparser.parse_args(argv)
+    journal_file = argv[0]
+    date, topic, note = parse_input(" ".join(args.note_input))
+
+    if args.journal.is_file():
+        with open(args.journal, "r") as f:
+            d = md_to_dict(f.read())
+    else:
+        d = empty_md_dict()
+    updated_d = add_note_to_dict(d, note, date, topic)
+    with open(journal_file, "w") as f:
+        f.write(dict_to_md(updated_d))
+
+
+if __name__ == "__main__":
+    import sys
+
+    main(sys.argv[1:])

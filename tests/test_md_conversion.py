@@ -9,6 +9,7 @@ from jrnlmd.jrnlmd import (
     parse_date,
     parse_input,
     dict_to_md,
+    main,
     md_to_dict,
     parse_note,
     split_list_on_delimiter,
@@ -323,3 +324,21 @@ class TestJointNotes(unittest.TestCase):
         notes_tokens = [["word1"], ["word2", "word3"]]
         result = join_notes_tokens(notes_tokens)
         self.assertEqual("- word1\n- word2 word3\n", result)
+
+
+class TestMain(unittest.TestCase):
+    def test_main_create_new_journal(self):
+        journal_file = tempfile.mktemp()
+        with tempfile.NamedTemporaryFile() as journal_file:
+            args = [journal_file.name, "12nov2021 topic1 . a note , second bullet"]
+            main(args)
+            self.assertEqual(
+                b"""# 2021-11-12
+
+## topic1
+
+- a note
+- second bullet
+""",
+                journal_file.read(),
+            )
