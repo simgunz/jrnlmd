@@ -1,3 +1,4 @@
+import datetime
 import tempfile
 import unittest
 
@@ -5,6 +6,7 @@ import pytest
 from jrnlmd.jrnlmd import (
     add_note_to_dict,
     parse_date,
+    parse_input,
     dict_to_md,
     md_to_dict,
     parse_note,
@@ -247,3 +249,16 @@ class TestDateParser(unittest.TestCase):
         txt_date = "12nov2021"
         iso_date = parse_date(txt_date)
         self.assertEqual("2021-11-12", iso_date)
+
+
+class TestInputParser(unittest.TestCase):
+    def setUp(self):
+        date_today = datetime.date.today()
+        self.today = date_today.strftime("%Y-%m-%d")
+
+    def test_input_single_note(self):
+        txt_input = "a note"
+        date, topic, note = parse_input(txt_input)
+        self.assertEqual(self.today, date)
+        self.assertEqual("ungrouped", topic)
+        self.assertEqual("a note", note)
