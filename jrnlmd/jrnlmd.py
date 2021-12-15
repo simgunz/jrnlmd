@@ -125,8 +125,10 @@ def main(argv):
     with open(journal_file, "w") as f:
         f.write(dict_to_md(updated_d))
 
-
-if __name__ == "__main__":
+def entrypoint():
     import sys
 
     main(sys.argv[1:])
+
+if __name__ == "__main__":
+    entrypoint()
