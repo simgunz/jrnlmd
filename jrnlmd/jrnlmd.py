@@ -27,8 +27,7 @@ def dict_to_md(d) -> str:
             output.append(f"## {topic}")
             output.append("")
             output.append(d[day][topic])
-    text = "\n".join(output)
-    return text
+    return "\n".join(output)
 
 
 def add_note_to_dict(d, note, date, topic):
