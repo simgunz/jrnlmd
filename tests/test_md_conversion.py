@@ -10,6 +10,7 @@ from jrnlmd.jrnlmd import (
     dict_to_md,
     md_to_dict,
     parse_note,
+    split_list_on_delimiter,
 )
 
 
@@ -279,3 +280,22 @@ class TestInputParser(unittest.TestCase):
         self.assertEqual("2021-11-12", date)
         self.assertEqual("ungrouped", topic)
         self.assertEqual("a note", note)
+
+    def test_input_single_note_with_topic(self):
+        txt_input = "topic1 is this . a note"
+        date, topic, note = parse_input(txt_input)
+        self.assertEqual(self.today, date)
+        self.assertEqual("topic1 is this", topic)
+        self.assertEqual("a note", note)
+
+
+class TestSplitListOnDelimiter(unittest.TestCase):
+    def test_split_with_no_delimiter(self):
+        tokens = ["word1", "word2", "word3"]
+        result = split_list_on_delimiter(tokens, delimiter=".")
+        self.assertEqual((["word1", "word2", "word3"],), result)
+
+    def test_split_with_one_delimiter(self):
+        tokens = ["word1", ".", "word2", "word3"]
+        result = split_list_on_delimiter(tokens, delimiter=".")
+        self.assertEqual((["word1"], ["word2", "word3"]), result)
