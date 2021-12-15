@@ -5,6 +5,7 @@ import unittest
 import pytest
 from jrnlmd.jrnlmd import (
     add_note_to_dict,
+    join_notes,
     parse_date,
     parse_input,
     dict_to_md,
@@ -306,3 +307,10 @@ class TestSplitListOnDelimiter(unittest.TestCase):
         tokens = ["word1", ".", "word2", "word3"]
         result = split_list_on_delimiter(tokens, delimiter=".")
         self.assertEqual((["word1"], ["word2", "word3"]), result)
+
+
+class TestJointNotes(unittest.TestCase):
+    def test_join_notes(self):
+        notes_tokens = [["word1"], ["word2", "word3"]]
+        result = join_notes(notes_tokens)
+        self.assertEqual("- word1\n- word2 word3", result)
