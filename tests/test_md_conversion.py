@@ -2,7 +2,7 @@ import pytest
 import tempfile
 import unittest
 
-from jrnlmd.jrnlmd import md_to_dict
+from jrnlmd.jrnlmd import dict_to_md, md_to_dict
 
 
 def write_md_file(text):
@@ -98,4 +98,21 @@ class TestMdToDictConversion(unittest.TestCase):
                 }
             },
             d,
+        )
+
+
+class TestDictToMdConversion(unittest.TestCase):
+    def test_dict_to_md_one_level(self):
+        d = {"2021-01-01": {"topic1": "- first line\n- second line\n"}}
+        text = dict_to_md(d)
+        self.assertEqual(
+            """# 2021-01-01
+
+## topic1
+
+- first line
+- second line
+
+""",
+            text,
         )

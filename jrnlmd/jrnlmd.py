@@ -17,3 +17,17 @@ def md_to_dict(text: str) -> DefaultDict:
                 raise ValueError("malformed journal")
             d[current_day][current_topic] += f"{line}\n"
     return d
+
+
+def dict_to_md(d) -> str:
+    output = []
+    for day in sorted(d):
+        output.append(f"# {day}")
+        output.append("")
+        for topic in d[day]:
+            output.append(f"## {topic}")
+            output.append("")
+            output.append(d[day][topic])
+            output.append("")
+    text = "\n".join(output)
+    return text
