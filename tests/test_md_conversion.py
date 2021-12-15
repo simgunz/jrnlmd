@@ -342,3 +342,21 @@ class TestMain(unittest.TestCase):
 """,
                 journal_file.read(),
             )
+
+            args2 = [journal_file.name, "12nov2021 topic2 . appended note"]
+            main(args2)
+            journal_file.seek(0)
+            self.assertEqual(
+                b"""# 2021-11-12
+
+## topic1
+
+- a note
+- second bullet
+
+## topic2
+
+- appended note
+""",
+                journal_file.read(),
+            )
