@@ -208,3 +208,13 @@ class TestParseNote(unittest.TestCase):
         note = "- a note"
         parsed_note = parse_note(note)
         self.assertEqual("- a note", parsed_note)
+
+    def test_multiline_note(self):
+        note = "- a note\n- with two lines"
+        parsed_note = parse_note(note)
+        self.assertEqual("- a note\n- with two lines", parsed_note)
+
+    def test_multiline_note_without_dash(self):
+        note = "a note\n- with two lines"
+        parsed_note = parse_note(note)
+        self.assertEqual("a note\n- with two lines", parsed_note)
