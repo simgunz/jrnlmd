@@ -1,6 +1,7 @@
 import dateparser
+import datetime
 from collections import defaultdict
-from typing import DefaultDict
+from typing import DefaultDict, Tuple
 
 
 def md_to_dict(text: str) -> DefaultDict:
@@ -56,3 +57,9 @@ def parse_date(text: str) -> str:
     )
     a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
     return a_date.strftime("%Y-%m-%d")
+
+
+def parse_input(text: str) -> Tuple[str, str, str]:
+    date_today = datetime.date.today()
+    today = date_today.strftime("%Y-%m-%d")
+    return today, "ungrouped", text
