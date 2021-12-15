@@ -65,6 +65,12 @@ def parse_date(text: str) -> Union[None, str]:
 
 
 def parse_input(text: str) -> Tuple[str, str, str]:
-    date_today = datetime.date.today()
-    today = date_today.strftime("%Y-%m-%d")
-    return today, "ungrouped", text
+    tokens = text.split()
+    date = parse_date(tokens[0])
+    if date is None:
+        date_today = datetime.date.today()
+        date = date_today.strftime("%Y-%m-%d")
+        note = text
+    else:
+        note = " ".join(tokens[1:])
+    return date, "ungrouped", note

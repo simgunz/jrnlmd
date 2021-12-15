@@ -272,3 +272,10 @@ class TestInputParser(unittest.TestCase):
         self.assertEqual(self.today, date)
         self.assertEqual("ungrouped", topic)
         self.assertEqual("a note", note)
+
+    def test_input_single_note_with_date(self):
+        txt_input = "12nov2021 a note"
+        date, topic, note = parse_input(txt_input)
+        self.assertEqual("2021-11-12", date)
+        self.assertEqual("ungrouped", topic)
+        self.assertEqual("a note", note)
