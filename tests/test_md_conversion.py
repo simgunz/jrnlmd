@@ -1,8 +1,8 @@
-import pytest
 import tempfile
 import unittest
 
-from jrnlmd.jrnlmd import dict_to_md, md_to_dict, add_note_to_dict
+import pytest
+from jrnlmd.jrnlmd import add_note_to_dict, dict_to_md, md_to_dict, parse_note
 
 
 def write_md_file(text):
@@ -196,3 +196,10 @@ class TestAddNoteToDict(unittest.TestCase):
             },
             updated_d,
         )
+
+
+class TestParseNote(unittest.TestCase):
+    def test_parse_one_line_note_no_dash(self):
+        note = "a note"
+        parsed_note = parse_note(note)
+        self.assertEqual("- a note", parsed_note)

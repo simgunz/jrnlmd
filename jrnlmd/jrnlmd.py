@@ -1,4 +1,3 @@
-import sys
 from collections import defaultdict
 from typing import DefaultDict
 
@@ -35,3 +34,7 @@ def dict_to_md(d) -> str:
 def add_note_to_dict(d, note, date, topic):
     d[date][topic] += f"{note}\n"
     return d
+
+
+def parse_note(note):
+    return f"- {note}"
