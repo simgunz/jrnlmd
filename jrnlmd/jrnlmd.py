@@ -1,5 +1,6 @@
 import dateparser
 import datetime
+import itertools
 import re
 from collections import defaultdict
 from typing import DefaultDict, Tuple, Union
@@ -70,7 +71,15 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     if date is None:
         date_today = datetime.date.today()
         date = date_today.strftime("%Y-%m-%d")
-        note = text
     else:
-        note = " ".join(tokens[1:])
-    return date, "ungrouped", note
+        tokens.pop(0)
+    maybe_topic_note = split_list_on_delimiter(tokens, ".")
+    note = " ".join(maybe_topic_note[-1])
+    topic = " ".join(maybe_topic_note[0]) if len(maybe_topic_note) == 2 else "ungrouped"
+    return date, topic, note
+
+
+def split_list_on_delimiter(tokens, delimiter):
+    return tuple(
+        list(y) for x, y in itertools.groupby(tokens, lambda z: z == delimiter) if not x
+    )
