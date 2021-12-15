@@ -2,7 +2,7 @@ import pytest
 import tempfile
 import unittest
 
-from jrnlmd.jrnlmd import dict_to_md, md_to_dict
+from jrnlmd.jrnlmd import dict_to_md, md_to_dict, add_note_to_dict
 
 
 def write_md_file(text):
@@ -168,4 +168,31 @@ class TestDictToMdConversion(unittest.TestCase):
 - fifth line
 """,
             text,
+        )
+
+
+class TestAddNoteToDict(unittest.TestCase):
+    def setUp(self):
+        self.d = {
+            "2021-01-01": {"topic1": "- first line\n- second line\n"},
+            "2021-01-02": {
+                "topic2": "- third line\n",
+                "topic3": "- fourth line\n- fifth line\n",
+            },
+        }
+
+    def test_add_note_to_dict(self):
+        new_topic = "topic1"
+        new_date = "2021-01-01"
+        new_note = "- my note"
+        updated_d = add_note_to_dict(self.d, new_note, new_date, new_topic)
+        self.assertEqual(
+            {
+                "2021-01-01": {"topic1": "- first line\n- second line\n- my note\n"},
+                "2021-01-02": {
+                    "topic2": "- third line\n",
+                    "topic3": "- fourth line\n- fifth line\n",
+                },
+            },
+            updated_d,
         )
