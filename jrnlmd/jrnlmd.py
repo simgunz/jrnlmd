@@ -74,12 +74,14 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     else:
         tokens.pop(0)
     maybe_topic_notes_tokens = split_list_on_delimiter(tokens, ".")
-    note = "- " + " ".join(maybe_topic_notes_tokens[-1])
+    notes_tokens = maybe_topic_notes_tokens[-1]
     topic = (
         " ".join(maybe_topic_notes_tokens[0])
         if len(maybe_topic_notes_tokens) == 2
         else "ungrouped"
     )
+    split_notes_tokens = split_list_on_delimiter(notes_tokens, ",")
+    note = join_notes(split_notes_tokens)
     return date, topic, note
 
 

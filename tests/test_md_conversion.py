@@ -296,6 +296,15 @@ class TestInputParser(unittest.TestCase):
         self.assertEqual("topic1 is this", topic)
         self.assertEqual("- a note", note)
 
+    def test_input_multiple_notes_with_date_and_topic(self):
+        txt_input = (
+            "12nov2021 topic1 is this . first bullet , second bullet , third bullet"
+        )
+        date, topic, note = parse_input(txt_input)
+        self.assertEqual("2021-11-12", date)
+        self.assertEqual("topic1 is this", topic)
+        self.assertEqual("- first bullet\n- second bullet\n- third bullet", note)
+
 
 class TestSplitListOnDelimiter(unittest.TestCase):
     def test_split_with_no_delimiter(self):
