@@ -38,6 +38,9 @@ def add_note_to_dict(d, note, date, topic):
 
 def parse_note(note: str) -> str:
     if len(note.splitlines()) != 1:
-        return note
-    stripped_note = note.removeprefix("-").lstrip()
-    return f"- {stripped_note}"
+        parsed_note = note
+    else:
+        stripped_note = note.removeprefix("-").lstrip()
+        parsed_note = f"- {stripped_note}"
+    rstripped_parsed_note = parsed_note.rstrip("\n")
+    return f"{rstripped_parsed_note}\n"
