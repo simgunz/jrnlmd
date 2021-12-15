@@ -31,7 +31,7 @@ def dict_to_md(d) -> str:
 
 
 def add_note_to_dict(d, note, date, topic):
-    d[date][topic] += f"{note}\n"
+    d[date][topic] += parse_note(note)
     return d
 
 
