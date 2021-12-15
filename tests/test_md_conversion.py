@@ -322,4 +322,4 @@ class TestJointNotes(unittest.TestCase):
     def test_join_notes(self):
         notes_tokens = [["word1"], ["word2", "word3"]]
         result = join_notes(notes_tokens)
-        self.assertEqual("- word1\n- word2 word3", result)
+        self.assertEqual("- word1\n- word2 word3\n", result)
