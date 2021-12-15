@@ -28,6 +28,5 @@ def dict_to_md(d) -> str:
             output.append(f"## {topic}")
             output.append("")
             output.append(d[day][topic])
-            output.append("")
     text = "\n".join(output)
     return text
