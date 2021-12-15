@@ -1,5 +1,6 @@
 import dateparser
 import datetime
+import re
 from collections import defaultdict
 from typing import DefaultDict, Tuple, Union
 
@@ -55,6 +56,8 @@ def parse_date(text: str) -> Union[None, str]:
         "ignore",
         message="The localize method is no longer necessary, as this time zone supports the fold attribute",
     )
+    if len(text) == 1 and not re.match("\d", text):
+        return None
     a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
     if a_date is None:
         return None
