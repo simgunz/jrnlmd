@@ -1,3 +1,4 @@
+import dateparser
 from collections import defaultdict
 from typing import DefaultDict
 
@@ -43,3 +44,15 @@ def parse_note(note: str) -> str:
         parsed_note = f"- {stripped_note}"
     rstripped_parsed_note = parsed_note.rstrip("\n")
     return f"{rstripped_parsed_note}\n"
+
+
+def parse_date(text: str) -> str:
+    import warnings
+
+    # Ignore dateparser warnings regarding pytz
+    warnings.filterwarnings(
+        "ignore",
+        message="The localize method is no longer necessary, as this time zone supports the fold attribute",
+    )
+    a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
+    return a_date.strftime("%Y-%m-%d")

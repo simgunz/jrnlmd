@@ -2,7 +2,13 @@ import tempfile
 import unittest
 
 import pytest
-from jrnlmd.jrnlmd import add_note_to_dict, dict_to_md, md_to_dict, parse_note
+from jrnlmd.jrnlmd import (
+    add_note_to_dict,
+    parse_date,
+    dict_to_md,
+    md_to_dict,
+    parse_note,
+)
 
 
 def write_md_file(text):
@@ -234,3 +240,10 @@ class TestParseNote(unittest.TestCase):
         note = "a note\n- with two lines"
         parsed_note = parse_note(note)
         self.assertEqual("a note\n- with two lines\n", parsed_note)
+
+
+class TestDateParser(unittest.TestCase):
+    def test_date_parser(self):
+        txt_date = "12nov2021"
+        iso_date = parse_date(txt_date)
+        self.assertEqual("2021-11-12", iso_date)
