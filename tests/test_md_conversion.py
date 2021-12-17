@@ -328,7 +328,6 @@ class TestJointNotes(unittest.TestCase):
 
 class TestMain(unittest.TestCase):
     def test_main_create_new_journal(self):
-        journal_file = tempfile.mktemp()
         with tempfile.NamedTemporaryFile() as journal_file:
             args = [
                 "--journal",
