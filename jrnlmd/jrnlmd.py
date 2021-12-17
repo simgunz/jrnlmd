@@ -103,32 +103,47 @@ def split_list_on_delimiter(tokens, delimiter):
     )
 
 
-def main(argv):
-    argparser = ArgumentParser()
-    argparser.add_argument("journal", type=Path, help="The journal file")
-    argparser.add_argument(
+def get_argparser():
+    parser = ArgumentParser()
+    subparsers = parser.add_subparsers(dest="command", help="journal actions")
+    parser.add_argument(
+        "-j",
+        "--journal",
+        type=Path,
+        required=True,
+        help="The journal file",
+    )
+    parser_add = subparsers.add_parser("add", help="Add a new note to the journal.")
+    parser_add.add_argument(
         "note_input",
         type=str,
         nargs="+",
         help="[date] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
     )
-    args = argparser.parse_args(argv)
-    journal_file = argv[0]
-    date, topic, note = parse_input(" ".join(args.note_input))
+    return parser
 
-    if args.journal.is_file():
-        with open(args.journal, "r") as f:
-            d = md_to_dict(f.read())
-    else:
-        d = empty_md_dict()
-    updated_d = add_note_to_dict(d, note, date, topic)
-    with open(journal_file, "w") as f:
-        f.write(dict_to_md(updated_d))
+
+def main(argv):
+    parser = get_argparser()
+    args = parser.parse_args(argv)
+    journal = args.journal
+    if args.command == "add":
+        date, topic, note = parse_input(" ".join(args.note_input))
+        if args.journal.is_file():
+            with open(args.journal, "r") as f:
+                d = md_to_dict(f.read())
+        else:
+            d = empty_md_dict()
+        updated_d = add_note_to_dict(d, note, date, topic)
+        with open(journal, "w") as f:
+            f.write(dict_to_md(updated_d))
+
 
 def entrypoint():
     import sys
 
     main(sys.argv[1:])
+
 
 if __name__ == "__main__":
     entrypoint()
