@@ -120,6 +120,14 @@ def get_argparser():
         nargs="+",
         help="[date] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
     )
+    parser_add = subparsers.add_parser(
+        "since", help="Output journal cat the given date."
+    )
+    parser_add.add_argument(
+        "since",
+        type=str,
+        help="The start date.",
+    )
     return parser
 
 
@@ -137,6 +145,14 @@ def main(argv):
         updated_d = add_note_to_dict(d, note, date, topic)
         with open(journal, "w") as f:
             f.write(dict_to_md(updated_d))
+    elif args.command == "since":
+        if not args.journal.is_file():
+            return
+        with open(args.journal, "r") as f:
+            d = md_to_dict(f.read())
+        from_date = dateparser.parse(args.since).strftime("%Y-%m-%d")
+        filtered_d = {k: v for k, v in d.items() if k >= from_date}
+        print(dict_to_md(filtered_d))
 
 
 def entrypoint():
