@@ -50,14 +50,7 @@ def test_dict_to_md_two_levels():
     }
     text = dict_to_md(d)
     assert (
-        """# 2021-01-01
-
-## topic1
-
-- first line
-- second line
-
-# 2021-01-02
+        """# 2021-01-02
 
 ## topic2
 
@@ -67,6 +60,13 @@ def test_dict_to_md_two_levels():
 
 - fourth line
 - fifth line
+
+# 2021-01-01
+
+## topic1
+
+- first line
+- second line
 """
         == text
     )

@@ -31,7 +31,7 @@ def md_to_dict(text: str) -> DefaultDict:
 
 def dict_to_md(d) -> str:
     output = []
-    for day in sorted(d):
+    for day in sorted(d, reverse=True):
         output.append(f"# {day}")
         output.append("")
         for topic in d[day]:
