@@ -1,5 +1,4 @@
 import argparse
-import dateparser
 import datetime
 import itertools
 import re
@@ -7,6 +6,8 @@ from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
 from typing import DefaultDict, Tuple, Union
+
+import dateparser
 
 
 def empty_md_dict() -> DefaultDict[str, DefaultDict[str, str]]:
@@ -121,6 +122,9 @@ def get_argparser():
         help="[date] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
     )
     parser_add = subparsers.add_parser(
+        "cat", help="Print the journal on the standard output."
+    )
+    parser_add = subparsers.add_parser(
         "since", help="Output journal cat the given date."
     )
     parser_add.add_argument(
@@ -143,11 +147,19 @@ def add_note_to_journal(journal, note_input):
         f.write(dict_to_md(updated_d))
 
 
+def cat_journal(journal: Path) -> None:
+    if not journal.is_file():
+        return
+    print(journal.read_text())
+
+
 def main(argv):
     parser = get_argparser()
     args = parser.parse_args(argv)
     if args.command == "add":
         add_note_to_journal(args.journal, args.note_input)
+    elif args.command == "cat":
+        cat_journal(args.journal)
     elif args.command == "since":
         if not args.journal.is_file():
             return
