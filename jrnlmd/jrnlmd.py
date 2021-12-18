@@ -133,10 +133,10 @@ def get_argparser():
         nargs="?",
         help="The date to display.",
     )
-    parser_add = subparsers.add_parser(
+    parser_since = subparsers.add_parser(
         "since", help="Output journal cat the given date."
     )
-    parser_add.add_argument(
+    parser_since.add_argument(
         "since",
         type=str,
         help="The start date.",
