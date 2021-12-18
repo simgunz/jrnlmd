@@ -3,7 +3,7 @@ from jrnlmd.jrnlmd import add_note_to_dict
 
 
 @pytest.fixture
-def d():
+def journal_dict():
     return {
         "2021-01-01": {"topic1": "- first line\n- second line\n"},
         "2021-01-02": {
@@ -13,11 +13,11 @@ def d():
     }
 
 
-def test_add_note_to_dict(d):
+def test_add_note_to_dict(journal_dict):
     new_topic = "topic1"
     new_date = "2021-01-01"
     new_note = "- my note"
-    updated_d = add_note_to_dict(d, new_note, new_date, new_topic)
+    updated_d = add_note_to_dict(journal_dict, new_note, new_date, new_topic)
     assert {
         "2021-01-01": {"topic1": "- first line\n- second line\n- my note\n"},
         "2021-01-02": {
@@ -27,11 +27,11 @@ def test_add_note_to_dict(d):
     } == updated_d
 
 
-def test_add_note_without_dash_to_dict(d):
+def test_add_note_without_dash_to_dict(journal_dict):
     new_topic = "topic1"
     new_date = "2021-01-01"
     new_note = "my note"
-    updated_d = add_note_to_dict(d, new_note, new_date, new_topic)
+    updated_d = add_note_to_dict(journal_dict, new_note, new_date, new_topic)
     assert {
         "2021-01-01": {"topic1": "- first line\n- second line\n- my note\n"},
         "2021-01-02": {
