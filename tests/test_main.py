@@ -31,14 +31,14 @@ def test_main_create_new_journal(journal):
     main(args)
     result = journal.read_text()
     assert (
-        result
-        == """# 2021-11-12
+        """# 2021-11-12
 
 ## topic1
 
 - a note
 - second bullet
 """
+        == result
     )
 
 
@@ -51,7 +51,7 @@ def test_main_append_to_journal(dummy_journal):
     ]
     main(args2)
     result = dummy_journal.read_text()
-    assert result == (
+    assert (
         """# 2021-11-12
 
 ## topic1
@@ -63,4 +63,5 @@ def test_main_append_to_journal(dummy_journal):
 
 - appended note
 """
+        == result
     )
