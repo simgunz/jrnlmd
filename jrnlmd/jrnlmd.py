@@ -124,8 +124,14 @@ def get_argparser():
         nargs="+",
         help="[date] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
     )
-    parser_add = subparsers.add_parser(
+    parser_cat = subparsers.add_parser(
         "cat", help="Print the journal on the standard output."
+    )
+    parser_cat.add_argument(
+        "date",
+        type=str,
+        nargs="?",
+        help="The date to display.",
     )
     parser_add = subparsers.add_parser(
         "since", help="Output journal cat the given date."
@@ -149,10 +155,16 @@ def command_add(journal, note_input):
         f.write(dict_to_md(updated_d))
 
 
-def command_cat(journal: Path) -> None:
+def command_cat(journal: Path, date: str = None) -> None:
     if not journal.is_file():
         return
-    print(journal.read_text())
+    if date is None:
+        print(journal.read_text())
+    else:
+        d = md_to_dict(journal.read_text())
+        from_date = dateparser.parse(date).strftime("%Y-%m-%d")
+        filtered_d = filter_dict_date(d, from_date)
+        print(dict_to_md(filtered_d))
 
 
 def command_since(journal: Path, since: str) -> None:
@@ -170,7 +182,7 @@ def main(argv):
     if args.command == "add":
         command_add(args.journal, args.note_input)
     elif args.command == "cat":
-        command_cat(args.journal)
+        command_cat(args.journal, args.date)
     elif args.command == "since":
         command_since(args.journal, args.since)
 
