@@ -103,6 +103,10 @@ def split_list_on_delimiter(tokens, delimiter):
     )
 
 
+def filter_dict_date(d, date: str, filt_func=str.__eq__):
+    return {k: v for k, v in d.items() if filt_func(k, date)}
+
+
 def get_argparser():
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", help="journal actions")
