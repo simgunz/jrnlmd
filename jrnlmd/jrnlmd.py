@@ -135,7 +135,7 @@ def get_argparser():
     return parser
 
 
-def add_note_to_journal(journal, note_input):
+def command_add(journal, note_input):
     date, topic, note = parse_input(" ".join(note_input))
     if journal.is_file():
         with open(journal, "r") as f:
@@ -147,13 +147,13 @@ def add_note_to_journal(journal, note_input):
         f.write(dict_to_md(updated_d))
 
 
-def cat_journal(journal: Path) -> None:
+def command_cat(journal: Path) -> None:
     if not journal.is_file():
         return
     print(journal.read_text())
 
 
-def cat_journal_since(journal: Path, since: str) -> None:
+def command_since(journal: Path, since: str) -> None:
     if not journal.is_file():
         return
     with open(journal, "r") as f:
@@ -167,11 +167,11 @@ def main(argv):
     parser = get_argparser()
     args = parser.parse_args(argv)
     if args.command == "add":
-        add_note_to_journal(args.journal, args.note_input)
+        command_add(args.journal, args.note_input)
     elif args.command == "cat":
-        cat_journal(args.journal)
+        command_cat(args.journal)
     elif args.command == "since":
-        cat_journal_since(args.journal, args.since)
+        command_since(args.journal, args.since)
 
 
 def entrypoint():
