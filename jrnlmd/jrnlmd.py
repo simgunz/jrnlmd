@@ -153,6 +153,16 @@ def cat_journal(journal: Path) -> None:
     print(journal.read_text())
 
 
+def cat_journal_since(journal: Path, since: str) -> None:
+    if not journal.is_file():
+        return
+    with open(journal, "r") as f:
+        d = md_to_dict(f.read())
+    from_date = dateparser.parse(since).strftime("%Y-%m-%d")
+    filtered_d = {k: v for k, v in d.items() if k >= from_date}
+    print(dict_to_md(filtered_d))
+
+
 def main(argv):
     parser = get_argparser()
     args = parser.parse_args(argv)
@@ -161,13 +171,7 @@ def main(argv):
     elif args.command == "cat":
         cat_journal(args.journal)
     elif args.command == "since":
-        if not args.journal.is_file():
-            return
-        with open(args.journal, "r") as f:
-            d = md_to_dict(f.read())
-        from_date = dateparser.parse(args.since).strftime("%Y-%m-%d")
-        filtered_d = {k: v for k, v in d.items() if k >= from_date}
-        print(dict_to_md(filtered_d))
+        cat_journal_since(args.journal, args.since)
 
 
 def entrypoint():

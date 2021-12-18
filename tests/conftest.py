@@ -18,3 +18,28 @@ def dummy_journal(journal):
 """
     )
     return journal
+
+
+@pytest.fixture()
+def journal_multidate(journal):
+    journal.write_text(
+        """# 2021-11-01
+
+## topic1
+
+- first date note
+
+# 2021-11-05
+
+## topic1
+
+- second date note
+
+# 2021-11-10
+
+## topic1
+
+- third date note
+"""
+    )
+    return journal
