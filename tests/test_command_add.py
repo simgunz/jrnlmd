@@ -1,8 +1,8 @@
-from jrnlmd.jrnlmd import add_note_to_journal
+from jrnlmd.jrnlmd import command_add
 
 
 def test_add_note_to_new_journal(journal):
-    add_note_to_journal(
+    command_add(
         journal, ["12nov2021", "topic1", ".", "a", "note", ",", "second", "bullet"]
     )
 
@@ -20,7 +20,7 @@ def test_add_note_to_new_journal(journal):
 
 
 def test_add_note_to_existing_journal(dummy_journal):
-    add_note_to_journal(
+    command_add(
         dummy_journal,
         ["12nov2021", "topic1", ".", "appended", "note"],
     )

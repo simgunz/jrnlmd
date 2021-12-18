@@ -1,14 +1,14 @@
-from jrnlmd.jrnlmd import cat_journal
+from jrnlmd.jrnlmd import command_cat
 
 
 def test_cat_empty_journal(journal, capsys):
-    cat_journal(journal)
+    command_cat(journal)
     captured = capsys.readouterr()
     assert "" == captured.out
 
 
 def test_cat_full_journal(dummy_journal, capsys):
-    cat_journal(dummy_journal)
+    command_cat(dummy_journal)
     captured = capsys.readouterr()
     assert (
         """# 2021-11-12
