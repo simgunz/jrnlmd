@@ -16,9 +16,15 @@ from jrnlmd.jrnlmd import (
 )
 
 
-def write_md_file(text):
-    f = tempfile.mktemp()
-    open(f, "w").write(text)
+@pytest.fixture(scope="class")
+def dummy_journal(request):
+    request.cls.dummy_journal = """# 2021-11-12
+
+## topic1
+
+- a note
+- second bullet
+"""
 
 
 class TestMdToDictConversion(unittest.TestCase):
@@ -326,37 +332,46 @@ class TestJointNotes(unittest.TestCase):
         self.assertEqual("- word1\n- word2 word3\n", result)
 
 
+@pytest.mark.usefixtures("dummy_journal")
 class TestMain(unittest.TestCase):
+    def setUp(self):
+        self.journal = tempfile.NamedTemporaryFile(mode="w+")
+
+    def tearDown(self):
+        self.journal.close()
+
     def test_main_create_new_journal(self):
-        with tempfile.NamedTemporaryFile() as journal_file:
-            args = [
-                "--journal",
-                journal_file.name,
-                "add",
-                "12nov2021 topic1 . a note , second bullet",
-            ]
-            main(args)
-            self.assertEqual(
-                b"""# 2021-11-12
+        args = [
+            "--journal",
+            self.journal.name,
+            "add",
+            "12nov2021 topic1 . a note , second bullet",
+        ]
+        main(args)
+        self.assertEqual(
+            """# 2021-11-12
 
 ## topic1
 
 - a note
 - second bullet
 """,
-                journal_file.read(),
-            )
+            self.journal.read(),
+        )
 
-            args2 = [
-                "--journal",
-                journal_file.name,
-                "add",
-                "12nov2021 topic2 . appended note",
-            ]
-            main(args2)
-            journal_file.seek(0)
-            self.assertEqual(
-                b"""# 2021-11-12
+    def test_main_append_to_journal(self):
+        self.journal.write(self.dummy_journal)
+        self.journal.seek(0)
+        args2 = [
+            "--journal",
+            self.journal.name,
+            "add",
+            "12nov2021 topic2 . appended note",
+        ]
+        main(args2)
+        self.journal.seek(0)
+        self.assertEqual(
+            """# 2021-11-12
 
 ## topic1
 
@@ -367,8 +382,8 @@ class TestMain(unittest.TestCase):
 
 - appended note
 """,
-                journal_file.read(),
-            )
+            self.journal.read(),
+        )
 
 
 class TestAddNoteToJournal(unittest.TestCase):
