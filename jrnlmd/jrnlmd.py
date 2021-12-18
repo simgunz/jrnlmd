@@ -141,8 +141,7 @@ def get_argparser():
 def command_add(journal, note_input):
     date, topic, note = parse_input(" ".join(note_input))
     if journal.is_file():
-        with open(journal, "r") as f:
-            d = md_to_dict(f.read())
+        d = md_to_dict(journal.read_text())
     else:
         d = empty_md_dict()
     updated_d = add_note_to_dict(d, note, date, topic)
@@ -159,8 +158,7 @@ def command_cat(journal: Path) -> None:
 def command_since(journal: Path, since: str) -> None:
     if not journal.is_file():
         return
-    with open(journal, "r") as f:
-        d = md_to_dict(f.read())
+    d = md_to_dict(journal.read_text())
     from_date = dateparser.parse(since).strftime("%Y-%m-%d")
     filtered_d = {k: v for k, v in d.items() if k >= from_date}
     print(dict_to_md(filtered_d))
