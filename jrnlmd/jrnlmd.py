@@ -137,7 +137,7 @@ def get_argparser():
         "since", help="Output journal cat the given date."
     )
     parser_since.add_argument(
-        "since",
+        "date",
         type=str,
         help="The start date.",
     )
@@ -184,7 +184,7 @@ def main(argv):
     elif args.command == "cat":
         command_cat(args.journal, args.date)
     elif args.command == "since":
-        command_since(args.journal, args.since)
+        command_since(args.journal, args.date)
 
 
 def entrypoint():
