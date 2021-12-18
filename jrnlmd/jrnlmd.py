@@ -131,20 +131,23 @@ def get_argparser():
     return parser
 
 
+def add_note_to_journal(journal, note_input):
+    date, topic, note = parse_input(" ".join(note_input))
+    if journal.is_file():
+        with open(journal, "r") as f:
+            d = md_to_dict(f.read())
+    else:
+        d = empty_md_dict()
+    updated_d = add_note_to_dict(d, note, date, topic)
+    with open(journal, "w") as f:
+        f.write(dict_to_md(updated_d))
+
+
 def main(argv):
     parser = get_argparser()
     args = parser.parse_args(argv)
-    journal = args.journal
     if args.command == "add":
-        date, topic, note = parse_input(" ".join(args.note_input))
-        if args.journal.is_file():
-            with open(args.journal, "r") as f:
-                d = md_to_dict(f.read())
-        else:
-            d = empty_md_dict()
-        updated_d = add_note_to_dict(d, note, date, topic)
-        with open(journal, "w") as f:
-            f.write(dict_to_md(updated_d))
+        add_note_to_journal(args.journal, args.note_input)
     elif args.command == "since":
         if not args.journal.is_file():
             return

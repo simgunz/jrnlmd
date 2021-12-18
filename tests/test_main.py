@@ -1,24 +1,4 @@
-import pytest
 from jrnlmd.jrnlmd import main
-
-
-@pytest.fixture()
-def journal(tmp_path):
-    return tmp_path / "journal.md"
-
-
-@pytest.fixture()
-def dummy_journal(journal):
-    journal.write_text(
-        """# 2021-11-12
-
-## topic1
-
-- a note
-- second bullet
-"""
-    )
-    return journal
 
 
 def test_main_create_new_journal(journal):
