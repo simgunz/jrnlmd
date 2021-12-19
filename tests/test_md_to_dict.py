@@ -107,3 +107,26 @@ line continuation
     assert {
         "2021-01-01": {"topic1": "- first line\nline continuation\n- second line\n"}
     } == d
+
+
+def test_md_to_dict_with_unindented_comment_in_code_fence():
+    text = """
+# 2021-01-01
+## topic1
+
+- first line
+```bash
+# comment
+sudo pacman -S bash
+```
+- second line
+"""
+    d = md_to_dict(text)
+    assert {
+        "2021-01-01": {
+            "topic1": (
+                "- first line\n```bash\n# comment\nsudo pacman -S bash\n```\n- second"
+                " line\n"
+            )
+        }
+    } == d

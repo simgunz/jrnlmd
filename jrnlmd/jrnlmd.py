@@ -25,10 +25,13 @@ def md_to_dict(text: str) -> JournalDict:
     d = empty_md_dict()
     current_day = ""
     current_topic = ""
+    code_fence = False
     for line in text.splitlines():
-        if line.startswith("##"):
+        if line.startswith("```"):
+            code_fence = not code_fence
+        if line.startswith("##") and not code_fence:
             current_topic = line.removeprefix("##").strip()
-        elif line.startswith("#"):
+        elif line.startswith("#") and not code_fence:
             current_day = line.removeprefix("#").strip()
         elif line:
             if not (current_day and current_topic):
