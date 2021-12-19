@@ -20,6 +20,6 @@ def test_multiline_note():
 
 
 def test_multiline_note_without_dash():
-    note = "a note\n- with two lines"
+    note = "a note\nwith two lines"
     parsed_note = parse_note(note)
-    assert "a note\n- with two lines\n" == parsed_note
+    assert "- a note\nwith two lines\n" == parsed_note
