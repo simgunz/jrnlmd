@@ -1,4 +1,5 @@
 import datetime
+from unittest import mock
 
 import pytest
 
@@ -60,3 +61,11 @@ def test_input_multiple_notes_with_date_and_topic():
     assert "2021-11-12" == date
     assert "topic1 is this" == topic
     assert "- first bullet\n- second bullet\n- third bullet\n" == note
+
+
+@mock.patch("jrnlmd.jrnlmd.input_from_editor")
+def test_input_with_user_input(mock_input_from_editor):
+    mock_input_from_editor.return_value = "a note"
+    txt_input = "topic1 is this . :"
+    _, _, note = parse_input(txt_input)
+    assert "- a note\n" == note
