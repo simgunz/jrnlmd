@@ -14,6 +14,7 @@ pytest = "^6.2.5"
 types-dateparser = "^1.0.8"
 black = "^21.12b0"
 mypy = "^0.920"
+pre-commit = "^2.16.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
