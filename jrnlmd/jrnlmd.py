@@ -8,6 +8,8 @@ from typing import Callable, DefaultDict, Dict, List, Tuple, Union
 
 import dateparser
 
+UNDEFINED_TOPIC_NAME = "ungrouped"
+
 JournalDict = Union[
     Dict[str, DefaultDict[str, str]], DefaultDict[str, DefaultDict[str, str]]
 ]
@@ -93,7 +95,7 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     topic = (
         " ".join(maybe_topic_notes_tokens[0])
         if len(maybe_topic_notes_tokens) == 2
-        else "ungrouped"
+        else UNDEFINED_TOPIC_NAME
     )
     split_notes_tokens = split_list_on_delimiter(notes_tokens, ",")
     note = join_notes_tokens(split_notes_tokens)
