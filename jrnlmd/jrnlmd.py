@@ -180,8 +180,7 @@ def command_cat(journal: Path, date: str = None) -> None:
     if not journal.is_file():
         return
     if date is None:
-        d = md_to_dict(journal.read_text())
-        print(dict_to_md(d, date_descending=False))
+        cat_filtered_journal(journal, "0001-01-01", filt_func=str.__ge__)
     else:
         cat_filtered_journal(journal, date, filt_func=str.__eq__)
 
