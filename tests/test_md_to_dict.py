@@ -109,24 +109,25 @@ line continuation
     } == d
 
 
-def test_md_to_dict_with_unindented_comment_in_code_fence():
-    text = """
+@pytest.mark.parametrize("code_fence", ["```", "~~~"])
+def test_md_to_dict_with_unindented_comment_in_code_fence(code_fence):
+    text = f"""
 # 2021-01-01
 ## topic1
 
 - first line
-```bash
+{code_fence}bash
 # comment
 sudo pacman -S bash
-```
+{code_fence}
 - second line
 """
     d = md_to_dict(text)
     assert {
         "2021-01-01": {
             "topic1": (
-                "- first line\n```bash\n# comment\nsudo pacman -S bash\n```\n- second"
-                " line\n"
+                f"- first line\n{code_fence}bash\n# comment\nsudo pacman -S"
+                f" bash\n{code_fence}\n- second line\n"
             )
         }
     } == d
