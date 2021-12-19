@@ -204,9 +204,10 @@ def get_argparser() -> ArgumentParser:
     parser_add = subparsers.add_parser("add", help="Add a new note to the journal.")
     parser_add.add_argument(
         "note_input",
+        metavar="",
         type=str,
         nargs="+",
-        help="[date] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
+        help="[date .] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
     )
     parser_cat = subparsers.add_parser(
         "cat", help="Print the journal on the standard output."
