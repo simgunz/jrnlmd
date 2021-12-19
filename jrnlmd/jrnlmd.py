@@ -85,8 +85,7 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     tokens = text.split()
     date = parse_date(tokens[0])
     if date is None:
-        date_today = datetime.date.today()
-        date = date_today.strftime("%Y-%m-%d")
+        date = datetime.date.today().isoformat()
     else:
         tokens.pop(0)
     maybe_topic_notes_tokens = split_list_on_delimiter(tokens, ".")
