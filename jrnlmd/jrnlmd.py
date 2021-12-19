@@ -1,6 +1,9 @@
 import datetime
 import itertools
+import os
 import re
+import subprocess
+import tempfile
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
@@ -145,9 +148,6 @@ def filter_dict_date(
 
 
 def input_from_editor():
-    import os
-    import subprocess
-    import tempfile
 
     editor = os.environ.get("EDITOR", "vim")
     with tempfile.NamedTemporaryFile(suffix=".tmp") as tf:
