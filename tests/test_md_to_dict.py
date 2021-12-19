@@ -1,4 +1,5 @@
 import pytest
+
 from jrnlmd.jrnlmd import md_to_dict
 
 
@@ -50,7 +51,10 @@ def test_md_to_dict_wrapped_lines():
     d = md_to_dict(text)
     assert {
         "2021-01-01": {
-            "topic1": "- first line\n  wrapped\n- second line\n  ```bash\n  sudo pacman -S bash\n  ```\n"
+            "topic1": (
+                "- first line\n  wrapped\n- second line\n  ```bash\n  sudo pacman -S"
+                " bash\n  ```\n"
+            )
         }
     } == d
 
@@ -82,6 +86,9 @@ def test_md_to_dict_comment_in_code_fence():
     d = md_to_dict(text)
     assert {
         "2021-01-01": {
-            "topic1": "- first line\n  wrapped\n- second line\n  ```bash\n  # comment\n  sudo pacman -S bash\n  ```\n"
+            "topic1": (
+                "- first line\n  wrapped\n- second line\n  ```bash\n  # comment\n  sudo"
+                " pacman -S bash\n  ```\n"
+            )
         }
     } == d

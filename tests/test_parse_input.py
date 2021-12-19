@@ -1,6 +1,7 @@
 import datetime
 
 import pytest
+
 from jrnlmd.jrnlmd import parse_input
 
 
