@@ -7,16 +7,27 @@ def test_cat_empty_journal(journal, capsys):
     assert "" == captured.out
 
 
-def test_cat_full_journal(dummy_journal, capsys):
-    command_cat(dummy_journal)
+def test_cat_full_journal(journal_multidate, capsys):
+    command_cat(journal_multidate)
     captured = capsys.readouterr()
     assert (
-        """# 2021-11-12
+        """# 2021-11-01
 
 ## topic1
 
-- a note
-- second bullet
+- first date note
+
+# 2021-11-05
+
+## topic1
+
+- second date note
+
+# 2021-11-10
+
+## topic1
+
+- third date note
 
 """
         == captured.out
