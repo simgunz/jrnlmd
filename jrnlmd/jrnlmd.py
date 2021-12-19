@@ -76,7 +76,7 @@ def parse_date(text: str) -> Union[None, str]:
     a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
     if a_date is None:
         return None
-    return a_date.strftime("%Y-%m-%d")
+    return a_date.date().isoformat()
 
 
 def parse_input(text: str) -> Tuple[str, str, str]:
