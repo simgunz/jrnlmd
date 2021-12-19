@@ -346,14 +346,6 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "types-dateparser"
-version = "1.0.8"
-description = "Typing stubs for dateparser"
-category = "dev"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "typing-extensions"
 version = "4.0.1"
 description = "Backported and Experimental Type Hints for Python 3.6+"
@@ -407,7 +399,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "d3651c68fdecc3d025d068914290be712b9ebb2c5d81d8d332aaa77de57cc953"
+content-hash = "33d827462134762edfcf6f4257772011f9873c8081fb23b68a18b2900a741802"
 
 [metadata.files]
 atomicwrites = [
@@ -654,10 +646,6 @@ toml = [
 tomli = [
     {file = "tomli-1.2.3-py3-none-any.whl", hash = "sha256:e3069e4be3ead9668e21cb9b074cd948f7b3113fd9c8bba083f48247aab8b11c"},
     {file = "tomli-1.2.3.tar.gz", hash = "sha256:05b6166bff487dc068d322585c7ea4ef78deed501cc124060e0f238e89a9231f"},
-]
-types-dateparser = [
-    {file = "types-dateparser-1.0.8.tar.gz", hash = "sha256:93de659aca8381b33c2d8f94da67a7316d3cb91524c535b45ca23537afaebbf2"},
-    {file = "types_dateparser-1.0.8-py3-none-any.whl", hash = "sha256:a6552c9ce37fd119764349674c6526a0dc3ca5e582f86142f288bf55944a0b9f"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
