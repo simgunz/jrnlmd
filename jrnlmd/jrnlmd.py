@@ -102,10 +102,10 @@ def join_notes_tokens(notes_tokens: List[List[str]]) -> str:
     return "".join((parse_note(note) for note in notes))
 
 
-def split_list_on_delimiter(tokens: List[str], delimiter: str) -> List[List["str"]]:
-    return tuple(
+def split_list_on_delimiter(tokens: List[str], delimiter: str) -> List[List[str]]:
+    return [
         list(y) for x, y in itertools.groupby(tokens, lambda z: z == delimiter) if not x
-    )
+    ]
 
 
 def filter_dict_date(
