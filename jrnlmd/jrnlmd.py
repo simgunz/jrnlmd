@@ -119,6 +119,41 @@ def filter_dict_date(
     return {k: v for k, v in d.items() if filt_func(k, date)}
 
 
+def command_add(journal: Path, note_input: List["str"]) -> None:
+    date, topic, note = parse_input(" ".join(note_input))
+    if journal.is_file():
+        d = md_to_dict(journal.read_text())
+    else:
+        d = empty_md_dict()
+    updated_d = add_note_to_dict(d, note, date, topic)
+    with open(journal, "w") as f:
+        f.write(dict_to_md(updated_d))
+
+
+def cat_filtered_journal(journal: Path, date: str, filt_func: Callable) -> None:
+    iso_date = parse_date(date)
+    if iso_date is None:
+        return
+    d = md_to_dict(journal.read_text())
+    filtered_d = filter_dict_date(d, iso_date, filt_func)
+    print(dict_to_md(filtered_d))
+
+
+def command_cat(journal: Path, date: str = None) -> None:
+    if not journal.is_file():
+        return
+    if date is None:
+        print(journal.read_text())
+    else:
+        cat_filtered_journal(journal, date, filt_func=str.__eq__)
+
+
+def command_since(journal: Path, since: str) -> None:
+    if not journal.is_file():
+        return
+    cat_filtered_journal(journal, since, filt_func=str.__ge__)
+
+
 def get_argparser() -> ArgumentParser:
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", help="journal actions")
@@ -154,41 +189,6 @@ def get_argparser() -> ArgumentParser:
         help="The start date.",
     )
     return parser
-
-
-def command_add(journal: Path, note_input: List["str"]) -> None:
-    date, topic, note = parse_input(" ".join(note_input))
-    if journal.is_file():
-        d = md_to_dict(journal.read_text())
-    else:
-        d = empty_md_dict()
-    updated_d = add_note_to_dict(d, note, date, topic)
-    with open(journal, "w") as f:
-        f.write(dict_to_md(updated_d))
-
-
-def cat_filtered_journal(journal: Path, date: str, filt_func: Callable) -> None:
-    iso_date = parse_date(date)
-    if iso_date is None:
-        return
-    d = md_to_dict(journal.read_text())
-    filtered_d = filter_dict_date(d, iso_date, filt_func)
-    print(dict_to_md(filtered_d))
-
-
-def command_cat(journal: Path, date: str = None) -> None:
-    if not journal.is_file():
-        return
-    if date is None:
-        print(journal.read_text())
-    else:
-        cat_filtered_journal(journal, date, filt_func=str.__eq__)
-
-
-def command_since(journal: Path, since: str) -> None:
-    if not journal.is_file():
-        return
-    cat_filtered_journal(journal, since, filt_func=str.__ge__)
 
 
 def main(argv: List["str"]) -> None:
