@@ -47,7 +47,6 @@ def dict_to_md(d: JournalDict) -> str:
 
 def add_note_to_dict(d: JournalDict, note: str, date: str, topic: str):
     d[date][topic] += parse_note(note)
-    return d
 
 
 def parse_note(note: str) -> str:
@@ -125,9 +124,9 @@ def command_add(journal: Path, note_input: List["str"]) -> None:
         d = md_to_dict(journal.read_text())
     else:
         d = empty_md_dict()
-    updated_d = add_note_to_dict(d, note, date, topic)
+    add_note_to_dict(d, note, date, topic)
     with open(journal, "w") as f:
-        f.write(dict_to_md(updated_d))
+        f.write(dict_to_md(d))
 
 
 def cat_filtered_journal(journal: Path, date: str, filt_func: Callable) -> None:
