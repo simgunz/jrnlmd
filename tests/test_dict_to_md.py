@@ -73,3 +73,29 @@ def test_dict_to_md_two_levels():
 """
         == text
     )
+
+
+def test_dict_to_md_date_ascending():
+    d = {
+        "2021-01-01": {"topic1": "- first line\n- second line\n"},
+        "2021-01-02": {
+            "topic2": "- third line\n",
+        },
+    }
+    text = dict_to_md(d, date_descending=False)
+    assert (
+        """# 2021-01-01
+
+## topic1
+
+- first line
+- second line
+
+# 2021-01-02
+
+## topic2
+
+- third line
+"""
+        == text
+    )
