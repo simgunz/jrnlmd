@@ -41,9 +41,9 @@ def md_to_dict(text: str) -> JournalDict:
     return d
 
 
-def dict_to_md(d: JournalDict) -> str:
+def dict_to_md(d: JournalDict, date_descending=True) -> str:
     output = []
-    for day in sorted(d, reverse=True):
+    for day in sorted(d, reverse=date_descending):
         output.append(f"# {day}")
         output.append("")
         for topic in d[day]:
