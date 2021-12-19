@@ -173,14 +173,15 @@ def cat_filtered_journal(journal: Path, date: str, filt_func: Callable) -> None:
         return
     d = md_to_dict(journal.read_text())
     filtered_d = filter_dict_date(d, iso_date, filt_func)
-    print(dict_to_md(filtered_d))
+    print(dict_to_md(filtered_d, date_descending=False))
 
 
 def command_cat(journal: Path, date: str = None) -> None:
     if not journal.is_file():
         return
     if date is None:
-        print(journal.read_text())
+        d = md_to_dict(journal.read_text())
+        print(dict_to_md(d, date_descending=False))
     else:
         cat_filtered_journal(journal, date, filt_func=str.__eq__)
 
