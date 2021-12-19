@@ -131,7 +131,7 @@ def filter_dict_date(
     return {k: v for k, v in d.items() if filt_func(k, date)}
 
 
-def command_add(journal: Path, note_input: List["str"]) -> None:
+def command_add(journal: Path, note_input: List[str]) -> None:
     date, topic, note = parse_input(" ".join(note_input))
     if journal.is_file():
         d = md_to_dict(journal.read_text())
@@ -203,7 +203,7 @@ def get_argparser() -> ArgumentParser:
     return parser
 
 
-def main(argv: List["str"]) -> None:
+def main(argv: List[str]) -> None:
     parser = get_argparser()
     args = parser.parse_args(argv)
     if args.command == "add":
