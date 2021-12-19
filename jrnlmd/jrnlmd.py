@@ -73,7 +73,10 @@ def parse_date(text: str) -> Union[None, str]:
     )
     if len(text) == 1 and not re.match(r"\d", text):
         return None
-    a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
+    try:
+        a_date = datetime.datetime.fromisoformat(text)
+    except ValueError:
+        a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
     if a_date is None:
         return None
     return a_date.date().isoformat()
