@@ -27,7 +27,7 @@ def md_to_dict(text: str) -> JournalDict:
     current_topic = ""
     code_fence = False
     for line in text.splitlines():
-        if line.startswith("```"):
+        if line.startswith("```") or line.startswith("~~~"):
             code_fence = not code_fence
         if line.startswith("##") and not code_fence:
             current_topic = line.removeprefix("##").strip()
