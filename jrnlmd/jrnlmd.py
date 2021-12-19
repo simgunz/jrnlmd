@@ -4,11 +4,13 @@ import re
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Callable, DefaultDict, List, Tuple, Union
+from typing import Callable, DefaultDict, Dict, List, Tuple, Union
 
 import dateparser
 
-JournalDict = DefaultDict[str, DefaultDict[str, str]]
+JournalDict = Union[
+    Dict[str, DefaultDict[str, str]], DefaultDict[str, DefaultDict[str, str]]
+]
 
 
 def empty_md_dict() -> JournalDict:
