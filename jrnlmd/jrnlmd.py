@@ -11,6 +11,7 @@ import dateparser
 UNDEFINED_TOPIC_NAME = "ungrouped"
 TOKEN_SEP = "."
 NOTE_SEP = ","
+EDITOR_INPUT_SYMBOL = ":"
 
 JournalDict = Union[
     Dict[str, DefaultDict[str, str]], DefaultDict[str, DefaultDict[str, str]]
@@ -105,6 +106,9 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     maybe_topic_notes_tokens = split_list_on_delimiter(tokens, TOKEN_SEP)
     notes_tokens = maybe_topic_notes_tokens[-1]
     split_notes_tokens = split_list_on_delimiter(notes_tokens, NOTE_SEP)
+    for index, note_token in enumerate(split_notes_tokens):
+        if len(note_token) == 1 and note_token[0] == EDITOR_INPUT_SYMBOL:
+            split_notes_tokens[index] = [input_from_editor()]
     note = join_notes_tokens(split_notes_tokens)
     today = datetime.date.today().isoformat()
     if len(maybe_topic_notes_tokens) == 1:
@@ -141,6 +145,18 @@ def filter_dict_date(
     d: JournalDict, date: str, filt_func: Callable = str.__eq__
 ) -> JournalDict:
     return {k: v for k, v in d.items() if filt_func(k, date)}
+
+
+def input_from_editor():
+    import os
+    import subprocess
+    import tempfile
+
+    editor = os.environ.get("EDITOR", "vim")
+    with tempfile.NamedTemporaryFile(suffix=".tmp") as tf:
+        subprocess.call([editor, tf.name])
+        tf.seek(0)
+        return tf.read().decode("utf-8")
 
 
 def command_add(journal: Path, note_input: List[str]) -> None:
