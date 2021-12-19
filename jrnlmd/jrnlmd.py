@@ -84,6 +84,18 @@ def parse_date(text: str) -> Union[None, str]:
 
 
 def parse_input(text: str) -> Tuple[str, str, str]:
+    """Parse a textual input and return date, topic, and the note.
+
+    Parameters
+    ----------
+    text : str
+        Texual input.
+
+    Returns
+    -------
+    Tuple[str, str, str]
+        date, topic, note
+    """
     tokens = text.split()
     date = parse_date(tokens[0])
     if date is None:
