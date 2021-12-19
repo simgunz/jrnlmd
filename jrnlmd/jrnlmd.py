@@ -173,18 +173,22 @@ def command_cat(journal: Path, date: str = None) -> None:
     if date is None:
         print(journal.read_text())
     else:
+        iso_date = parse_date(date)
+        if iso_date is None:
+            return
         d = md_to_dict(journal.read_text())
-        from_date = dateparser.parse(date).strftime("%Y-%m-%d")
-        filtered_d = filter_dict_date(d, from_date)
+        filtered_d = filter_dict_date(d, iso_date)
         print(dict_to_md(filtered_d))
 
 
 def command_since(journal: Path, since: str) -> None:
     if not journal.is_file():
         return
+    iso_date = parse_date(since)
+    if iso_date is None:
+        return
     d = md_to_dict(journal.read_text())
-    from_date = dateparser.parse(since).strftime("%Y-%m-%d")
-    filtered_d = {k: v for k, v in d.items() if k >= from_date}
+    filtered_d = {k: v for k, v in d.items() if k >= iso_date}
     print(dict_to_md(filtered_d))
 
 
