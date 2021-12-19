@@ -9,6 +9,8 @@ from typing import Callable, DefaultDict, Dict, List, Tuple, Union
 import dateparser
 
 UNDEFINED_TOPIC_NAME = "ungrouped"
+TOKEN_SEP = "."
+NOTE_SEP = ","
 
 JournalDict = Union[
     Dict[str, DefaultDict[str, str]], DefaultDict[str, DefaultDict[str, str]]
@@ -97,9 +99,9 @@ def parse_input(text: str) -> Tuple[str, str, str]:
         date, topic, note
     """
     tokens = text.split()
-    maybe_topic_notes_tokens = split_list_on_delimiter(tokens, ".")
+    maybe_topic_notes_tokens = split_list_on_delimiter(tokens, TOKEN_SEP)
     notes_tokens = maybe_topic_notes_tokens[-1]
-    split_notes_tokens = split_list_on_delimiter(notes_tokens, ",")
+    split_notes_tokens = split_list_on_delimiter(notes_tokens, NOTE_SEP)
     note = join_notes_tokens(split_notes_tokens)
     today = datetime.date.today().isoformat()
     if len(maybe_topic_notes_tokens) == 1:
@@ -118,7 +120,7 @@ def parse_input(text: str) -> Tuple[str, str, str]:
         else:
             return maybe_date, topic, note
     else:
-        raise ValueError("Too many . in input.")
+        raise ValueError(f"Too many {TOKEN_SEP} in input.")
 
 
 def join_notes_tokens(notes_tokens: List[List[str]]) -> str:
