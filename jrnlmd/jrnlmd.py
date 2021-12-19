@@ -97,18 +97,23 @@ def parse_input(text: str) -> Tuple[str, str, str]:
         date, topic, note
     """
     tokens = text.split()
-    date = parse_date(tokens[0])
-    if date is None:
-        date = datetime.date.today().isoformat()
-    else:
-        tokens.pop(0)
     maybe_topic_notes_tokens = split_list_on_delimiter(tokens, ".")
     notes_tokens = maybe_topic_notes_tokens[-1]
-    topic = (
-        " ".join(maybe_topic_notes_tokens[0])
-        if len(maybe_topic_notes_tokens) == 2
-        else UNDEFINED_TOPIC_NAME
-    )
+    if len(maybe_topic_notes_tokens) == 1:
+        date = datetime.date.today().isoformat()
+        topic = UNDEFINED_TOPIC_NAME
+    elif len(maybe_topic_notes_tokens) == 2:
+        maybe_date = parse_date(" ".join(maybe_topic_notes_tokens[0]))
+        if maybe_date is None:
+            date = datetime.date.today().isoformat()
+            topic = " ".join(maybe_topic_notes_tokens[0])
+        else:
+            date = maybe_date
+            topic = UNDEFINED_TOPIC_NAME
+    elif len(maybe_topic_notes_tokens) == 3:
+        maybe_date = parse_date(" ".join(maybe_topic_notes_tokens[0]))
+        date = datetime.date.today().isoformat() if maybe_date is None else maybe_date
+        topic = " ".join(maybe_topic_notes_tokens[1])
     split_notes_tokens = split_list_on_delimiter(notes_tokens, ",")
     note = join_notes_tokens(split_notes_tokens)
     return date, topic, parse_note(note)

@@ -27,6 +27,15 @@ def test_input_single_note_with_date():
     assert "- a note\n" == note
 
 
+def test_input_single_note_with_date_with_spaces():
+    txt_input = "12 nov 2021 . a note"
+
+    date, topic, note = parse_input(txt_input)
+    assert "2021-11-12" == date
+    assert "ungrouped" == topic
+    assert "- a note\n" == note
+
+
 def test_input_single_note_with_topic(today):
     txt_input = "topic1 is this . a note"
     date, topic, note = parse_input(txt_input)
