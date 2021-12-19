@@ -188,7 +188,7 @@ def command_since(journal: Path, since: str) -> None:
     if iso_date is None:
         return
     d = md_to_dict(journal.read_text())
-    filtered_d = {k: v for k, v in d.items() if k >= iso_date}
+    filtered_d = filter_dict_date(d, iso_date, str.__ge__)
     print(dict_to_md(filtered_d))
 
 
