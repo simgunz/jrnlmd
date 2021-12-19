@@ -92,3 +92,18 @@ def test_md_to_dict_comment_in_code_fence():
             )
         }
     } == d
+
+
+def test_md_to_dict_line_continuation():
+    text = """
+# 2021-01-01
+## topic1
+
+- first line
+line continuation
+- second line
+"""
+    d = md_to_dict(text)
+    assert {
+        "2021-01-01": {"topic1": "- first line\nline continuation\n- second line\n"}
+    } == d
