@@ -1,3 +1,3 @@
 # jrnlmd
 
-A script to write a journal in markdown format. 
+A script to write a journal in markdown format.
