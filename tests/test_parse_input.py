@@ -69,3 +69,11 @@ def test_input_with_user_input(mock_input_from_editor):
     txt_input = "topic1 is this . :"
     _, _, note = parse_input(txt_input)
     assert "- a note\n" == note
+
+
+@mock.patch("jrnlmd.jrnlmd.input_from_editor")
+def test_input_with_multiple_user_input(mock_input_from_editor):
+    mock_input_from_editor.side_effect = ["first note", "second note"]
+    txt_input = "topic1 is this . : , :"
+    _, _, note = parse_input(txt_input)
+    assert "- first note\n- second note\n" == note
