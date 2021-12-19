@@ -19,7 +19,10 @@ def test_dict_to_md_one_level():
 def test_dict_to_md_comment_in_code_fence():
     d = {
         "2021-01-01": {
-            "topic1": "- first line\n  wrapped\n- second line\n  ```bash\n  # comment\n  sudo pacman -S bash\n  ```\n"
+            "topic1": (
+                "- first line\n  wrapped\n- second line\n  ```bash\n  # comment\n  sudo"
+                " pacman -S bash\n  ```\n"
+            )
         }
     }
     text = dict_to_md(d)

@@ -10,10 +10,10 @@ def test_parse_date():
 def test_parse_date_unparsable():
     txt_date = "aaaa"
     iso_date = parse_date(txt_date)
-    assert None == iso_date
+    assert iso_date is None
 
 
 def test_parse_date_single_char():
     txt_date = "a"
     iso_date = parse_date(txt_date)
-    assert None == iso_date
+    assert iso_date is None

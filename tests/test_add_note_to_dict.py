@@ -1,4 +1,5 @@
 import pytest
+
 from jrnlmd.jrnlmd import add_note_to_dict
 
 

@@ -64,9 +64,12 @@ def parse_date(text: str) -> Union[None, str]:
     # Ignore dateparser warnings regarding pytz
     warnings.filterwarnings(
         "ignore",
-        message="The localize method is no longer necessary, as this time zone supports the fold attribute",
+        message=(
+            "The localize method is no longer necessary, as this time zone supports the"
+            " fold attribute"
+        ),
     )
-    if len(text) == 1 and not re.match("\d", text):
+    if len(text) == 1 and not re.match(r"\d", text):
         return None
     a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
     if a_date is None:
