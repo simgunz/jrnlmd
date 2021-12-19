@@ -4,16 +4,18 @@ import re
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import DefaultDict, Tuple, Union
+from typing import Callable, DefaultDict, List, Tuple, Union
 
 import dateparser
 
+JournalDict = DefaultDict[str, DefaultDict[str, str]]
 
-def empty_md_dict() -> DefaultDict[str, DefaultDict[str, str]]:
+
+def empty_md_dict() -> JournalDict:
     return defaultdict(lambda: defaultdict(str))
 
 
-def md_to_dict(text: str) -> DefaultDict:
+def md_to_dict(text: str) -> JournalDict:
     d = empty_md_dict()
     current_day = ""
     current_topic = ""
@@ -29,7 +31,7 @@ def md_to_dict(text: str) -> DefaultDict:
     return d
 
 
-def dict_to_md(d) -> str:
+def dict_to_md(d: JournalDict) -> str:
     output = []
     for day in sorted(d, reverse=True):
         output.append(f"# {day}")
@@ -41,7 +43,7 @@ def dict_to_md(d) -> str:
     return "\n".join(output)
 
 
-def add_note_to_dict(d, note, date, topic):
+def add_note_to_dict(d: JournalDict, note: str, date: str, topic: str):
     d[date][topic] += parse_note(note)
     return d
 
@@ -92,22 +94,24 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     return date, topic, parse_note(note)
 
 
-def join_notes_tokens(notes_tokens):
+def join_notes_tokens(notes_tokens: List[List[str]]) -> str:
     notes = (" ".join(tokens) for tokens in notes_tokens)
     return "".join((parse_note(note) for note in notes))
 
 
-def split_list_on_delimiter(tokens, delimiter):
+def split_list_on_delimiter(tokens: List[str], delimiter: str) -> List[List["str"]]:
     return tuple(
         list(y) for x, y in itertools.groupby(tokens, lambda z: z == delimiter) if not x
     )
 
 
-def filter_dict_date(d, date: str, filt_func=str.__eq__):
+def filter_dict_date(
+    d: JournalDict, date: str, filt_func: Callable = str.__eq__
+) -> JournalDict:
     return {k: v for k, v in d.items() if filt_func(k, date)}
 
 
-def get_argparser():
+def get_argparser() -> ArgumentParser:
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", help="journal actions")
     parser.add_argument(
@@ -144,7 +148,7 @@ def get_argparser():
     return parser
 
 
-def command_add(journal, note_input):
+def command_add(journal: Path, note_input: List["str"]) -> None:
     date, topic, note = parse_input(" ".join(note_input))
     if journal.is_file():
         d = md_to_dict(journal.read_text())
@@ -176,7 +180,7 @@ def command_since(journal: Path, since: str) -> None:
     print(dict_to_md(filtered_d))
 
 
-def main(argv):
+def main(argv: List["str"]) -> None:
     parser = get_argparser()
     args = parser.parse_args(argv)
     if args.command == "add":
@@ -187,7 +191,7 @@ def main(argv):
         command_since(args.journal, args.date)
 
 
-def entrypoint():
+def entrypoint() -> None:
     import sys
 
     main(sys.argv[1:])
