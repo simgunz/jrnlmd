@@ -156,8 +156,8 @@ def input_from_editor():
         return tf.read().decode("utf-8")
 
 
-def command_add(journal: Path, note_input: List[str]) -> None:
-    date, topic, note = parse_input(" ".join(note_input))
+def command_add(journal: Path, text: List[str]) -> None:
+    date, topic, note = parse_input(" ".join(text))
     if journal.is_file():
         d = md_to_dict(journal.read_text())
     else:
@@ -203,7 +203,7 @@ def get_argparser() -> ArgumentParser:
     )
     parser_add = subparsers.add_parser("add", help="Add a new note to the journal.")
     parser_add.add_argument(
-        "note_input",
+        "text",
         metavar="",
         type=str,
         nargs="+",
@@ -233,7 +233,7 @@ def main(argv: List[str]) -> None:
     parser = get_argparser()
     args = parser.parse_args(argv)
     if args.command == "add":
-        command_add(args.journal, args.note_input)
+        command_add(args.journal, args.text)
     elif args.command == "cat":
         command_cat(args.journal, args.date)
     elif args.command == "since":
