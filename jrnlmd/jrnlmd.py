@@ -167,29 +167,28 @@ def command_add(journal: Path, note_input: List["str"]) -> None:
         f.write(dict_to_md(updated_d))
 
 
+def cat_filtered_journal(journal: Path, date: str, filt_func: Callable) -> None:
+    iso_date = parse_date(date)
+    if iso_date is None:
+        return
+    d = md_to_dict(journal.read_text())
+    filtered_d = filter_dict_date(d, iso_date, filt_func)
+    print(dict_to_md(filtered_d))
+
+
 def command_cat(journal: Path, date: str = None) -> None:
     if not journal.is_file():
         return
     if date is None:
         print(journal.read_text())
     else:
-        iso_date = parse_date(date)
-        if iso_date is None:
-            return
-        d = md_to_dict(journal.read_text())
-        filtered_d = filter_dict_date(d, iso_date)
-        print(dict_to_md(filtered_d))
+        cat_filtered_journal(journal, date, filt_func=str.__eq__)
 
 
 def command_since(journal: Path, since: str) -> None:
     if not journal.is_file():
         return
-    iso_date = parse_date(since)
-    if iso_date is None:
-        return
-    d = md_to_dict(journal.read_text())
-    filtered_d = filter_dict_date(d, iso_date, str.__ge__)
-    print(dict_to_md(filtered_d))
+    cat_filtered_journal(journal, since, filt_func=str.__ge__)
 
 
 def main(argv: List["str"]) -> None:
