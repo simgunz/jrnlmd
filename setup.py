@@ -13,9 +13,7 @@ setup(
     long_description_content_type="text/markdown",
     url="",
     packages=find_packages(),
-    entry_points={
-        "console_scripts": ['jrnlmd = jrnlmd.jrnlmd:entrypoint']
-    },
+    entry_points={"console_scripts": ["jrnlmd = jrnlmd.jrnlmd:entrypoint"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
