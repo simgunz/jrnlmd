@@ -19,6 +19,9 @@ pre-commit = "^2.16.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.scripts]
+jrnlmd = 'jrnlmd.jrnlmd:entrypoint'
+
 [[tool.mypy.overrides]]
 module = [
     "dateparser",
