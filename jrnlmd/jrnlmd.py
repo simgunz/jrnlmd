@@ -14,7 +14,7 @@ import dateparser
 UNDEFINED_TOPIC_NAME = "ungrouped"
 TOKEN_SEP = "."
 NOTE_SEP = ","
-EDITOR_INPUT_SYMBOL = ":"
+EDITOR_INPUT_SYMBOL = "@"
 
 JournalDict = Union[
     Dict[str, DefaultDict[str, str]], DefaultDict[str, DefaultDict[str, str]]
