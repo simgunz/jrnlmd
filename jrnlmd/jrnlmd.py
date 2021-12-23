@@ -102,6 +102,10 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     Tuple[str, str, str]
         date, topic, note
     """
+    today = datetime.date.today().isoformat()
+    colon_pos = text.find(": ")
+    date = parse_date(text[:colon_pos]) or today if colon_pos > 0 else today
+    text = text[colon_pos + 1 :].strip()
     tokens = text.split()
     maybe_topic_notes_tokens = split_list_on_delimiter(tokens, TOKEN_SEP)
     notes_tokens = maybe_topic_notes_tokens[-1]
@@ -110,22 +114,11 @@ def parse_input(text: str) -> Tuple[str, str, str]:
         if len(note_token) == 1 and note_token[0] == EDITOR_INPUT_SYMBOL:
             split_notes_tokens[index] = [input_from_editor()]
     note = join_notes_tokens(split_notes_tokens)
-    today = datetime.date.today().isoformat()
     if len(maybe_topic_notes_tokens) == 1:
-        return today, UNDEFINED_TOPIC_NAME, note
+        return date, UNDEFINED_TOPIC_NAME, note
     elif len(maybe_topic_notes_tokens) == 2:
-        maybe_date = parse_date(" ".join(maybe_topic_notes_tokens[0]))
-        if maybe_date is not None:
-            return maybe_date, UNDEFINED_TOPIC_NAME, note
         topic = " ".join(maybe_topic_notes_tokens[0])
-        return today, topic, note
-    elif len(maybe_topic_notes_tokens) == 3:
-        maybe_date = parse_date(" ".join(maybe_topic_notes_tokens[0]))
-        topic = " ".join(maybe_topic_notes_tokens[1])
-        if maybe_date is None:
-            return today, topic, note
-        else:
-            return maybe_date, topic, note
+        return date, topic, note
     else:
         raise ValueError(f"Too many {TOKEN_SEP} in input.")
 

@@ -3,7 +3,7 @@ from jrnlmd.jrnlmd import command_add
 
 def test_add_note_to_new_journal(journal):
     command_add(
-        journal, ["12nov2021", ".", "topic1", ".", "a", "note", ",", "second", "bullet"]
+        journal, ["12nov2021", ":", "topic1", ".", "a", "note", ",", "second", "bullet"]
     )
 
     result = journal.read_text()
@@ -22,7 +22,7 @@ def test_add_note_to_new_journal(journal):
 def test_add_note_to_existing_journal(dummy_journal):
     command_add(
         dummy_journal,
-        ["12nov2021", ".", "topic1", ".", "appended", "note"],
+        ["12nov2021", ":", "topic1", ".", "appended", "note"],
     )
     result = dummy_journal.read_text()
     assert (
@@ -41,7 +41,7 @@ def test_add_note_to_existing_journal(dummy_journal):
 def test_add_note_different_date_to_existing_journal(dummy_journal):
     command_add(
         dummy_journal,
-        ["20nov2021", ".", "topic1", ".", "another", "note"],
+        ["20nov2021", ":", "topic1", ".", "another", "note"],
     )
     result = dummy_journal.read_text()
     assert (
