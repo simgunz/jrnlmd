@@ -14,7 +14,7 @@ def today():
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
 def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, journal):
     mock_input_from_editor.return_value = "first note"
-    command_add(journal, ["12 nov 2021:", "topic1"])
+    command_add(journal, "12 nov 2021: topic1")
 
     result = journal.read_text()
     assert (
@@ -29,7 +29,7 @@ def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, journal
 
 
 def test_add_note_without_date(journal, today):
-    command_add(journal, ["topic1", ".", "a", "note"])
+    command_add(journal, "topic1 . a note")
 
     result = journal.read_text()
     assert (
@@ -46,7 +46,7 @@ def test_add_note_without_date(journal, today):
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
 def test_add_note_without_a_topic(mock_input_from_editor, journal, today):
     mock_input_from_editor.return_value = "a note"
-    command_add(journal, [])
+    command_add(journal, "")
 
     result = journal.read_text()
     assert (
@@ -61,9 +61,7 @@ def test_add_note_without_a_topic(mock_input_from_editor, journal, today):
 
 
 def test_add_note_to_new_journal(journal):
-    command_add(
-        journal, ["12nov2021", ":", "topic1", ".", "a", "note", ",", "second", "bullet"]
-    )
+    command_add(journal, "12nov2021 : topic1 . a note , second bullet")
 
     result = journal.read_text()
     assert (
@@ -81,7 +79,7 @@ def test_add_note_to_new_journal(journal):
 def test_add_note_to_existing_journal(dummy_journal):
     command_add(
         dummy_journal,
-        ["12nov2021", ":", "topic1", ".", "appended", "note"],
+        "12nov2021 : topic1 . appended note",
     )
     result = dummy_journal.read_text()
     assert (
@@ -100,7 +98,7 @@ def test_add_note_to_existing_journal(dummy_journal):
 def test_add_note_different_date_to_existing_journal(dummy_journal):
     command_add(
         dummy_journal,
-        ["20nov2021", ":", "topic1", ".", "another", "note"],
+        "20nov2021 : topic1 . another note",
     )
     result = dummy_journal.read_text()
     assert (
