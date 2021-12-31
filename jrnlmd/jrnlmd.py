@@ -178,7 +178,8 @@ def cat_filtered_journal(journal: Path, date: str, filt_func: Callable) -> None:
     print(dict_to_md(filtered_d, date_descending=False))
 
 
-def command_cat(journal: Path, date: str = None) -> None:
+def command_cat(journal: Path, filter_: str = "") -> None:
+    date, _, _ = parse_input(filter_)
     if not journal.is_file():
         return
     if date is None:
@@ -214,23 +215,25 @@ def get_argparser() -> ArgumentParser:
     parser_cat = subparsers.add_parser(
         "cat", help="Print the journal on the standard output."
     )
-    parser_cat.add_argument(
-        "date",
-        type=str,
-        nargs="?",
-        help="The date to display.",
-    )
+    filter_arg = {
+        "dest": "filter",
+        "type": str,
+        "nargs": "*",
+        "help": "[date:] [topic]",
+    }
+    parser_cat.add_argument(**filter_arg)
     return parser
 
 
 def main(argv: List[str]) -> None:
     parser = get_argparser()
     args = parser.parse_args(argv)
-    text = " ".join(args.text)
     if args.command == "add":
+        text = " ".join(args.text)
         command_add(args.journal, text)
     elif args.command == "cat":
-        command_cat(args.journal, args.date)
+        filter_ = " ".join(args.filter)
+        command_cat(args.journal, filter_)
 
 
 def entrypoint() -> None:
