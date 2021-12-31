@@ -101,10 +101,9 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     Tuple[str, str, str]
         date, topic, note
     """
-    today = datetime.date.today().isoformat()
     m = re.search(":(?: |$)", text)
     colon_pos = m.start() if m else -1
-    date = parse_date(text[:colon_pos]) or today if colon_pos > 0 else today
+    date = parse_date(text[:colon_pos]) if colon_pos > 0 else None
     text = text[colon_pos + 1 :].strip()
     if not text:
         return date, None, None
@@ -153,6 +152,8 @@ def input_from_editor():
 
 def command_add(journal: Path, text: List[str]) -> None:
     date, topic, note = parse_input(" ".join(text))
+    if date is None:
+        date = datetime.date.today().isoformat()
     if note is None:
         raw_note = input_from_editor()
         note = parse_note(raw_note)
