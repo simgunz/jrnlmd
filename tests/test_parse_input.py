@@ -6,13 +6,7 @@ import pytest
 from jrnlmd.jrnlmd import parse_input
 
 
-@pytest.fixture
-def today():
-    date_today = datetime.date.today()
-    return date_today.strftime("%Y-%m-%d")
-
-
-def test_input_date_only(today):
+def test_input_date_only():
     txt_input = "12 nov 2021:"
     date, topic, note = parse_input(txt_input)
     assert "2021-11-12" == date
@@ -20,18 +14,18 @@ def test_input_date_only(today):
     assert note is None
 
 
-def test_input_single_note_with_topic_only(today):
+def test_input_single_note_with_topic_only():
     txt_input = "topic1 is this"
     date, topic, note = parse_input(txt_input)
-    assert today == date
+    assert date is None
     assert "topic1 is this" == topic
     assert note is None
 
 
-def test_input_single_note_with_topic(today):
+def test_input_single_note_with_topic():
     txt_input = "topic1 is this . a note"
     date, topic, note = parse_input(txt_input)
-    assert today == date
+    assert date is None
     assert "topic1 is this" == topic
     assert "- a note\n" == note
 
