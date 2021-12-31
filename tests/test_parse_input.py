@@ -12,6 +12,14 @@ def today():
     return date_today.strftime("%Y-%m-%d")
 
 
+def test_input_date_only(today):
+    txt_input = "12 nov 2021:"
+    date, topic, note = parse_input(txt_input)
+    assert "2021-11-12" == date
+    assert topic is None
+    assert note is None
+
+
 def test_input_single_note_with_topic_only(today):
     txt_input = "topic1 is this"
     date, topic, note = parse_input(txt_input)
