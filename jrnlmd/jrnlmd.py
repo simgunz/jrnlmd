@@ -150,6 +150,9 @@ def input_from_editor():
 
 def command_add(journal: Path, text: List[str]) -> None:
     date, topic, note = parse_input(" ".join(text))
+    if note is None:
+        raw_note = input_from_editor()
+        note = parse_note(raw_note)
     if journal.is_file():
         d = md_to_dict(journal.read_text())
     else:
