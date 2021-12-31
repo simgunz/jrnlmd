@@ -4,7 +4,7 @@ from jrnlmd.jrnlmd import command_add
 
 
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
-def test_add_empty_note_to_new_journal(mock_input_from_editor, journal):
+def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, journal):
     mock_input_from_editor.return_value = "first note"
     command_add(journal, ["12 nov 2021:", "topic1"])
 
