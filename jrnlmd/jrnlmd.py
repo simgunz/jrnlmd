@@ -11,7 +11,6 @@ from typing import Callable, DefaultDict, Dict, List, Tuple, Union
 
 import dateparser
 
-UNDEFINED_TOPIC_NAME = "ungrouped"
 TOKEN_SEP = "."
 NOTE_SEP = ","
 EDITOR_INPUT_SYMBOL = "@"
@@ -108,16 +107,16 @@ def parse_input(text: str) -> Tuple[str, str, str]:
     text = text[colon_pos + 1 :].strip()
     tokens = text.split()
     maybe_topic_notes_tokens = split_list_on_delimiter(tokens, TOKEN_SEP)
-    notes_tokens = maybe_topic_notes_tokens[-1]
-    split_notes_tokens = split_list_on_delimiter(notes_tokens, NOTE_SEP)
-    for index, note_token in enumerate(split_notes_tokens):
-        if len(note_token) == 1 and note_token[0] == EDITOR_INPUT_SYMBOL:
-            split_notes_tokens[index] = [input_from_editor()]
-    note = join_notes_tokens(split_notes_tokens)
+    topic = " ".join(maybe_topic_notes_tokens[0])
     if len(maybe_topic_notes_tokens) == 1:
-        return date, UNDEFINED_TOPIC_NAME, note
+        return date, topic, None
     elif len(maybe_topic_notes_tokens) == 2:
-        topic = " ".join(maybe_topic_notes_tokens[0])
+        notes_tokens = maybe_topic_notes_tokens[-1]
+        split_notes_tokens = split_list_on_delimiter(notes_tokens, NOTE_SEP)
+        for index, note_token in enumerate(split_notes_tokens):
+            if len(note_token) == 1 and note_token[0] == EDITOR_INPUT_SYMBOL:
+                split_notes_tokens[index] = [input_from_editor()]
+        note = join_notes_tokens(split_notes_tokens)
         return date, topic, note
     else:
         raise ValueError(f"Too many {TOKEN_SEP} in input.")
