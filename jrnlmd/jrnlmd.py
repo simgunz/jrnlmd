@@ -102,9 +102,12 @@ def parse_input(text: str) -> Tuple[str, str, str]:
         date, topic, note
     """
     today = datetime.date.today().isoformat()
-    colon_pos = text.find(": ")
+    m = re.search(":(?: |$)", text)
+    colon_pos = m.start() if m else -1
     date = parse_date(text[:colon_pos]) or today if colon_pos > 0 else today
     text = text[colon_pos + 1 :].strip()
+    if not text:
+        return date, None, None
     tokens = text.split()
     maybe_topic_notes_tokens = split_list_on_delimiter(tokens, TOKEN_SEP)
     topic = " ".join(maybe_topic_notes_tokens[0])
