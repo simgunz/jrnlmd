@@ -151,8 +151,8 @@ def input_from_editor():
         return tf.read().decode("utf-8")
 
 
-def command_add(journal: Path, text: List[str]) -> None:
-    date, topic, note = parse_input(" ".join(text))
+def command_add(journal: Path, text: str) -> None:
+    date, topic, note = parse_input(text)
     if date is None:
         date = datetime.date.today().isoformat()
     if topic is None:
@@ -226,8 +226,9 @@ def get_argparser() -> ArgumentParser:
 def main(argv: List[str]) -> None:
     parser = get_argparser()
     args = parser.parse_args(argv)
+    text = " ".join(args.text)
     if args.command == "add":
-        command_add(args.journal, args.text)
+        command_add(args.journal, text)
     elif args.command == "cat":
         command_cat(args.journal, args.date)
 
