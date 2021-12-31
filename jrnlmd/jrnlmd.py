@@ -14,6 +14,7 @@ import dateparser
 TOKEN_SEP = "."
 NOTE_SEP = ","
 EDITOR_INPUT_SYMBOL = "@"
+UNDEFINED_TOPIC = "ungrouped"
 
 JournalDict = Union[
     Dict[str, DefaultDict[str, str]], DefaultDict[str, DefaultDict[str, str]]
@@ -154,6 +155,8 @@ def command_add(journal: Path, text: List[str]) -> None:
     date, topic, note = parse_input(" ".join(text))
     if date is None:
         date = datetime.date.today().isoformat()
+    if topic is None:
+        topic = UNDEFINED_TOPIC
     if note is None:
         raw_note = input_from_editor()
         note = parse_note(raw_note)
@@ -205,7 +208,7 @@ def get_argparser() -> ArgumentParser:
         "text",
         metavar="",
         type=str,
-        nargs="+",
+        nargs="*",
         help="[date .] [topic . ] note1 [, note2 [, note3 [ ... ]]]",
     )
     parser_cat = subparsers.add_parser(

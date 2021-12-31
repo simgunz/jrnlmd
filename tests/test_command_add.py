@@ -43,6 +43,23 @@ def test_add_note_without_date(journal, today):
     )
 
 
+@mock.patch("jrnlmd.jrnlmd.input_from_editor")
+def test_add_note_without_a_topic(mock_input_from_editor, journal, today):
+    mock_input_from_editor.return_value = "a note"
+    command_add(journal, [])
+
+    result = journal.read_text()
+    assert (
+        f"""# {today}
+
+## ungrouped
+
+- a note
+"""
+        == result
+    )
+
+
 def test_add_note_to_new_journal(journal):
     command_add(
         journal, ["12nov2021", ":", "topic1", ".", "a", "note", ",", "second", "bullet"]
