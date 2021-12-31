@@ -1,4 +1,23 @@
+from unittest import mock
+
 from jrnlmd.jrnlmd import command_add
+
+
+@mock.patch("jrnlmd.jrnlmd.input_from_editor")
+def test_add_empty_note_to_new_journal(mock_input_from_editor, journal):
+    mock_input_from_editor.return_value = "first note"
+    command_add(journal, ["12 nov 2021:", "topic1"])
+
+    result = journal.read_text()
+    assert (
+        """# 2021-11-12
+
+## topic1
+
+- first note
+"""
+        == result
+    )
 
 
 def test_add_note_to_new_journal(journal):
