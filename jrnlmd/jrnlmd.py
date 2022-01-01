@@ -7,7 +7,7 @@ import tempfile
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Callable, DefaultDict, Dict, List, Tuple, Union
+from typing import Callable, DefaultDict, Dict, List, Optional, Tuple, Union
 
 import dateparser
 
@@ -89,7 +89,7 @@ def parse_date(text: str) -> Union[None, str]:
     return a_date.date().isoformat()
 
 
-def parse_input(text: str) -> Tuple[str, str, str]:
+def parse_input(text: str) -> Tuple[Optional[str], Optional[str], Optional[str]]:
     """Parse a textual input and return date, topic, and the note.
 
     Parameters
@@ -201,23 +201,16 @@ def get_argparser() -> ArgumentParser:
         help="The journal file",
     )
     parser_add = subparsers.add_parser("add", help="Add a new note to the journal.")
-    text_arg = {
-        "dest": "text",
-        "type": str,
-        "nargs": "*",
-        "help": "[date:] [topic [ . note1 [, note2 [, note3 [ ... ]]]]]",
-    }
-    parser_add.add_argument(**text_arg)
+    parser_add.add_argument(
+        "text",
+        type=str,
+        nargs="*",
+        help="[date:] [topic [ . note1 [, note2 [, note3 [ ... ]]]]]",
+    )
     parser_cat = subparsers.add_parser(
         "cat", help="Print the journal on the standard output."
     )
-    filter_arg = {
-        "dest": "filter",
-        "type": str,
-        "nargs": "*",
-        "help": "[date:] [topic]",
-    }
-    parser_cat.add_argument(**filter_arg)
+    parser_cat.add_argument("filter", type=str, nargs="*", help="[date:] [topic]")
     return parser
 
 
