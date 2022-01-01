@@ -169,29 +169,25 @@ def command_add(journal: Path, text: str) -> None:
         f.write(dict_to_md(d))
 
 
-def cat_filtered_journal(journal: Path, date: str, filt_func: Callable) -> None:
-    iso_date = parse_date(date)
-    if iso_date is None:
-        return
-    d = md_to_dict(journal.read_text())
-    filtered_d = filter_dict_date(d, iso_date, filt_func)
-    print(dict_to_md(filtered_d, date_descending=False))
-
-
 def command_cat(journal: Path, filter_: str = "") -> None:
-    date, _, _ = parse_input(filter_)
     if not journal.is_file():
         return
-    if date is None:
-        cat_filtered_journal(journal, "0001-01-01", filt_func=str.__ge__)
-    else:
-        cat_filtered_journal(journal, date, filt_func=str.__eq__)
+    d = md_to_dict(journal.read_text())
+    if not filter_:
+        print(dict_to_md(d, date_descending=False))
+        return
+    date, _, _ = parse_input(filter_)
+    if date:
+        filtered_d = filter_dict_date(d, date, filt_func=str.__eq__)
+    print(dict_to_md(filtered_d, date_descending=False))
 
 
 def command_since(journal: Path, since: str) -> None:
     if not journal.is_file():
         return
-    cat_filtered_journal(journal, since, filt_func=str.__ge__)
+    d = md_to_dict(journal.read_text())
+    filtered_d = filter_dict_date(d, since, filt_func=str.__ge__)
+    print(dict_to_md(filtered_d, date_descending=False))
 
 
 def get_argparser() -> ArgumentParser:
