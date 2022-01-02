@@ -99,3 +99,24 @@ def test_dict_to_md_date_ascending():
 """
         == text
     )
+
+
+def test_dict_to_md_simplified():
+    d = {
+        "2021-01-01": {"topic1": "- first line\n"},
+        "2021-01-02": {
+            "topic1": "- second line\n",
+        },
+    }
+    text = dict_to_md(d, date_descending=False, simplified=True)
+    assert (
+        """# 2021-01-01
+
+- first line
+
+# 2021-01-02
+
+- second line
+"""
+        == text
+    )
