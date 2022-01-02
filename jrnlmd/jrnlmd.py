@@ -69,10 +69,6 @@ def dict_to_md(
     return "\n".join(output)
 
 
-def add_note_to_dict(d: JournalDict, note: str, date: str, topic: str):
-    d[date][topic] += parse_note(note)
-
-
 def parse_note(note: str) -> str:
     stripped_note = note.removeprefix("-").lstrip()
     parsed_note = f"- {stripped_note}"
@@ -191,7 +187,7 @@ def command_add(journal: Path, text: str) -> None:
         d = md_to_dict(journal.read_text())
     else:
         d = empty_md_dict()
-    add_note_to_dict(d, note, date, topic)
+    d[date][topic] += parse_note(note)
     with open(journal, "w") as f:
         f.write(dict_to_md(d))
 
