@@ -126,9 +126,6 @@ def parse_input(text: str) -> Tuple[Optional[str], Optional[str], Optional[str]]
     elif len(maybe_topic_notes_tokens) == 2:
         notes_tokens = maybe_topic_notes_tokens[-1]
         split_notes_tokens = split_list_on_delimiter(notes_tokens, NOTE_SEP)
-        for index, note_token in enumerate(split_notes_tokens):
-            if len(note_token) == 1 and note_token[0] == EDITOR_INPUT_SYMBOL:
-                split_notes_tokens[index] = [input_from_editor()]
         note = join_notes_tokens(split_notes_tokens)
         return date, topic, note
     else:
