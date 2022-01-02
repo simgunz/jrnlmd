@@ -47,7 +47,9 @@ def md_to_dict(text: str) -> JournalDict:
     return d
 
 
-def dict_to_md(d: JournalDict, date_descending=True, simplified=False) -> str:
+def dict_to_md(
+    d: JournalDict, date_descending=True, simplified=False, compact=False
+) -> str:
     keys: Set[str] = set()
     for v in d.values():
         keys.update(v.keys())
@@ -55,12 +57,15 @@ def dict_to_md(d: JournalDict, date_descending=True, simplified=False) -> str:
     output = []
     for day in sorted(d, reverse=date_descending):
         output.append(f"# {day}")
-        output.append("")
+        if not compact:
+            output.append("")
         for topic in d[day]:
             if not (simplified and canSimplify):
                 output.append(f"## {topic}")
-                output.append("")
-            output.append(d[day][topic])
+                if not compact:
+                    output.append("")
+            note = d[day][topic]
+            output.append(note)
     return "\n".join(output)
 
 
@@ -191,12 +196,16 @@ def command_add(journal: Path, text: str) -> None:
         f.write(dict_to_md(d))
 
 
-def command_cat(journal: Path, filter_: str = "", simplified=False) -> None:
+def command_cat(
+    journal: Path, filter_: str = "", simplified=False, compact=False
+) -> None:
     if not journal.is_file():
         return
     filtered_d = md_to_dict(journal.read_text())
     if not filter_:
-        print_with_external(dict_to_md(filtered_d, date_descending=False))
+        print_with_external(
+            dict_to_md(filtered_d, date_descending=False, compact=compact)
+        )
         return
     date, topic, _ = parse_input(filter_)
     simplify = False
@@ -207,7 +216,10 @@ def command_cat(journal: Path, filter_: str = "", simplified=False) -> None:
         filtered_d = filter_dict_topic(filtered_d, topic)
     print_with_external(
         dict_to_md(
-            filtered_d, date_descending=False, simplified=(simplified and simplify)
+            filtered_d,
+            date_descending=False,
+            simplified=(simplified and simplify),
+            compact=compact,
         )
     )
 
@@ -242,7 +254,10 @@ def get_argparser() -> ArgumentParser:
     )
     parser_cat.add_argument("filter", type=str, nargs="*", help="[date:] [topic]")
     parser_cat.add_argument(
-        "--simplified", action="store_true", help="Hide topic if unique"
+        "--simplified", action="store_true", help="Hide topic if unique."
+    )
+    parser_cat.add_argument(
+        "--compact", action="store_true", help="Remove empty lines in output."
     )
     return parser
 
@@ -255,7 +270,7 @@ def main(argv: List[str]) -> None:
         command_add(args.journal, text)
     elif args.command == "cat":
         filter_ = " ".join(args.filter)
-        command_cat(args.journal, filter_, args.simplified)
+        command_cat(args.journal, filter_, args.simplified, args.compact)
 
 
 def entrypoint() -> None:
