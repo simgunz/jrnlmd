@@ -7,7 +7,7 @@ import tempfile
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Callable, DefaultDict, Dict, List, Optional, Tuple, Union
+from typing import Callable, DefaultDict, Dict, List, Optional, Set, Tuple, Union
 
 import dateparser
 
@@ -46,14 +46,19 @@ def md_to_dict(text: str) -> JournalDict:
     return d
 
 
-def dict_to_md(d: JournalDict, date_descending=True) -> str:
+def dict_to_md(d: JournalDict, date_descending=True, simplified=False) -> str:
+    keys: Set[str] = set()
+    for v in d.values():
+        keys.update(v.keys())
+    canSimplify = len(keys) == 1
     output = []
     for day in sorted(d, reverse=date_descending):
         output.append(f"# {day}")
         output.append("")
         for topic in d[day]:
-            output.append(f"## {topic}")
-            output.append("")
+            if not (simplified and canSimplify):
+                output.append(f"## {topic}")
+                output.append("")
             output.append(d[day][topic])
     return "\n".join(output)
 
