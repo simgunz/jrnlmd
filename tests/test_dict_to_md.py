@@ -75,6 +75,33 @@ def test_dict_to_md_two_levels():
     )
 
 
+def test_dict_to_md_compact():
+    d = {
+        "2021-01-01": {"topic1": "- first line\n- second line\n"},
+        "2021-01-02": {
+            "topic2": "- third line\n",
+            "topic3": "- fourth line\n- fifth line\n",
+        },
+    }
+    text = dict_to_md(d, compact=True)
+    assert (
+        """# 2021-01-02
+## topic2
+- third line
+
+## topic3
+- fourth line
+- fifth line
+
+# 2021-01-01
+## topic1
+- first line
+- second line
+"""
+        == text
+    )
+
+
 def test_dict_to_md_date_ascending():
     d = {
         "2021-01-01": {"topic1": "- first line\n- second line\n"},
