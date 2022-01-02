@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 
 
@@ -47,3 +49,10 @@ def journal_multidate(journal):
 """
     )
     return journal
+
+
+# Replace print_with_external with print
+@pytest.fixture(autouse=True)
+def print_with_external_mock():
+    with mock.patch("jrnlmd.jrnlmd.print_with_external", wraps=print) as print_mock:
+        yield print_mock
