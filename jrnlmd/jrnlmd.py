@@ -182,15 +182,15 @@ def command_add(journal: Path, text: str) -> None:
 def command_cat(journal: Path, filter_: str = "") -> None:
     if not journal.is_file():
         return
-    d = md_to_dict(journal.read_text())
+    filtered_d = md_to_dict(journal.read_text())
     if not filter_:
-        print(dict_to_md(d, date_descending=False))
+        print(dict_to_md(filtered_d, date_descending=False))
         return
     date, topic, _ = parse_input(filter_)
     if date:
-        filtered_d = filter_dict_date(d, date, filt_func=str.__eq__)
+        filtered_d = filter_dict_date(filtered_d, date, filt_func=str.__eq__)
     if topic:
-        filtered_d = filter_dict_topic(d, topic)
+        filtered_d = filter_dict_topic(filtered_d, topic)
     print(dict_to_md(filtered_d, date_descending=False))
 
 

@@ -66,3 +66,18 @@ def test_cat_specific_topic(journal_multidate, capsys):
 """
         == captured.out
     )
+
+
+def test_cat_specific_date_and_topic(journal_multidate, capsys):
+    command_cat(journal_multidate, "1 11 2021: topic1")
+    captured = capsys.readouterr()
+    assert (
+        """# 2021-11-01
+
+## topic1
+
+- another note
+
+"""
+        == captured.out
+    )
