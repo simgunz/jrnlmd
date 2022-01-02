@@ -1,7 +1,6 @@
 from typing import DefaultDict, Dict, Union
 
-JournalDict = Union[
-    Dict[str, Dict[str, str]],
-    Dict[str, DefaultDict[str, str]],
-    DefaultDict[str, DefaultDict[str, str]],
-]
+JDict = Dict[str, Dict[str, str]]
+JDictDTopic = Dict[str, DefaultDict[str, str]]
+JDictDDateDTopic = DefaultDict[str, DefaultDict[str, str]]
+JournalDict = Union[JDict, JDictDTopic, JDictDDateDTopic]
