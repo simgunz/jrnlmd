@@ -13,9 +13,13 @@ def test_cat_full_journal(journal_multidate, capsys):
     assert (
         """# 2021-11-01
 
-## topic1
+## topic2
 
 - first date note
+
+## topic1
+
+- another note
 
 # 2021-11-05
 

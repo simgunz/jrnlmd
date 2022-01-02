@@ -37,9 +37,13 @@ def journal_multidate(journal):
 
 # 2021-11-01
 
-## topic1
+## topic2
 
 - first date note
+
+## topic1
+
+- another note
 """
     )
     return journal
