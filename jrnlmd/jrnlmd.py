@@ -186,7 +186,7 @@ def command_add(journal: Path, text: str) -> None:
         f.write(dict_to_md(d))
 
 
-def command_cat(journal: Path, filter_: str = "") -> None:
+def command_cat(journal: Path, filter_: str = "", simplified=False) -> None:
     if not journal.is_file():
         return
     filtered_d = md_to_dict(journal.read_text())
@@ -194,11 +194,17 @@ def command_cat(journal: Path, filter_: str = "") -> None:
         print(dict_to_md(filtered_d, date_descending=False))
         return
     date, topic, _ = parse_input(filter_)
+    simplify = False
     if date:
         filtered_d = filter_dict_date(filtered_d, date, filt_func=str.__eq__)
     if topic:
+        simplify = True
         filtered_d = filter_dict_topic(filtered_d, topic)
-    print(dict_to_md(filtered_d, date_descending=False))
+    print(
+        dict_to_md(
+            filtered_d, date_descending=False, simplified=(simplified and simplify)
+        )
+    )
 
 
 def command_since(journal: Path, since: str) -> None:
@@ -230,6 +236,9 @@ def get_argparser() -> ArgumentParser:
         "cat", help="Print the journal on the standard output."
     )
     parser_cat.add_argument("filter", type=str, nargs="*", help="[date:] [topic]")
+    parser_cat.add_argument(
+        "--simplified", action="store_true", help="Hide topic if unique"
+    )
     return parser
 
 
@@ -241,7 +250,7 @@ def main(argv: List[str]) -> None:
         command_add(args.journal, text)
     elif args.command == "cat":
         filter_ = " ".join(args.filter)
-        command_cat(args.journal, filter_)
+        command_cat(args.journal, filter_, args.simplified)
 
 
 def entrypoint() -> None:
