@@ -7,21 +7,17 @@ import tempfile
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Callable, DefaultDict, Dict, List, Optional, Set, Tuple, Union
+from typing import Callable, DefaultDict, List, Optional, Set, Tuple, Union
 
 import dateparser
+
+from .usertypes import JournalDict
 
 TOKEN_SEP = "."
 NOTE_SEP = ","
 EDITOR_INPUT_SYMBOL = "@"
 UNDEFINED_TOPIC = "ungrouped"
 EXTERNAL_COMMAND = "bat -l markdown --pager=never --style=plain"
-
-JournalDict = Union[
-    Dict[str, Dict[str, str]],
-    Dict[str, DefaultDict[str, str]],
-    DefaultDict[str, DefaultDict[str, str]],
-]
 
 
 def empty_md_dict() -> DefaultDict[str, DefaultDict[str, str]]:
