@@ -147,7 +147,10 @@ def split_list_on_delimiter(tokens: List[str], delimiter: str) -> List[List[str]
 
 
 def print_with_external(text: str) -> None:
-    subprocess.run(EXTERNAL_COMMAND.split(), input=text, encoding="utf-8")
+    try:
+        subprocess.run(EXTERNAL_COMMAND.split(), input=text, encoding="utf-8")
+    except Exception:
+        print(text)
 
 
 def filter_dict_date(
