@@ -150,7 +150,7 @@ def filter_dict_topic(d: JournalDict, topic: str) -> JournalDict:
     return {
         k: {kk: vv for kk, vv in v.items() if topic in kk}
         for k, v in d.items()
-        if topic in v
+        if any(topic in kkk for kkk in v.keys())
     }
 
 
