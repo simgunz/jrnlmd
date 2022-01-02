@@ -17,12 +17,13 @@ EDITOR_INPUT_SYMBOL = "@"
 UNDEFINED_TOPIC = "ungrouped"
 
 JournalDict = Union[
+    Dict[str, Dict[str, str]],
     Dict[str, DefaultDict[str, str]],
     DefaultDict[str, DefaultDict[str, str]],
 ]
 
 
-def empty_md_dict() -> JournalDict:
+def empty_md_dict() -> DefaultDict[str, DefaultDict[str, str]]:
     return defaultdict(lambda: defaultdict(str))
 
 
@@ -143,7 +144,7 @@ def filter_dict_date(
     return {k: v for k, v in d.items() if filt_func(k, date)}
 
 
-def filter_dict_topic(d: JournalDict, topic: str) -> Dict[str, Dict[str, str]]:
+def filter_dict_topic(d: JournalDict, topic: str) -> JournalDict:
     return {
         k: {kk: vv for kk, vv in v.items() if topic in kk}
         for k, v in d.items()
@@ -185,9 +186,11 @@ def command_cat(journal: Path, filter_: str = "") -> None:
     if not filter_:
         print(dict_to_md(d, date_descending=False))
         return
-    date, _, _ = parse_input(filter_)
+    date, topic, _ = parse_input(filter_)
     if date:
         filtered_d = filter_dict_date(d, date, filt_func=str.__eq__)
+    if topic:
+        filtered_d = filter_dict_topic(d, topic)
     print(dict_to_md(filtered_d, date_descending=False))
 
 
