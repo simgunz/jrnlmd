@@ -85,7 +85,9 @@ def parse_date(text: str) -> Union[None, str]:
     try:
         a_date = datetime.datetime.fromisoformat(text)
     except ValueError:
-        a_date = dateparser.parse(text, settings={"DATE_ORDER": "DMY"})
+        a_date = dateparser.parse(
+            text, settings={"DATE_ORDER": "DMY", "PREFER_DATES_FROM": "past"}
+        )
     if a_date is None:
         return None
     return a_date.date().isoformat()
