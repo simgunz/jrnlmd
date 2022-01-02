@@ -15,6 +15,7 @@ TOKEN_SEP = "."
 NOTE_SEP = ","
 EDITOR_INPUT_SYMBOL = "@"
 UNDEFINED_TOPIC = "ungrouped"
+EXTERNAL_COMMAND = "bat -l markdown --pager=never --style=plain"
 
 JournalDict = Union[
     Dict[str, Dict[str, str]],
@@ -145,6 +146,10 @@ def split_list_on_delimiter(tokens: List[str], delimiter: str) -> List[List[str]
     ]
 
 
+def print_with_external(text: str) -> None:
+    subprocess.run(EXTERNAL_COMMAND.split(), input=text, encoding="utf-8")
+
+
 def filter_dict_date(
     d: JournalDict, date: str, filt_func: Callable = str.__eq__
 ) -> JournalDict:
@@ -191,7 +196,7 @@ def command_cat(journal: Path, filter_: str = "", simplified=False) -> None:
         return
     filtered_d = md_to_dict(journal.read_text())
     if not filter_:
-        print(dict_to_md(filtered_d, date_descending=False))
+        print_with_external(dict_to_md(filtered_d, date_descending=False))
         return
     date, topic, _ = parse_input(filter_)
     simplify = False
@@ -200,7 +205,7 @@ def command_cat(journal: Path, filter_: str = "", simplified=False) -> None:
     if topic:
         simplify = True
         filtered_d = filter_dict_topic(filtered_d, topic)
-    print(
+    print_with_external(
         dict_to_md(
             filtered_d, date_descending=False, simplified=(simplified and simplify)
         )
@@ -212,7 +217,7 @@ def command_since(journal: Path, since: str) -> None:
         return
     d = md_to_dict(journal.read_text())
     filtered_d = filter_dict_date(d, since, filt_func=str.__ge__)
-    print(dict_to_md(filtered_d, date_descending=False))
+    print_with_external(dict_to_md(filtered_d, date_descending=False))
 
 
 def get_argparser() -> ArgumentParser:
