@@ -21,6 +21,12 @@ def test_load_not_existing_file(new_journal_file):
         journal.load()
 
 
+def test_load_with_file_name_not_set():
+    journal = Journal()
+    with pytest.raises(RuntimeError):
+        journal.load()
+
+
 def test_load_empty_journal(empty_journal_file):
     journal = Journal(empty_journal_file)
     journal.load()
