@@ -24,6 +24,14 @@ def test_journal_entry_constructor_with_unparsed_note_only(today):
     assert UNDEFINED_TOPIC == entry.topic
 
 
+def test_journal_entry_constructor_with_multiple_notes(today):
+    notes = ["first note", "second note"]
+    entry = JournalEntry(notes)
+    assert "- first note\n- second note\n" == entry.note
+    assert today == entry.date
+    assert UNDEFINED_TOPIC == entry.topic
+
+
 def test_journal_entry_constructor_with_note_and_date():
     note = "- a note"
     date = "2021-11-01"
