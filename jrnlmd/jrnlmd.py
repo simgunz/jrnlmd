@@ -12,6 +12,7 @@ from typing import DefaultDict, List, Optional, Set, Tuple, Union
 import dateparser
 
 from jrnlmd.journal import Journal
+from jrnlmd.journal_entry import JournalEntry
 
 from .usertypes import JournalDict
 
@@ -158,22 +159,13 @@ def input_from_editor():
         return tf.read().decode("utf-8")
 
 
-def command_add(journal: Path, text: str) -> None:
+def command_add(journal: Journal, text: str) -> None:
     date, topic, note = parse_input(text)
-    if date is None:
-        date = datetime.date.today().isoformat()
-    if topic is None:
-        topic = UNDEFINED_TOPIC
     if note is None:
-        raw_note = input_from_editor()
-        note = parse_note(raw_note)
-    if journal.is_file():
-        d = md_to_dict(journal.read_text())
-    else:
-        d = empty_md_dict()
-    d[date][topic] += parse_note(note)
-    with open(journal, "w") as f:
-        f.write(dict_to_md(d))
+        note = input_from_editor()
+    entry = JournalEntry(note, date, topic)
+    journal.add(entry)
+    journal.save()
 
 
 def command_cat(
@@ -234,12 +226,12 @@ def get_argparser() -> ArgumentParser:
 def main(argv: List[str]) -> None:
     parser = get_argparser()
     args = parser.parse_args(argv)
+    journal = Journal(args.journal)
     if args.command == "add":
         text = " ".join(args.text)
-        command_add(args.journal, text)
+        command_add(journal, text)
     elif args.command == "cat":
         filter_ = " ".join(args.filter)
-        journal = Journal(args.journal)
         command_cat(journal, filter_, args.simplified, args.compact)
 
 
