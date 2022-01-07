@@ -1,3 +1,4 @@
+import datetime
 from unittest import mock
 
 import pytest
@@ -69,6 +70,12 @@ def journal_multidate(journal_multidate_file):
     journal = Journal(journal_multidate_file)
     journal.load()
     return journal
+
+
+@pytest.fixture
+def today():
+    date_today = datetime.date.today()
+    return date_today.strftime("%Y-%m-%d")
 
 
 # Replace print_with_external with print
