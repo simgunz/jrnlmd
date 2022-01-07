@@ -20,30 +20,30 @@ class Journal:
         return journal
 
     def __init__(self, journal_path: Path = None):
-        self._journal_path = journal_path
+        self._journal_file = journal_path
         self._j: JDictDDateDTopic = self._empty_dict()
 
     @property
     def journal_file(self):
-        return self._journal_path
+        return self._journal_file
 
     @journal_file.setter
     def journal_file(self, file_path: Union[str, Path]):
-        self._journal_path = Path(file_path)
+        self._journal_file = Path(file_path)
 
     def load(self) -> None:
-        if self._journal_path is None:
+        if self._journal_file is None:
             raise RuntimeError("The journal file name has not been set.")
-        if not self._journal_path.is_file():
+        if not self._journal_file.is_file():
             raise FileNotFoundError()
-        text = self._journal_path.read_text()
+        text = self._journal_file.read_text()
         self._from_md(text)
 
     def save(self) -> None:
-        if self._journal_path is None:
+        if self._journal_file is None:
             raise RuntimeError("The journal file name has not been set.")
         text = self.to_md()
-        self._journal_path.write_text(text)
+        self._journal_file.write_text(text)
 
     def to_md(
         self,
