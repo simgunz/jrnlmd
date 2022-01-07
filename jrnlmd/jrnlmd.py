@@ -11,6 +11,8 @@ from typing import Callable, DefaultDict, List, Optional, Set, Tuple, Union
 
 import dateparser
 
+from jrnlmd.journal import Journal
+
 from .usertypes import JournalDict
 
 TOKEN_SEP = "."
@@ -189,26 +191,18 @@ def command_add(journal: Path, text: str) -> None:
 
 
 def command_cat(
-    journal: Path, filter_: str = "", simplified=False, compact=False
+    journal: Journal, filter_: str = "", simplified=False, compact=False
 ) -> None:
-    if not journal.is_file():
-        return
-    filtered_d = md_to_dict(journal.read_text())
-    if not filter_:
-        print_with_external(
-            dict_to_md(filtered_d, date_descending=False, compact=compact)
-        )
-        return
     date, topic, _ = parse_input(filter_)
     simplify = False
+    journal_filtered = journal
     if date:
-        filtered_d = filter_dict_date(filtered_d, date, filt_func=str.__eq__)
+        journal_filtered = journal_filtered.on(date)
     if topic:
         simplify = True
-        filtered_d = filter_dict_topic(filtered_d, topic)
+        journal_filtered = journal_filtered.about(topic)
     print_with_external(
-        dict_to_md(
-            filtered_d,
+        journal_filtered.to_md(
             date_descending=False,
             simplified=(simplified and simplify),
             compact=compact,
@@ -262,7 +256,8 @@ def main(argv: List[str]) -> None:
         command_add(args.journal, text)
     elif args.command == "cat":
         filter_ = " ".join(args.filter)
-        command_cat(args.journal, filter_, args.simplified, args.compact)
+        journal = Journal(args.journal)
+        command_cat(journal, filter_, args.simplified, args.compact)
 
 
 def entrypoint() -> None:
