@@ -21,6 +21,12 @@ def test_load_not_existing_file(new_journal_file):
         journal.load()
 
 
+def test_load_empty_journal(empty_journal_file):
+    journal = Journal(empty_journal_file)
+    journal.load()
+    assert {} == journal._j
+
+
 def test_from_dict():
     d = {
         "2021-01-01": {"topic1": "- first line\n- second line\n"},
