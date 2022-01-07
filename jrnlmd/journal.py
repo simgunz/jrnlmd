@@ -22,6 +22,12 @@ class Journal:
     def __init__(self, journal_path: Path = None):
         self._journal_file = journal_path
         self._j: JDictDDateDTopic = self._empty_dict()
+        if journal_path is not None:
+            try:
+                self.load()
+            except FileNotFoundError:
+                # The journal is a new journal
+                pass
 
     @property
     def journal_file(self):
