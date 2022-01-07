@@ -1,10 +1,19 @@
+from __future__ import annotations
+
 import datetime
 from typing import List, Optional, Union
+
+from .parsers import parse_journal_entry_text
 
 UNDEFINED_TOPIC = "ungrouped"
 
 
 class JournalEntry:
+    @staticmethod
+    def from_string(text: str) -> JournalEntry:
+        date, topic, notes = parse_journal_entry_text(text)
+        return JournalEntry(notes, date, topic)
+
     @staticmethod
     def _parse_note(note: Optional[str]) -> str:
         if note is None:

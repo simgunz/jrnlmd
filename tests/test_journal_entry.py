@@ -78,3 +78,13 @@ def test_multiline_note_without_dash():
     note = "a note\nwith two lines"
     parsed_note = JournalEntry._parse_note(note)
     assert "- a note\nwith two lines\n" == parsed_note
+
+
+def test_entry_from_string_multiple_notes_with_date_and_topic():
+    txt_input = (
+        "12nov2021: topic1 is this . first bullet , second bullet , third bullet"
+    )
+    entry = JournalEntry.from_string(txt_input)
+    assert "2021-11-12" == entry.date
+    assert "topic1 is this" == entry.topic
+    assert "- first bullet\n- second bullet\n- third bullet\n" == entry.note
