@@ -2,6 +2,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Set, Union
 
+from .journal_entry import JournalEntry
 from .usertypes import JDict, JDictDDateDTopic, JournalDict
 
 
@@ -90,6 +91,9 @@ class Journal:
                 if any(topic in kkk for kkk in v.keys())
             }
         )
+
+    def add(self, entry: JournalEntry) -> None:
+        self._j[entry.date][entry.topic] += entry.note
 
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))

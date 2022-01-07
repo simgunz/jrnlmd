@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from jrnlmd.journal import Journal
+from jrnlmd.journal_entry import JournalEntry
 
 
 def test_create_new_journal_file():
@@ -397,3 +398,9 @@ sudo pacman -S bash
             )
         }
     } == journal._j
+
+
+def test_add(new_journal):
+    entry = JournalEntry("a note", "2021-11-01", "topic1")
+    new_journal.add(entry)
+    assert {"2021-11-01": {"topic1": "- a note\n"}} == new_journal._j
