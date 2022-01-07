@@ -1,7 +1,7 @@
 from jrnlmd.parsers import (
     join_notes_tokens,
     parse_date,
-    parse_input,
+    parse_journal_entry_text,
     parse_note,
     split_list_on_delimiter,
 )
@@ -75,49 +75,49 @@ def test_multiline_note_without_dash():
 
 def test_input_date_only():
     txt_input = "12 nov 2021:"
-    date, topic, note = parse_input(txt_input)
+    date, topic, notes = parse_journal_entry_text(txt_input)
     assert "2021-11-12" == date
     assert topic is None
-    assert note is None
+    assert notes is None
 
 
 def test_input_single_note_with_topic_only():
     txt_input = "topic1 is this"
-    date, topic, note = parse_input(txt_input)
+    date, topic, notes = parse_journal_entry_text(txt_input)
     assert date is None
     assert "topic1 is this" == topic
-    assert note is None
+    assert notes is None
 
 
 def test_input_single_note_with_topic():
     txt_input = "topic1 is this . a note"
-    date, topic, note = parse_input(txt_input)
+    date, topic, notes = parse_journal_entry_text(txt_input)
     assert date is None
     assert "topic1 is this" == topic
-    assert "- a note\n" == note
+    assert ["a note"] == notes
 
 
 def test_input_single_note_with_date_and_topic():
     txt_input = "12nov2021: topic1 is this . a note"
-    date, topic, note = parse_input(txt_input)
+    date, topic, notes = parse_journal_entry_text(txt_input)
     assert "2021-11-12" == date
     assert "topic1 is this" == topic
-    assert "- a note\n" == note
+    assert ["a note"] == notes
 
 
 def test_input_single_note_with_date_with_space_and_topic():
     txt_input = "12 nov 2021: topic1 is this . a note"
-    date, topic, note = parse_input(txt_input)
+    date, topic, notes = parse_journal_entry_text(txt_input)
     assert "2021-11-12" == date
     assert "topic1 is this" == topic
-    assert "- a note\n" == note
+    assert ["a note"] == notes
 
 
 def test_input_multiple_notes_with_date_and_topic():
     txt_input = (
         "12nov2021: topic1 is this . first bullet , second bullet , third bullet"
     )
-    date, topic, note = parse_input(txt_input)
+    date, topic, notes = parse_journal_entry_text(txt_input)
     assert "2021-11-12" == date
     assert "topic1 is this" == topic
-    assert "- first bullet\n- second bullet\n- third bullet\n" == note
+    assert ["first bullet", "second bullet", "third bullet"] == notes
