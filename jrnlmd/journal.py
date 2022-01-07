@@ -42,7 +42,8 @@ class Journal:
     def save(self) -> None:
         if self._journal_path is None:
             raise RuntimeError("The journal file name has not been set.")
-        self._journal_path.write_text("")
+        text = self.to_md()
+        self._journal_path.write_text(text)
 
     def to_md(
         self,

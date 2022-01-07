@@ -34,10 +34,29 @@ def test_save_with_file_name_not_set():
         journal.save()
 
 
-def test_save_new_journal_file(new_journal_file):
+def test_save_new_journal_file_with_no_content(new_journal_file):
     journal = Journal(new_journal_file)
     journal.save()
     assert new_journal_file.is_file()
+
+
+def test_save_new_journal_file(new_journal_file):
+    journal = Journal.from_dict(
+        {"2021-11-12": {"topic1": "- a note\n- second bullet\n"}}
+    )
+    journal.journal_file = new_journal_file
+    journal.save()
+    result = new_journal_file.read_text()
+    assert (
+        """# 2021-11-12
+
+## topic1
+
+- a note
+- second bullet
+"""
+        == result
+    )
 
 
 def test_load_empty_journal(empty_journal_file):
