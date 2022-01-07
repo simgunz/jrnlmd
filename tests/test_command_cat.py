@@ -7,8 +7,8 @@ def test_cat_new_journal_file(new_journal_file, capsys):
     assert "" == captured.out
 
 
-def test_cat_full_journal(journal_multidate, capsys):
-    command_cat(journal_multidate)
+def test_cat_full_journal(journal_multidate_file, capsys):
+    command_cat(journal_multidate_file)
     captured = capsys.readouterr()
     assert (
         """# 2021-11-01
@@ -38,8 +38,8 @@ def test_cat_full_journal(journal_multidate, capsys):
     )
 
 
-def test_cat_specific_date(journal_multidate, capsys):
-    command_cat(journal_multidate, "2021-11-05:")
+def test_cat_specific_date(journal_multidate_file, capsys):
+    command_cat(journal_multidate_file, "2021-11-05:")
     captured = capsys.readouterr()
     assert (
         """# 2021-11-05
@@ -53,8 +53,8 @@ def test_cat_specific_date(journal_multidate, capsys):
     )
 
 
-def test_cat_specific_topic(journal_multidate, capsys):
-    command_cat(journal_multidate, "topic2")
+def test_cat_specific_topic(journal_multidate_file, capsys):
+    command_cat(journal_multidate_file, "topic2")
     captured = capsys.readouterr()
     assert (
         """# 2021-11-01
@@ -68,8 +68,8 @@ def test_cat_specific_topic(journal_multidate, capsys):
     )
 
 
-def test_cat_specific_date_and_topic(journal_multidate, capsys):
-    command_cat(journal_multidate, "1 11 2021: topic1")
+def test_cat_specific_date_and_topic(journal_multidate_file, capsys):
+    command_cat(journal_multidate_file, "1 11 2021: topic1")
     captured = capsys.readouterr()
     assert (
         """# 2021-11-01
@@ -83,8 +83,8 @@ def test_cat_specific_date_and_topic(journal_multidate, capsys):
     )
 
 
-def test_cat_specific_topic_simplified(journal_multidate, capsys):
-    command_cat(journal_multidate, "topic1", simplified=True)
+def test_cat_specific_topic_simplified(journal_multidate_file, capsys):
+    command_cat(journal_multidate_file, "topic1", simplified=True)
     captured = capsys.readouterr()
     assert (
         """# 2021-11-01
