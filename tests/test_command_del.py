@@ -15,5 +15,7 @@ def test_delete_specific_topic_on_date(journal_multidate):
     } == journal_multidate._j
 
 
-def test_delete_specific_topic_raises(journal_multidate):
+def test_delete_specific_topic_raises(journal_multidate, capsys):
     command_del(journal_multidate, "topic1")
+    captured = capsys.readouterr()
+    assert "ERROR" in captured.err

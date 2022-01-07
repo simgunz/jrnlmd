@@ -40,9 +40,11 @@ def command_cat(
 
 
 def command_del(journal: Journal, filter_: str = ""):
+    import sys
+
     date, topic, _ = parse_journal_entry_text(filter_)
     if not date:
-        print("ERROR: a date must be specified.")
+        print("ERROR: a date must be specified.", file=sys.stderr)
         return
     journal.delete(date, topic)
     journal.save()
