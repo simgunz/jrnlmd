@@ -1,4 +1,5 @@
 from collections import defaultdict
+from pathlib import Path
 from typing import Set
 
 from .usertypes import JDict, JDictDDateDTopic, JournalDict
@@ -18,7 +19,8 @@ class Journal:
         journal._from_md(text)
         return journal
 
-    def __init__(self):
+    def __init__(self, journal_path: Path = None):
+        self._journal_path = journal_path
         self._j: JDictDDateDTopic = self._empty_dict()
 
     def _empty_dict(self):
