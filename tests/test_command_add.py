@@ -3,7 +3,7 @@ from unittest import mock
 from jrnlmd.jrnlmd import command_add
 
 
-@mock.patch("jrnlmd.jrnlmd.input_from_editor")
+@mock.patch("jrnlmd.ioutils.input_from_editor")
 def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, new_journal):
     mock_input_from_editor.return_value = "first note"
     command_add(new_journal, "12 nov 2021: topic1")
@@ -35,7 +35,7 @@ def test_add_note_without_date(new_journal, today):
     )
 
 
-@mock.patch("jrnlmd.jrnlmd.input_from_editor")
+@mock.patch("jrnlmd.ioutils.input_from_editor")
 def test_add_note_without_a_topic(mock_input_from_editor, new_journal, today):
     mock_input_from_editor.return_value = "a note"
     command_add(new_journal, "")
