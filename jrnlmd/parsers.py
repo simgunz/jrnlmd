@@ -7,7 +7,6 @@ import dateparser
 
 TOKEN_SEP = "."
 NOTE_SEP = ","
-EDITOR_INPUT_SYMBOL = "@"
 
 
 def parse_note(note: str) -> str:

@@ -10,7 +10,6 @@ from jrnlmd.journal_entry import JournalEntry
 
 from .parsers import parse_input
 
-UNDEFINED_TOPIC = "ungrouped"
 EXTERNAL_COMMAND = "bat -l markdown --pager=never --style=plain"
 
 
