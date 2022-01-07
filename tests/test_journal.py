@@ -1,5 +1,4 @@
 from collections import defaultdict
-from pathlib import Path
 
 import pytest
 
@@ -16,9 +15,8 @@ def test_constructor_with_journal_path(new_journal_file):
     assert new_journal_file == journal._journal_path
 
 
-def test_load_not_existing_file():
-    journal_file = Path("/tmp/not_existing.md")
-    journal = Journal(journal_file)
+def test_load_not_existing_file(new_journal_file):
+    journal = Journal(new_journal_file)
     with pytest.raises(FileNotFoundError):
         journal.load()
 
