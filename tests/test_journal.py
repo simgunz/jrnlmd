@@ -33,6 +33,12 @@ def test_save_with_file_name_not_set():
         journal.save()
 
 
+def test_save_new_journal_file(new_journal_file):
+    journal = Journal(new_journal_file)
+    journal.save()
+    assert new_journal_file.is_file()
+
+
 def test_load_empty_journal(empty_journal_file):
     journal = Journal(empty_journal_file)
     journal.load()
