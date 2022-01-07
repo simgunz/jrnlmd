@@ -102,8 +102,9 @@ class Journal:
     def delete(self, date: str, topic: str = None) -> None:
         if topic:
             del self._j[date][topic]
-        else:
-            del self._j[date]
+            if self._j[date]:
+                return
+        del self._j[date]
 
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))

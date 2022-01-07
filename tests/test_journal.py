@@ -428,3 +428,8 @@ def test_delete_topic_on_date(journal_multidate):
 def test_delete_missing_topic(simple_journal):
     with pytest.raises(KeyError):
         simple_journal.delete("2021-11-01", "missing_topic")
+
+
+def test_delete_last_topic_on_date(simple_journal):
+    simple_journal.delete("2021-11-12", "topic1")
+    assert {} == simple_journal._j
