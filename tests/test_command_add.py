@@ -1,6 +1,7 @@
 import datetime
-import pytest
 from unittest import mock
+
+import pytest
 
 from jrnlmd.jrnlmd import command_add
 
@@ -12,11 +13,11 @@ def today():
 
 
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
-def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, journal):
+def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, empty_journal):
     mock_input_from_editor.return_value = "first note"
-    command_add(journal, "12 nov 2021: topic1")
+    command_add(empty_journal, "12 nov 2021: topic1")
 
-    result = journal.read_text()
+    result = empty_journal.read_text()
     assert (
         """# 2021-11-12
 
@@ -28,10 +29,10 @@ def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, journal
     )
 
 
-def test_add_note_without_date(journal, today):
-    command_add(journal, "topic1 . a note")
+def test_add_note_without_date(empty_journal, today):
+    command_add(empty_journal, "topic1 . a note")
 
-    result = journal.read_text()
+    result = empty_journal.read_text()
     assert (
         f"""# {today}
 
@@ -44,11 +45,11 @@ def test_add_note_without_date(journal, today):
 
 
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
-def test_add_note_without_a_topic(mock_input_from_editor, journal, today):
+def test_add_note_without_a_topic(mock_input_from_editor, empty_journal, today):
     mock_input_from_editor.return_value = "a note"
-    command_add(journal, "")
+    command_add(empty_journal, "")
 
-    result = journal.read_text()
+    result = empty_journal.read_text()
     assert (
         f"""# {today}
 
@@ -60,10 +61,10 @@ def test_add_note_without_a_topic(mock_input_from_editor, journal, today):
     )
 
 
-def test_add_note_to_new_journal(journal):
-    command_add(journal, "12nov2021 : topic1 . a note , second bullet")
+def test_add_note_to_new_journal(empty_journal):
+    command_add(empty_journal, "12nov2021 : topic1 . a note , second bullet")
 
-    result = journal.read_text()
+    result = empty_journal.read_text()
     assert (
         """# 2021-11-12
 

@@ -10,9 +10,9 @@ def test_create_empty_journal():
     assert isinstance(journal._j, defaultdict)
 
 
-def test_create_journal_from_not_existing_file(journal):
-    jrnl = Journal(journal)
-    assert journal == jrnl._journal_path
+def test_create_journal_from_not_existing_file(empty_journal):
+    jrnl = Journal(empty_journal)
+    assert empty_journal == jrnl._journal_path
 
 
 def test_from_dict():
