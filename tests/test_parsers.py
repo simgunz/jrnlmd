@@ -1,16 +1,4 @@
-from jrnlmd.parsers import (
-    join_notes_tokens,
-    parse_date,
-    parse_journal_entry_text,
-    parse_note,
-    split_list_on_delimiter,
-)
-
-
-def test_join_notes_tokens():
-    notes_tokens = [["word1"], ["word2", "word3"]]
-    result = join_notes_tokens(notes_tokens)
-    assert "- word1\n- word2 word3\n" == result
+from jrnlmd.parsers import parse_date, parse_journal_entry_text, split_list_on_delimiter
 
 
 def test_split_with_no_delimiter():
@@ -47,30 +35,6 @@ def test_parse_date_iso_format():
     txt_date = "2021-11-12"
     iso_date = parse_date(txt_date)
     assert "2021-11-12" == iso_date
-
-
-def test_parse_one_line_note_no_dash():
-    note = "a note"
-    parsed_note = parse_note(note)
-    assert "- a note\n" == parsed_note
-
-
-def test_parse_one_line_note_with_dash():
-    note = "- a note"
-    parsed_note = parse_note(note)
-    assert "- a note\n" == parsed_note
-
-
-def test_multiline_note():
-    note = "- a note\n- with two lines"
-    parsed_note = parse_note(note)
-    assert "- a note\n- with two lines\n" == parsed_note
-
-
-def test_multiline_note_without_dash():
-    note = "a note\nwith two lines"
-    parsed_note = parse_note(note)
-    assert "- a note\nwith two lines\n" == parsed_note
 
 
 def test_input_date_only():

@@ -9,13 +9,6 @@ TOKEN_SEP = "."
 NOTE_SEP = ","
 
 
-def parse_note(note: str) -> str:
-    stripped_note = note.removeprefix("-").lstrip()
-    parsed_note = f"- {stripped_note}"
-    rstripped_parsed_note = parsed_note.rstrip("\n")
-    return f"{rstripped_parsed_note}\n"
-
-
 def parse_date(text: str) -> Union[None, str]:
     import warnings
 
@@ -38,11 +31,6 @@ def parse_date(text: str) -> Union[None, str]:
     if a_date is None:
         return None
     return a_date.date().isoformat()
-
-
-def join_notes_tokens(notes_tokens: List[List[str]]) -> str:
-    notes = (" ".join(tokens) for tokens in notes_tokens)
-    return "".join((parse_note(note) for note in notes))
 
 
 def parse_journal_entry_text(
