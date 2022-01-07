@@ -23,9 +23,6 @@ class Journal:
         self._journal_path = journal_path
         self._j: JDictDDateDTopic = self._empty_dict()
 
-    def _empty_dict(self):
-        return defaultdict(lambda: defaultdict(str))
-
     def load(self):
         if not self._journal_path.is_file():
             raise FileNotFoundError()
@@ -55,6 +52,9 @@ class Journal:
                 note = self._j[day][topic]
                 output.append(note)
         return "\n".join(output)
+
+    def _empty_dict(self):
+        return defaultdict(lambda: defaultdict(str))
 
     def _from_md(self, text: str):
         current_day = ""
