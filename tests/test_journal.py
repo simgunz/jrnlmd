@@ -10,6 +10,11 @@ def test_create_empty_journal():
     assert isinstance(journal._j, defaultdict)
 
 
+def test_create_journal_from_not_existing_file(journal):
+    jrnl = Journal(journal)
+    assert journal == jrnl._journal_path
+
+
 def test_from_dict():
     d = {
         "2021-01-01": {"topic1": "- first line\n- second line\n"},
