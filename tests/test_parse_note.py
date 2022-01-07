@@ -1,4 +1,4 @@
-from jrnlmd.jrnlmd import parse_note
+from jrnlmd.parsers import parse_note
 
 
 def test_parse_one_line_note_no_dash():

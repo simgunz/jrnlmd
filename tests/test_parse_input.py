@@ -1,4 +1,4 @@
-from jrnlmd.jrnlmd import parse_input
+from jrnlmd.parsers import parse_input
 
 
 def test_input_date_only():

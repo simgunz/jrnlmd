@@ -1,4 +1,4 @@
-from jrnlmd.jrnlmd import join_notes_tokens
+from jrnlmd.parsers import join_notes_tokens
 
 
 def test_join_notes_tokens():
