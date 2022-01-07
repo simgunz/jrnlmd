@@ -15,20 +15,7 @@ class Journal:
     @classmethod
     def from_md(cls, text: str) -> JournalDict:
         journal = cls()
-        current_day = ""
-        current_topic = ""
-        code_fence = False
-        for line in text.splitlines():
-            if line.startswith("```") or line.startswith("~~~"):
-                code_fence = not code_fence
-            if line.startswith("##") and not code_fence:
-                current_topic = line.removeprefix("##").strip()
-            elif line.startswith("#") and not code_fence:
-                current_day = line.removeprefix("#").strip()
-            elif line:
-                if not (current_day and current_topic):
-                    raise ValueError("malformed journal")
-                journal._j[current_day][current_topic] += f"{line}\n"
+        journal._from_md(text)
         return journal
 
     def __init__(self):
@@ -60,3 +47,19 @@ class Journal:
                 note = self._j[day][topic]
                 output.append(note)
         return "\n".join(output)
+
+    def _from_md(self, text: str):
+        current_day = ""
+        current_topic = ""
+        code_fence = False
+        for line in text.splitlines():
+            if line.startswith("```") or line.startswith("~~~"):
+                code_fence = not code_fence
+            if line.startswith("##") and not code_fence:
+                current_topic = line.removeprefix("##").strip()
+            elif line.startswith("#") and not code_fence:
+                current_day = line.removeprefix("#").strip()
+            elif line:
+                if not (current_day and current_topic):
+                    raise ValueError("malformed journal")
+                self._j[current_day][current_topic] += f"{line}\n"
