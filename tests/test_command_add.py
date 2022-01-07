@@ -4,13 +4,11 @@ from jrnlmd.jrnlmd import command_add
 
 
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
-def test_add_note_from_user_input_to_new_journal(
-    mock_input_from_editor, new_journal_file
-):
+def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, new_journal):
     mock_input_from_editor.return_value = "first note"
-    command_add(new_journal_file, "12 nov 2021: topic1")
+    command_add(new_journal, "12 nov 2021: topic1")
 
-    result = new_journal_file.read_text()
+    result = new_journal.to_md()
     assert (
         """# 2021-11-12
 
@@ -22,10 +20,10 @@ def test_add_note_from_user_input_to_new_journal(
     )
 
 
-def test_add_note_without_date(new_journal_file, today):
-    command_add(new_journal_file, "topic1 . a note")
+def test_add_note_without_date(new_journal, today):
+    command_add(new_journal, "topic1 . a note")
 
-    result = new_journal_file.read_text()
+    result = new_journal.to_md()
     assert (
         f"""# {today}
 
@@ -38,11 +36,11 @@ def test_add_note_without_date(new_journal_file, today):
 
 
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
-def test_add_note_without_a_topic(mock_input_from_editor, new_journal_file, today):
+def test_add_note_without_a_topic(mock_input_from_editor, new_journal, today):
     mock_input_from_editor.return_value = "a note"
-    command_add(new_journal_file, "")
+    command_add(new_journal, "")
 
-    result = new_journal_file.read_text()
+    result = new_journal.to_md()
     assert (
         f"""# {today}
 
@@ -54,10 +52,10 @@ def test_add_note_without_a_topic(mock_input_from_editor, new_journal_file, toda
     )
 
 
-def test_add_note_to_new_journal(new_journal_file):
-    command_add(new_journal_file, "12nov2021 : topic1 . a note , second bullet")
+def test_add_note_to_new_journal(new_journal):
+    command_add(new_journal, "12nov2021 : topic1 . a note , second bullet")
 
-    result = new_journal_file.read_text()
+    result = new_journal.to_md()
     assert (
         """# 2021-11-12
 
@@ -70,12 +68,12 @@ def test_add_note_to_new_journal(new_journal_file):
     )
 
 
-def test_add_note_to_existing_journal(simple_journal_file):
+def test_add_note_to_existing_journal(simple_journal):
     command_add(
-        simple_journal_file,
+        simple_journal,
         "12nov2021 : topic1 . appended note",
     )
-    result = simple_journal_file.read_text()
+    result = simple_journal.to_md()
     assert (
         """# 2021-11-12
 
@@ -89,12 +87,12 @@ def test_add_note_to_existing_journal(simple_journal_file):
     )
 
 
-def test_add_note_different_date_to_existing_journal(simple_journal_file):
+def test_add_note_different_date_to_existing_journal(simple_journal):
     command_add(
-        simple_journal_file,
+        simple_journal,
         "20nov2021 : topic1 . another note",
     )
-    result = simple_journal_file.read_text()
+    result = simple_journal.to_md()
     assert (
         """# 2021-11-20
 
