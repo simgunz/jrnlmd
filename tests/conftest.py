@@ -4,13 +4,13 @@ import pytest
 
 
 @pytest.fixture()
-def empty_journal(tmp_path):
+def new_journal_file(tmp_path):
     return tmp_path / "journal.md"
 
 
 @pytest.fixture()
-def dummy_journal(empty_journal):
-    empty_journal.write_text(
+def dummy_journal(new_journal_file):
+    new_journal_file.write_text(
         """# 2021-11-12
 
 ## topic1
@@ -19,12 +19,12 @@ def dummy_journal(empty_journal):
 - second bullet
 """
     )
-    return empty_journal
+    return new_journal_file
 
 
 @pytest.fixture()
-def journal_multidate(empty_journal):
-    empty_journal.write_text(
+def journal_multidate(new_journal_file):
+    new_journal_file.write_text(
         """# 2021-11-10
 
 ## topic1
@@ -48,7 +48,7 @@ def journal_multidate(empty_journal):
 - another note
 """
     )
-    return empty_journal
+    return new_journal_file
 
 
 # Replace print_with_external with print

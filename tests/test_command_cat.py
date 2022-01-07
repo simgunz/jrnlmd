@@ -1,8 +1,8 @@
 from jrnlmd.jrnlmd import command_cat
 
 
-def test_cat_empty_journal(empty_journal, capsys):
-    command_cat(empty_journal)
+def test_cat_new_journal_file(new_journal_file, capsys):
+    command_cat(new_journal_file)
     captured = capsys.readouterr()
     assert "" == captured.out
 
