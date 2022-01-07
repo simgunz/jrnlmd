@@ -10,14 +10,26 @@ UNDEFINED_TOPIC = "ungrouped"
 
 class JournalEntry:
     @staticmethod
-    def from_string(text: str) -> JournalEntry:
+    def from_string(text: str, prompt_for_input=False) -> JournalEntry:
         """Parse a string into a journal entry.
 
-        If the note is missing from the string it prompts the user for input it."""
+        Parameters
+        ----------
+        text : str
+            A textual input with the following format:
+            [date:] [topic [ . note1 [, note2 [, note3 [ ... ]]]]]
+        prompt_for_input : bool, optional
+            Flag to enable prompt from EDITOR if no note is present in the text,
+            by default False
+
+        Returns
+        -------
+        JournalEntry
+        """
         from jrnlmd.ioutils import input_from_editor
 
         date, topic, notes = parse_journal_entry_text(text)
-        if notes is None:
+        if notes is None and prompt_for_input:
             notes = input_from_editor()
         return JournalEntry(notes, date, topic)
 

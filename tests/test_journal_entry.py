@@ -96,7 +96,7 @@ def test_entry_from_string_multiple_notes_with_date_and_topic():
 def test_entry_from_string_with_user_input(mock_input_from_editor):
     mock_input_from_editor.return_value = "a note"
     txt_input = "12nov2021: topic1"
-    entry = JournalEntry.from_string(txt_input)
+    entry = JournalEntry.from_string(txt_input, prompt_for_input=True)
     assert "2021-11-12" == entry.date
     assert "topic1" == entry.topic
     assert "- a note\n" == entry.note

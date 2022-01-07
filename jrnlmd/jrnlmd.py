@@ -10,7 +10,7 @@ from .parsers import parse_journal_entry_text
 
 
 def command_add(journal: Journal, text: str) -> None:
-    entry = JournalEntry.from_string(text)
+    entry = JournalEntry.from_string(text, prompt_for_input=True)
     journal.add(entry)
     journal.save()
 
