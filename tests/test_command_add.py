@@ -1,15 +1,6 @@
-import datetime
 from unittest import mock
 
-import pytest
-
 from jrnlmd.jrnlmd import command_add
-
-
-@pytest.fixture
-def today():
-    date_today = datetime.date.today()
-    return date_today.strftime("%Y-%m-%d")
 
 
 @mock.patch("jrnlmd.jrnlmd.input_from_editor")
