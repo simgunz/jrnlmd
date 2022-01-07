@@ -79,12 +79,12 @@ def test_add_note_to_new_journal(new_journal_file):
     )
 
 
-def test_add_note_to_existing_journal(dummy_journal):
+def test_add_note_to_existing_journal(simple_journal_file):
     command_add(
-        dummy_journal,
+        simple_journal_file,
         "12nov2021 : topic1 . appended note",
     )
-    result = dummy_journal.read_text()
+    result = simple_journal_file.read_text()
     assert (
         """# 2021-11-12
 
@@ -98,12 +98,12 @@ def test_add_note_to_existing_journal(dummy_journal):
     )
 
 
-def test_add_note_different_date_to_existing_journal(dummy_journal):
+def test_add_note_different_date_to_existing_journal(simple_journal_file):
     command_add(
-        dummy_journal,
+        simple_journal_file,
         "20nov2021 : topic1 . another note",
     )
-    result = dummy_journal.read_text()
+    result = simple_journal_file.read_text()
     assert (
         """# 2021-11-20
 

@@ -15,7 +15,7 @@ def empty_journal_file(new_journal_file):
 
 
 @pytest.fixture()
-def dummy_journal(new_journal_file):
+def simple_journal_file(new_journal_file):
     new_journal_file.write_text(
         """# 2021-11-12
 
@@ -29,7 +29,7 @@ def dummy_journal(new_journal_file):
 
 
 @pytest.fixture()
-def journal_multidate(new_journal_file):
+def journal_multidate_file(new_journal_file):
     new_journal_file.write_text(
         """# 2021-11-10
 
