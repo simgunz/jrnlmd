@@ -7,7 +7,7 @@ import tempfile
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Callable, DefaultDict, List, Optional, Set, Tuple, Union
+from typing import DefaultDict, List, Optional, Set, Tuple, Union
 
 import dateparser
 
@@ -149,20 +149,6 @@ def print_with_external(text: str) -> None:
         print(text)
 
 
-def filter_dict_date(
-    d: JournalDict, date: str, filt_func: Callable = str.__eq__
-) -> JournalDict:
-    return {k: v for k, v in d.items() if filt_func(k, date)}
-
-
-def filter_dict_topic(d: JournalDict, topic: str) -> JournalDict:
-    return {
-        k: {kk: vv for kk, vv in v.items() if topic in kk}
-        for k, v in d.items()
-        if any(topic in kkk for kkk in v.keys())
-    }
-
-
 def input_from_editor():
 
     editor = os.environ.get("EDITOR", "vim")
@@ -210,12 +196,9 @@ def command_cat(
     )
 
 
-def command_since(journal: Path, since: str) -> None:
-    if not journal.is_file():
-        return
-    d = md_to_dict(journal.read_text())
-    filtered_d = filter_dict_date(d, since, filt_func=str.__ge__)
-    print_with_external(dict_to_md(filtered_d, date_descending=False))
+def command_since(journal: Journal, since: str) -> None:
+    # TODO: add filter here
+    print_with_external(journal.to_md(date_descending=False))
 
 
 def get_argparser() -> ArgumentParser:
