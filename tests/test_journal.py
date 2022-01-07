@@ -6,14 +6,14 @@ import pytest
 from jrnlmd.journal import Journal
 
 
-def test_create_empty_journal():
+def test_create_new_journal_file():
     journal = Journal()
     assert isinstance(journal._j, defaultdict)
 
 
-def test_constructor_with_journal_path(empty_journal):
-    journal = Journal(empty_journal)
-    assert empty_journal == journal._journal_path
+def test_constructor_with_journal_path(new_journal_file):
+    journal = Journal(new_journal_file)
+    assert new_journal_file == journal._journal_path
 
 
 def test_load_not_existing_file():
