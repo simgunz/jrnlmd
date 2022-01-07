@@ -31,6 +31,10 @@ class Journal:
         text = self._journal_path.read_text()
         self._from_md(text)
 
+    def save(self) -> None:
+        if self._journal_path is None:
+            raise RuntimeError("The journal file name has not been set.")
+
     def to_md(
         self,
         date_descending: bool = True,

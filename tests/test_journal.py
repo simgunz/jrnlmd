@@ -23,8 +23,14 @@ def test_load_not_existing_file(new_journal_file):
 
 def test_load_with_file_name_not_set():
     journal = Journal()
-    with pytest.raises(RuntimeError):
+    with pytest.raises(RuntimeError, match="The journal file name has not been set."):
         journal.load()
+
+
+def test_save_with_file_name_not_set():
+    journal = Journal()
+    with pytest.raises(RuntimeError, match="The journal file name has not been set."):
+        journal.save()
 
 
 def test_load_empty_journal(empty_journal_file):
