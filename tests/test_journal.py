@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+import pytest
+
 from jrnlmd.journal import Journal
 
 
@@ -180,3 +182,133 @@ def test_dict_to_md_simplified():
 """
         == text
     )
+
+
+def test_md_to_dict_one_level():
+    text = """
+# 2021-01-01
+## topic1
+
+- first line
+- second line
+"""
+    journal = Journal.from_md(text)
+    assert {"2021-01-01": {"topic1": "- first line\n- second line\n"}} == journal._j
+
+
+def test_md_to_dict_two_topics():
+    text = """
+# 2021-01-01
+## topic1
+
+- first line
+- second line
+
+## topic2
+
+- third line
+"""
+    journal = Journal.from_md(text)
+    assert {
+        "2021-01-01": {
+            "topic1": "- first line\n- second line\n",
+            "topic2": "- third line\n",
+        }
+    } == journal._j
+
+
+def test_md_to_dict_wrapped_lines():
+    text = """
+# 2021-01-01
+## topic1
+
+- first line
+  wrapped
+- second line
+  ```bash
+  sudo pacman -S bash
+  ```
+"""
+    journal = Journal.from_md(text)
+    assert {
+        "2021-01-01": {
+            "topic1": (
+                "- first line\n  wrapped\n- second line\n  ```bash\n  sudo pacman -S"
+                " bash\n  ```\n"
+            )
+        }
+    } == journal._j
+
+
+def test_md_to_dict_malformed_journal():
+    text = """
+## topic1
+
+- first line
+- second line
+"""
+    with pytest.raises(ValueError):
+        Journal.from_md(text)
+
+
+def test_md_to_dict_comment_in_code_fence():
+    text = """
+# 2021-01-01
+## topic1
+
+- first line
+  wrapped
+- second line
+  ```bash
+  # comment
+  sudo pacman -S bash
+  ```
+"""
+    journal = Journal.from_md(text)
+    assert {
+        "2021-01-01": {
+            "topic1": (
+                "- first line\n  wrapped\n- second line\n  ```bash\n  # comment\n  sudo"
+                " pacman -S bash\n  ```\n"
+            )
+        }
+    } == journal._j
+
+
+def test_md_to_dict_line_continuation():
+    text = """
+# 2021-01-01
+## topic1
+
+- first line
+line continuation
+- second line
+"""
+    journal = Journal.from_md(text)
+    assert {
+        "2021-01-01": {"topic1": "- first line\nline continuation\n- second line\n"}
+    } == journal._j
+
+
+@pytest.mark.parametrize("code_fence", ["```", "~~~"])
+def test_md_to_dict_with_unindented_comment_in_code_fence(code_fence):
+    text = f"""
+# 2021-01-01
+## topic1
+
+- first line
+{code_fence}bash
+# comment
+sudo pacman -S bash
+{code_fence}
+- second line
+"""
+    journal = Journal.from_md(text)
+    assert {
+        "2021-01-01": {
+            "topic1": (
+                f"- first line\n{code_fence}bash\n# comment\nsudo pacman -S"
+                f" bash\n{code_fence}\n- second line\n"
+            )
+        }
+    } == journal._j
