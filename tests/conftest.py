@@ -9,6 +9,12 @@ def new_journal_file(tmp_path):
 
 
 @pytest.fixture()
+def empty_journal_file(new_journal_file):
+    new_journal_file.touch()
+    return new_journal_file
+
+
+@pytest.fixture()
 def dummy_journal(new_journal_file):
     new_journal_file.write_text(
         """# 2021-11-12

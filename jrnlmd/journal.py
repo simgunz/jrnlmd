@@ -27,7 +27,8 @@ class Journal:
         return defaultdict(lambda: defaultdict(str))
 
     def load(self):
-        raise FileNotFoundError()
+        if not self._journal_path.is_file():
+            raise FileNotFoundError()
 
     def to_md(
         self,
