@@ -39,6 +39,15 @@ def command_cat(
     )
 
 
+def command_del(journal: Journal, filter_: str = ""):
+    date, topic, _ = parse_journal_entry_text(filter_)
+    if not date:
+        print("ERROR: a date must be specified.")
+        return
+    journal.delete(date, topic)
+    journal.save()
+
+
 def _detect_time_modifier(text: str) -> Tuple[str, str]:
     tokens = text.split()
     if tokens and tokens[0] in ["from", "since"]:
@@ -80,6 +89,10 @@ def get_argparser() -> ArgumentParser:
         action="store_true",
         help="Reduce the number of blank lines in the output.",
     )
+    parser_delete = subparsers.add_parser(
+        "del", help="Delete an entry from the journal."
+    )
+    parser_delete.add_argument("filter", type=str, nargs="*", help="[[date:] [topic]")
     return parser
 
 
@@ -93,6 +106,9 @@ def main(argv: List[str]) -> None:
     elif args.command == "cat":
         filter_ = " ".join(args.filter)
         command_cat(journal, filter_, args.simplified, args.compact)
+    elif args.command == "del":
+        filter_ = " ".join(args.filter)
+        command_del(journal, filter_)
 
 
 def entrypoint() -> None:
