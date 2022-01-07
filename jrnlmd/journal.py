@@ -23,7 +23,9 @@ class Journal:
         self._journal_path = journal_path
         self._j: JDictDDateDTopic = self._empty_dict()
 
-    def load(self):
+    def load(self) -> None:
+        if self._journal_path is None:
+            raise RuntimeError("The journal file name has not been set.")
         if not self._journal_path.is_file():
             raise FileNotFoundError()
         text = self._journal_path.read_text()
