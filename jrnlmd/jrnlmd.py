@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from jrnlmd.journal import Journal
 from jrnlmd.journal_entry import JournalEntry
@@ -18,11 +18,15 @@ def command_add(journal: Journal, text: str) -> None:
 def command_cat(
     journal: Journal, filter_: str = "", simplified=False, compact=False
 ) -> None:
+    filter_time_modifier, filter_ = _detect_time_modifier(filter_)
     date, topic, _ = parse_journal_entry_text(filter_)
     simplify = False
     journal_filtered = journal
     if date:
-        journal_filtered = journal_filtered.on(date)
+        if filter_time_modifier == "since":
+            journal_filtered = journal_filtered.since(date)
+        else:
+            journal_filtered = journal_filtered.on(date)
     if topic:
         simplify = True
         journal_filtered = journal_filtered.about(topic)
@@ -35,9 +39,12 @@ def command_cat(
     )
 
 
-def command_since(journal: Journal, since: str) -> None:
-    # TODO: add filter here
-    print_with_external(journal.to_md(date_descending=False))
+def _detect_time_modifier(text: str) -> Tuple[str, str]:
+    tokens = text.split()
+    if tokens and tokens[0] in ["from", "since"]:
+        return "since", " ".join(tokens[1:])
+    else:
+        return "on", text
 
 
 def get_argparser() -> ArgumentParser:

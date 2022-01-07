@@ -1,3 +1,5 @@
+import pytest
+
 from jrnlmd.jrnlmd import command_cat
 
 
@@ -96,6 +98,28 @@ def test_cat_specific_topic_simplified(journal_multidate, capsys):
 - second date note
 
 # 2021-11-10
+
+- third date note
+
+"""
+        == captured.out
+    )
+
+
+@pytest.mark.parametrize("mod", ["from", "since"])
+def test_cat_journal_since(mod, journal_multidate, capsys):
+    command_cat(journal_multidate, f"{mod} 2021-11-05:")
+    captured = capsys.readouterr()
+    assert (
+        """# 2021-11-05
+
+## topic1
+
+- second date note
+
+# 2021-11-10
+
+## topic1
 
 - third date note
 
