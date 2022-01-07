@@ -80,6 +80,10 @@ class Journal:
         """Return a filtered journal on the given date."""
         return Journal.from_dict({k: v for k, v in self._j.items() if k == date})
 
+    def since(self, date: str) -> JournalDict:
+        """Return a filtered journal on the given date."""
+        return Journal.from_dict({k: v for k, v in self._j.items() if k >= date})
+
     def about(self, topic: str) -> JournalDict:
         """Return a filtered journal about the given topic.
 
