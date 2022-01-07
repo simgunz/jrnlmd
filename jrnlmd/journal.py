@@ -72,9 +72,13 @@ class Journal:
         pass
 
     def on(self, date: str) -> JournalDict:
+        """Return a filtered journal on the given date."""
         return Journal.from_dict({k: v for k, v in self._j.items() if k == date})
 
     def about(self, topic: str) -> JournalDict:
+        """Return a filtered journal about the given topic.
+
+        The topic can be a partial match."""
         return Journal.from_dict(
             {
                 k: {kk: vv for kk, vv in v.items() if topic in kk}
