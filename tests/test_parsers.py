@@ -1,39 +1,43 @@
-from jrnlmd.parsers import parse_date, parse_journal_entry_text, split_list_on_delimiter
+from jrnlmd.parsers import (
+    _parse_date,
+    _split_list_on_delimiter,
+    parse_journal_entry_text,
+)
 
 
 def test_split_with_no_delimiter():
     tokens = ["word1", "word2", "word3"]
-    result = split_list_on_delimiter(tokens, delimiter=".")
+    result = _split_list_on_delimiter(tokens, delimiter=".")
     assert [["word1", "word2", "word3"]] == result
 
 
 def test_split_with_one_delimiter():
     tokens = ["word1", ".", "word2", "word3"]
-    result = split_list_on_delimiter(tokens, delimiter=".")
+    result = _split_list_on_delimiter(tokens, delimiter=".")
     assert [["word1"], ["word2", "word3"]] == result
 
 
 def test_parse_date():
     txt_date = "12nov2021"
-    iso_date = parse_date(txt_date)
+    iso_date = _parse_date(txt_date)
     assert "2021-11-12" == iso_date
 
 
 def test_parse_date_unparsable():
     txt_date = "aaaa"
-    iso_date = parse_date(txt_date)
+    iso_date = _parse_date(txt_date)
     assert iso_date is None
 
 
 def test_parse_date_single_char():
     txt_date = "a"
-    iso_date = parse_date(txt_date)
+    iso_date = _parse_date(txt_date)
     assert iso_date is None
 
 
 def test_parse_date_iso_format():
     txt_date = "2021-11-12"
-    iso_date = parse_date(txt_date)
+    iso_date = _parse_date(txt_date)
     assert "2021-11-12" == iso_date
 
 
