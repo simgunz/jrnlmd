@@ -5,67 +5,19 @@ import re
 import subprocess
 import tempfile
 from argparse import ArgumentParser
-from collections import defaultdict
 from pathlib import Path
-from typing import DefaultDict, List, Optional, Set, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import dateparser
 
 from jrnlmd.journal import Journal
 from jrnlmd.journal_entry import JournalEntry
 
-from .usertypes import JournalDict
-
 TOKEN_SEP = "."
 NOTE_SEP = ","
 EDITOR_INPUT_SYMBOL = "@"
 UNDEFINED_TOPIC = "ungrouped"
 EXTERNAL_COMMAND = "bat -l markdown --pager=never --style=plain"
-
-
-def empty_md_dict() -> DefaultDict[str, DefaultDict[str, str]]:
-    return defaultdict(lambda: defaultdict(str))
-
-
-def md_to_dict(text: str) -> JournalDict:
-    d = empty_md_dict()
-    current_day = ""
-    current_topic = ""
-    code_fence = False
-    for line in text.splitlines():
-        if line.startswith("```") or line.startswith("~~~"):
-            code_fence = not code_fence
-        if line.startswith("##") and not code_fence:
-            current_topic = line.removeprefix("##").strip()
-        elif line.startswith("#") and not code_fence:
-            current_day = line.removeprefix("#").strip()
-        elif line:
-            if not (current_day and current_topic):
-                raise ValueError("malformed journal")
-            d[current_day][current_topic] += f"{line}\n"
-    return d
-
-
-def dict_to_md(
-    d: JournalDict, date_descending=True, simplified=False, compact=False
-) -> str:
-    keys: Set[str] = set()
-    for v in d.values():
-        keys.update(v.keys())
-    canSimplify = len(keys) == 1
-    output = []
-    for day in sorted(d, reverse=date_descending):
-        output.append(f"# {day}")
-        if not compact:
-            output.append("")
-        for topic in d[day]:
-            if not (simplified and canSimplify):
-                output.append(f"## {topic}")
-                if not compact:
-                    output.append("")
-            note = d[day][topic]
-            output.append(note)
-    return "\n".join(output)
 
 
 def parse_note(note: str) -> str:
