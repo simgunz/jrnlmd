@@ -26,6 +26,9 @@ class Journal:
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))
 
+    def load(self):
+        raise FileNotFoundError()
+
     def to_md(
         self,
         date_descending: bool = True,

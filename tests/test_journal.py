@@ -1,4 +1,5 @@
 from collections import defaultdict
+from pathlib import Path
 
 import pytest
 
@@ -13,6 +14,13 @@ def test_create_empty_journal():
 def test_constructor_with_journal_path(empty_journal):
     journal = Journal(empty_journal)
     assert empty_journal == journal._journal_path
+
+
+def test_load_not_existing_file():
+    journal_file = Path("/tmp/not_existing.md")
+    journal = Journal(journal_file)
+    with pytest.raises(FileNotFoundError):
+        journal.load()
 
 
 def test_from_dict():
