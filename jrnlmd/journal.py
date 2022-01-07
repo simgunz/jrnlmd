@@ -69,8 +69,6 @@ class Journal:
                 output.append(note)
         return "\n".join(output)
 
-        pass
-
     def on(self, date: str) -> JournalDict:
         """Return a filtered journal on the given date."""
         return Journal.from_dict({k: v for k, v in self._j.items() if k == date})
