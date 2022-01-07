@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from typing import Set
+from typing import Set, Union
 
 from .usertypes import JDict, JDictDDateDTopic, JournalDict
 
@@ -22,6 +22,14 @@ class Journal:
     def __init__(self, journal_path: Path = None):
         self._journal_path = journal_path
         self._j: JDictDDateDTopic = self._empty_dict()
+
+    @property
+    def journal_file(self):
+        return self._journal_path
+
+    @journal_file.setter
+    def journal_file(self, file_path: Union[str, Path]):
+        self._journal_path = Path(file_path)
 
     def load(self) -> None:
         if self._journal_path is None:
