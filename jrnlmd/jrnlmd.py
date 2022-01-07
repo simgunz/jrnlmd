@@ -6,7 +6,7 @@ from jrnlmd.journal import Journal
 from jrnlmd.journal_entry import JournalEntry
 
 from .ioutils import print_with_external
-from .parsers import parse_input
+from .parsers import parse_journal_entry_text
 
 
 def command_add(journal: Journal, text: str) -> None:
@@ -18,7 +18,7 @@ def command_add(journal: Journal, text: str) -> None:
 def command_cat(
     journal: Journal, filter_: str = "", simplified=False, compact=False
 ) -> None:
-    date, topic, _ = parse_input(filter_)
+    date, topic, _ = parse_journal_entry_text(filter_)
     simplify = False
     journal_filtered = journal
     if date:
