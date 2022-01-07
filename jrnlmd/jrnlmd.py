@@ -67,12 +67,18 @@ def get_argparser() -> ArgumentParser:
     parser_cat = subparsers.add_parser(
         "cat", help="Print the journal on the standard output."
     )
-    parser_cat.add_argument("filter", type=str, nargs="*", help="[date:] [topic]")
     parser_cat.add_argument(
-        "--simplified", action="store_true", help="Hide topic if unique."
+        "filter", type=str, nargs="*", help="[[{from, since}] date:] [topic]"
     )
     parser_cat.add_argument(
-        "--compact", action="store_true", help="Remove empty lines in output."
+        "--simplified",
+        action="store_true",
+        help="Do not print the topic when the filter match a single topic.",
+    )
+    parser_cat.add_argument(
+        "--compact",
+        action="store_true",
+        help="Reduce the number of blank lines in the output.",
     )
     return parser
 
