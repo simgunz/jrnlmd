@@ -89,6 +89,7 @@ class Journal:
         return defaultdict(lambda: defaultdict(str))
 
     def _from_md(self, text: str):
+        self._j = self._empty_dict()
         current_day = ""
         current_topic = ""
         code_fence = False
