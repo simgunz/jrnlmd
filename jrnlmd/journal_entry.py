@@ -4,7 +4,7 @@ UNDEFINED_TOPIC = "ungrouped"
 
 
 class JournalEntry:
-    def __init__(self, note) -> None:
+    def __init__(self, note, date: str = None) -> None:
         self.note = note
-        self.date = datetime.date.today().isoformat()
+        self.date = date or datetime.date.today().isoformat()
         self.topic = UNDEFINED_TOPIC
