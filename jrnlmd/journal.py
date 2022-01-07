@@ -99,8 +99,11 @@ class Journal:
     def add(self, entry: JournalEntry) -> None:
         self._j[entry.date][entry.topic] += entry.note
 
-    def delete(self, date: str) -> None:
-        del self._j[date]
+    def delete(self, date: str, topic: str = None) -> None:
+        if topic:
+            del self._j[date][topic]
+        else:
+            del self._j[date]
 
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))
