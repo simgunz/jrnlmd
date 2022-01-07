@@ -11,8 +11,8 @@ def test_create_empty_journal():
 
 
 def test_create_journal_from_not_existing_file(empty_journal):
-    jrnl = Journal(empty_journal)
-    assert empty_journal == jrnl._journal_path
+    journal = Journal(empty_journal)
+    assert empty_journal == journal._journal_path
 
 
 def test_from_dict():
