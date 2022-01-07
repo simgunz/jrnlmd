@@ -1,4 +1,4 @@
-from jrnlmd.jrnlmd import split_list_on_delimiter
+from jrnlmd.parsers import split_list_on_delimiter
 
 
 def test_split_with_no_delimiter():

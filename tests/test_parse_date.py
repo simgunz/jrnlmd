@@ -1,4 +1,4 @@
-from jrnlmd.jrnlmd import parse_date
+from jrnlmd.parsers import parse_date
 
 
 def test_parse_date():
