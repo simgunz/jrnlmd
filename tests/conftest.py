@@ -72,15 +72,12 @@ def simple_journal(simple_journal_file):
 
 @pytest.fixture
 def journal_multidate(journal_multidate_file):
-    journal = Journal(journal_multidate_file)
-    journal.load()
-    return journal
+    return Journal(journal_multidate_file)
 
 
 @pytest.fixture
 def today():
-    date_today = datetime.date.today()
-    return date_today.strftime("%Y-%m-%d")
+    return datetime.date.today().isoformat()
 
 
 # Replace print_with_external with print
