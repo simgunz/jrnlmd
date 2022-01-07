@@ -60,6 +60,11 @@ def journal_multidate_file(new_journal_file):
 
 
 @pytest.fixture
+def new_journal(new_journal_file):
+    return Journal(new_journal_file)
+
+
+@pytest.fixture
 def journal_multidate(journal_multidate_file):
     journal = Journal(journal_multidate_file)
     journal.load()
