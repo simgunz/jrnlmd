@@ -28,6 +28,18 @@ def test_load_with_file_name_not_set():
         journal.load()
 
 
+def test_load_empty_journal(empty_journal_file):
+    journal = Journal(empty_journal_file)
+    journal.load()
+    assert {} == journal._j
+
+
+def test_load_journal(simple_journal_file):
+    journal = Journal(simple_journal_file)
+    journal.load()
+    assert {"2021-11-12": {"topic1": "- a note\n- second bullet\n"}} == journal._j
+
+
 def test_save_with_file_name_not_set():
     journal = Journal()
     with pytest.raises(RuntimeError, match="The journal file name has not been set."):
@@ -57,18 +69,6 @@ def test_save_new_journal_file(new_journal_file):
 """
         == result
     )
-
-
-def test_load_empty_journal(empty_journal_file):
-    journal = Journal(empty_journal_file)
-    journal.load()
-    assert {} == journal._j
-
-
-def test_load_journal(simple_journal_file):
-    journal = Journal(simple_journal_file)
-    journal.load()
-    assert {"2021-11-12": {"topic1": "- a note\n- second bullet\n"}} == journal._j
 
 
 def test_journal_file_setter_with_path(new_journal_file):
