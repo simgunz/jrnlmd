@@ -29,6 +29,8 @@ class Journal:
     def load(self):
         if not self._journal_path.is_file():
             raise FileNotFoundError()
+        text = self._journal_path.read_text()
+        self._from_md(text)
 
     def to_md(
         self,
