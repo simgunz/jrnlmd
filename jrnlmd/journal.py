@@ -74,6 +74,15 @@ class Journal:
     def on(self, date: str) -> JournalDict:
         return Journal.from_dict({k: v for k, v in self._j.items() if k == date})
 
+    def about(self, topic: str) -> JournalDict:
+        return Journal.from_dict(
+            {
+                k: {kk: vv for kk, vv in v.items() if topic in kk}
+                for k, v in self._j.items()
+                if any(topic in kkk for kkk in v.keys())
+            }
+        )
+
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))
 
