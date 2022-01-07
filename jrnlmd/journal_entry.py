@@ -1,4 +1,8 @@
 import datetime
+import re
+from typing import Union
+
+import dateparser
 
 UNDEFINED_TOPIC = "ungrouped"
 
@@ -10,6 +14,30 @@ class JournalEntry:
         parsed_note = f"- {stripped_note}"
         rstripped_parsed_note = parsed_note.rstrip("\n")
         return f"{rstripped_parsed_note}\n"
+
+    @staticmethod
+    def parse_date(text: str) -> Union[None, str]:
+        import warnings
+
+        # Ignore dateparser warnings regarding pytz
+        warnings.filterwarnings(
+            "ignore",
+            message=(
+                "The localize method is no longer necessary, as this time zone supports"
+                " the fold attribute"
+            ),
+        )
+        if len(text) == 1 and not re.match(r"\d", text):
+            return None
+        try:
+            a_date = datetime.datetime.fromisoformat(text)
+        except ValueError:
+            a_date = dateparser.parse(
+                text, settings={"DATE_ORDER": "DMY", "PREFER_DATES_FROM": "past"}
+            )
+        if a_date is None:
+            return None
+        return a_date.date().isoformat()
 
     def __init__(self, note, date: str = None, topic: str = None) -> None:
         self.note = self._parse_note(note)
