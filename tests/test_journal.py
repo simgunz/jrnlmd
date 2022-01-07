@@ -13,7 +13,7 @@ def test_create_new_journal_file():
 
 def test_constructor_with_journal_path(new_journal_file):
     journal = Journal(new_journal_file)
-    assert new_journal_file == journal._journal_path
+    assert new_journal_file == journal._journal_file
 
 
 def test_load_not_existing_file(new_journal_file):
@@ -74,13 +74,13 @@ def test_load_journal(dummy_journal):
 def test_journal_file_setter_with_path(new_journal_file):
     journal = Journal()
     journal.journal_file = new_journal_file
-    assert journal._journal_path == new_journal_file
+    assert journal._journal_file == new_journal_file
 
 
 def test_journal_file_setter_with_string():
     journal = Journal()
     journal.journal_file = "/tmp/journal_test.md"
-    assert journal._journal_path == Path("/tmp/journal_test.md")
+    assert journal._journal_file == Path("/tmp/journal_test.md")
 
 
 def test_from_dict():
