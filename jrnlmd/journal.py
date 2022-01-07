@@ -69,6 +69,11 @@ class Journal:
                 output.append(note)
         return "\n".join(output)
 
+        pass
+
+    def on(self, date: str) -> JournalDict:
+        return Journal.from_dict({k: v for k, v in self._j.items() if k == date})
+
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))
 

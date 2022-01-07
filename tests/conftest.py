@@ -2,6 +2,8 @@ from unittest import mock
 
 import pytest
 
+from jrnlmd.journal import Journal
+
 
 @pytest.fixture()
 def new_journal_file(tmp_path):
@@ -55,6 +57,13 @@ def journal_multidate_file(new_journal_file):
 """
     )
     return new_journal_file
+
+
+@pytest.fixture
+def journal_multidate(journal_multidate_file):
+    journal = Journal(journal_multidate_file)
+    journal.load()
+    return journal
 
 
 # Replace print_with_external with print
