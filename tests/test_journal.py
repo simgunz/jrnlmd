@@ -16,6 +16,11 @@ def test_constructor_with_journal_path(new_journal_file):
     assert new_journal_file == journal._journal_file
 
 
+def test_constructor_loads_journal_if_exists(simple_journal_file):
+    journal = Journal(simple_journal_file)
+    assert {"2021-11-12": {"topic1": "- a note\n- second bullet\n"}} == journal._j
+
+
 def test_load_not_existing_file(new_journal_file):
     journal = Journal(new_journal_file)
     with pytest.raises(FileNotFoundError):
