@@ -16,3 +16,12 @@ def test_journal_entry_constructor_with_note_and_date():
     assert note == entry.note
     assert date == entry.date
     assert UNDEFINED_TOPIC == entry.topic
+
+
+def test_journal_entry_constructor_with_note_and_topic(today):
+    note = "a note"
+    topic = "topic1"
+    entry = JournalEntry(note, topic=topic)
+    assert note == entry.note
+    assert today == entry.date
+    assert topic == entry.topic
