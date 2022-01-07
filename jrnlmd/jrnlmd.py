@@ -5,15 +5,12 @@ from typing import List
 from jrnlmd.journal import Journal
 from jrnlmd.journal_entry import JournalEntry
 
-from .ioutils import input_from_editor, print_with_external
+from .ioutils import print_with_external
 from .parsers import parse_input
 
 
 def command_add(journal: Journal, text: str) -> None:
-    date, topic, note = parse_input(text)
-    if note is None:
-        note = input_from_editor()
-    entry = JournalEntry(note, date, topic)
+    entry = JournalEntry.from_string(text)
     journal.add(entry)
     journal.save()
 
