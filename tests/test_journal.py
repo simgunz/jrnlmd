@@ -404,3 +404,8 @@ def test_add(new_journal):
     entry = JournalEntry("a note", "2021-11-01", "topic1")
     new_journal.add(entry)
     assert {"2021-11-01": {"topic1": "- a note\n"}} == new_journal._j
+
+
+def test_delete_date(simple_journal):
+    simple_journal.delete("2021-11-12")
+    assert {} == simple_journal._j
