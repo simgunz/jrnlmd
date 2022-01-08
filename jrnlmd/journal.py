@@ -99,12 +99,22 @@ class Journal:
     def add(self, entry: JournalEntry) -> None:
         self._j[entry.date][entry.topic] += entry.note
 
-    def delete(self, date: str, topic: str = None) -> None:
+    def delete(self, date: str, topic: str = None) -> JournalDict:
+        if date not in self._j:
+            raise KeyError(f"{date} missing from journal.")
         if topic:
-            del self._j[date][topic]
-            if self._j[date]:
-                return
-        del self._j[date]
+            if topic not in self._j[date]:
+                raise KeyError(f"{topic} missing on {date} entry.")
+            topic_to_delete = [topic]
+        else:
+            topic_to_delete = list(self._j[date].keys())
+        deleted_entries = Journal()
+        for tpc in topic_to_delete:
+            deleted_entries.add(JournalEntry(self._j[date][tpc], date, tpc))
+            del self._j[date][tpc]
+        if not self._j[date]:
+            del self._j[date]
+        return deleted_entries
 
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))
