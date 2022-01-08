@@ -135,3 +135,5 @@ class Journal:
                 if not (current_day and current_topic):
                     raise ValueError("malformed journal")
                 self._j[current_day][current_topic] += f"{line}\n"
+            elif code_fence:
+                self._j[current_day][current_topic] += f"{line}\n"
