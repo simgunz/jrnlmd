@@ -417,12 +417,21 @@ def test_delete_missing_date(simple_journal):
 
 
 def test_delete_topic_on_date(journal_multidate):
-    journal_multidate.delete("2021-11-01", "topic1")
+    deleted_entries = journal_multidate.delete("2021-11-01", "topic1")
     assert {
         "2021-11-10": {"topic1": "- third date note\n"},
         "2021-11-05": {"topic1": "- second date note\n"},
         "2021-11-01": {"topic2": "- first date note\n"},
     } == journal_multidate._j
+    assert (
+        """# 2021-11-01
+
+## topic1
+
+- another note
+"""
+        == deleted_entries.to_md()
+    )
 
 
 def test_delete_missing_topic(simple_journal):
