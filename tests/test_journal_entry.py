@@ -114,3 +114,19 @@ def test_entry_to_dict():
     topic = "topic1"
     entry = JournalEntry(note, date, topic)
     assert {date: {topic: note}} == entry._to_dict()
+
+
+def test_entry_to_md():
+    note = "- a note\n"
+    date = "2021-11-01"
+    topic = "topic1"
+    entry = JournalEntry(note, date, topic)
+    assert (
+        """# 2021-11-01
+
+## topic1
+
+- a note
+"""
+        == entry.to_md()
+    )

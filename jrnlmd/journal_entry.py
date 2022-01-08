@@ -5,6 +5,7 @@ from typing import List, Optional, Union
 
 from jrnlmd.usertypes import JDict
 
+from .mdutils import dict_to_md
 from .parsers import parse_journal_entry_text
 
 UNDEFINED_TOPIC = "ungrouped"
@@ -43,6 +44,9 @@ class JournalEntry:
         if notes is None and prompt_for_input:
             notes = input_from_editor()
         return JournalEntry(notes, date, topic)
+
+    def to_md(self) -> str:
+        return dict_to_md(self._to_dict())
 
     @staticmethod
     def _parse_note(note: Optional[str]) -> str:
