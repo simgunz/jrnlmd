@@ -442,3 +442,22 @@ def test_delete_missing_topic(simple_journal):
 def test_delete_last_topic_on_date(simple_journal):
     simple_journal.delete("2021-11-12", "topic1")
     assert {} == simple_journal._j
+
+
+def test_from_md_preserves_blank_lines_in_code_fence():
+    in_text_md = """# 2021-11-01
+
+## topic1
+
+- a note
+- second note:
+```bash
+# comment
+ls -a
+
+mkdir test
+```
+"""
+    journal = Journal.from_md(in_text_md)
+    out_text_md = journal.to_md()
+    assert in_text_md == out_text_md
