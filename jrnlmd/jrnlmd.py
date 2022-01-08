@@ -100,8 +100,9 @@ def command_del(journal: Journal, filter_: str = ""):
     if not entry_filter.date:
         print("ERROR: a date must be specified.", file=sys.stderr)
         return
-    journal.delete(entry_filter.date, entry_filter.topic)
+    deleted_entries = journal.delete(entry_filter.date, entry_filter.topic)
     journal.save()
+    print_with_external(f"Deleted entries:\n\n{deleted_entries.to_md()}")
 
 
 def _detect_time_modifier(text: str) -> Tuple[str, str]:
