@@ -3,6 +3,8 @@ from __future__ import annotations
 import datetime
 from typing import List, Optional, Union
 
+from jrnlmd.usertypes import JDict
+
 from .parsers import parse_journal_entry_text
 
 UNDEFINED_TOPIC = "ungrouped"
@@ -50,6 +52,9 @@ class JournalEntry:
         parsed_note = f"- {stripped_note}"
         rstripped_parsed_note = parsed_note.rstrip("\n")
         return f"{rstripped_parsed_note}\n"
+
+    def _to_dict(self) -> JDict:
+        return {self.date: {self.topic: self.note}}
 
     def _join_notes(self, notes: List[str]) -> str:
         return "".join(self._parse_note(note) for note in notes)

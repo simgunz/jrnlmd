@@ -106,3 +106,11 @@ def test_entry_from_string_with_user_input(mock_input_from_editor):
     assert "2021-11-12" == entry.date
     assert "topic1" == entry.topic
     assert "- a note\n" == entry.note
+
+
+def test_entry_to_dict():
+    note = "- a note\n"
+    date = "2021-11-01"
+    topic = "topic1"
+    entry = JournalEntry(note, date, topic)
+    assert {date: {topic: note}} == entry._to_dict()
