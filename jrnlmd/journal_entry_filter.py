@@ -4,6 +4,10 @@ from .parsers import parse_journal_entry_text
 
 
 class JournalEntryFilter:
+    def __init__(self, date: str = None, topic: str = None) -> None:
+        self.date = date
+        self.topic = topic
+
     @classmethod
     def from_string(cls, text: str) -> JournalEntryFilter:
         """Parse a string into a journal entry filter.
@@ -20,7 +24,3 @@ class JournalEntryFilter:
         """
         date, topic, _ = parse_journal_entry_text(text)
         return cls(date, topic)
-
-    def __init__(self, date: str = None, topic: str = None) -> None:
-        self.date = date
-        self.topic = topic
