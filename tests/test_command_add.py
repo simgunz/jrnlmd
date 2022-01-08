@@ -109,3 +109,19 @@ def test_add_note_different_date_to_existing_journal(simple_journal):
 """
         == result
     )
+
+
+def test_add_note_print_to_stdout(new_journal, capsys):
+    command_add(new_journal, "2021-11-01: topic1 . a note")
+
+    captured = capsys.readouterr()
+    assert (
+        """# 2021-11-01
+
+## topic1
+
+- a note
+
+"""
+        == captured.out
+    )

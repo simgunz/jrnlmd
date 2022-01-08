@@ -67,6 +67,7 @@ def command_add(journal: Journal, text: str) -> None:
     entry = JournalEntry.from_string(text, prompt_for_input=True)
     journal.add(entry)
     journal.save()
+    print_with_external(journal.on(entry.date).about(entry.topic).to_md())
 
 
 def command_cat(
