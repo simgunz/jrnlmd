@@ -1,9 +1,23 @@
 from jrnlmd.jrnlmd import command_del
 
 
-def test_delete_specific_date(simple_journal):
+def test_delete_specific_date(simple_journal, capsys):
     command_del(simple_journal, "2021-11-12:")
     assert {} == simple_journal._j
+    captured = capsys.readouterr()
+    assert (
+        """Deleted entries:
+
+# 2021-11-12
+
+## topic1
+
+- a note
+- second bullet
+
+"""
+        == captured.out
+    )
 
 
 def test_delete_specific_topic_on_date(journal_multidate):
