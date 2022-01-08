@@ -6,7 +6,7 @@ from jrnlmd.journal import Journal
 from jrnlmd.journal_entry import JournalEntry
 
 from .ioutils import print_with_external
-from .parsers import parse_journal_entry_text
+from .journal_entry_filter import JournalEntryFilter
 
 
 def command_add(journal: Journal, text: str) -> None:
@@ -19,17 +19,17 @@ def command_cat(
     journal: Journal, filter_: str = "", simplified=False, compact=False
 ) -> None:
     filter_time_modifier, filter_ = _detect_time_modifier(filter_)
-    date, topic, _ = parse_journal_entry_text(filter_)
+    entry_filter = JournalEntryFilter.from_string(filter_)
     simplify = False
     journal_filtered = journal
-    if date:
+    if entry_filter.date:
         if filter_time_modifier == "since":
-            journal_filtered = journal_filtered.since(date)
+            journal_filtered = journal_filtered.since(entry_filter.date)
         else:
-            journal_filtered = journal_filtered.on(date)
-    if topic:
+            journal_filtered = journal_filtered.on(entry_filter.date)
+    if entry_filter.topic:
         simplify = True
-        journal_filtered = journal_filtered.about(topic)
+        journal_filtered = journal_filtered.about(entry_filter.topic)
     print_with_external(
         journal_filtered.to_md(
             date_descending=False,
@@ -42,11 +42,11 @@ def command_cat(
 def command_del(journal: Journal, filter_: str = ""):
     import sys
 
-    date, topic, _ = parse_journal_entry_text(filter_)
-    if not date:
+    entry_filter = JournalEntryFilter.from_string(filter_)
+    if not entry_filter.date:
         print("ERROR: a date must be specified.", file=sys.stderr)
         return
-    journal.delete(date, topic)
+    journal.delete(entry_filter.date, entry_filter.topic)
     journal.save()
 
 
