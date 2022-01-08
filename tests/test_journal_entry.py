@@ -58,6 +58,12 @@ def test_parse_none_note():
     assert "" == parsed_note
 
 
+def test_parse_empty_note():
+    note = ""
+    parsed_note = JournalEntry._parse_note(note)
+    assert "" == parsed_note
+
+
 def test_parse_one_line_note_no_dash():
     note = "a note"
     parsed_note = JournalEntry._parse_note(note)
