@@ -2,10 +2,9 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import List, Tuple
 
-from jrnlmd.journal import Journal
-from jrnlmd.journal_entry import JournalEntry
-
 from .ioutils import print_with_external
+from .journal import Journal
+from .journal_entry import JournalEntry
 from .journal_entry_filter import JournalEntryFilter
 
 
