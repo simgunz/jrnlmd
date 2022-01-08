@@ -44,7 +44,7 @@ class JournalEntry:
 
     @staticmethod
     def _parse_note(note: Optional[str]) -> str:
-        if note is None:
+        if not note:
             return ""
         stripped_note = note.removeprefix("-").lstrip()
         parsed_note = f"- {stripped_note}"
