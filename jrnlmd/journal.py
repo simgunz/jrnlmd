@@ -58,17 +58,19 @@ class Journal:
         simplified: bool = False,
         compact: bool = False,
     ) -> str:
-        keys: Set[str] = set()
-        for v in self._j.values():
-            keys.update(v.keys())
-        canSimplify = len(keys) == 1
+        simplify = False
+        if simplified:
+            keys: Set[str] = set()
+            for v in self._j.values():
+                keys.update(v.keys())
+            simplify = len(keys) == 1
         output = []
         for day in sorted(self._j, reverse=date_descending):
             output.append(f"# {day}")
             if not compact:
                 output.append("")
             for topic in self._j[day]:
-                if not (simplified and canSimplify):
+                if not simplify:
                     output.append(f"## {topic}")
                     if not compact:
                         output.append("")
