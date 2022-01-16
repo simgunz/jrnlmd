@@ -65,21 +65,16 @@ class Journal:
                 keys.update(v.keys())
             simplify = len(keys) == 1
         date_marker = "##" if simplify else "#"
+        maybe_blank_line = "" if compact else "\n"
         output = []
         if simplify:
-            topic = f"# {keys.pop()}"
+            topic = f"# {keys.pop()}{maybe_blank_line}"
             output.append(topic)
-            if not compact:
-                output.append("")
         for day in sorted(self._j, reverse=date_descending):
-            output.append(f"{date_marker} {day}")
-            if not compact:
-                output.append("")
+            output.append(f"{date_marker} {day}{maybe_blank_line}")
             for topic in self._j[day]:
                 if not simplify:
-                    output.append(f"## {topic}")
-                    if not compact:
-                        output.append("")
+                    output.append(f"## {topic}{maybe_blank_line}")
                 note = self._j[day][topic]
                 output.append(note)
         return "\n".join(output)
