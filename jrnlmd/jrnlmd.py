@@ -65,6 +65,8 @@ def get_argparser() -> ArgumentParser:
 
 def command_add(journal: Journal, text: str) -> None:
     entry = JournalEntry.from_string(text, prompt_for_input=True)
+    if not entry.is_valid():
+        return
     journal.add(entry)
     journal.save()
     print_with_external(journal.on(entry.date).about(entry.topic).to_md())

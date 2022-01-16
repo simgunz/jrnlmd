@@ -20,6 +20,17 @@ def test_add_note_from_user_input_to_new_journal(mock_input_from_editor, new_jou
     )
 
 
+@mock.patch("jrnlmd.ioutils.input_from_editor")
+def test_add_note_from_empty_user_input_to_new_journal(
+    mock_input_from_editor, new_journal
+):
+    mock_input_from_editor.return_value = ""
+    command_add(new_journal, "12 nov 2021: topic1")
+
+    result = new_journal.to_md()
+    assert "" == result
+
+
 def test_add_note_without_date(new_journal, today):
     command_add(new_journal, "topic1 . a note")
 
