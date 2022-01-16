@@ -42,6 +42,9 @@ class JournalEntry:
             notes = input_from_editor()
         return JournalEntry(notes, date, topic)
 
+    def is_valid(self):
+        return self.note != ""
+
     @staticmethod
     def _parse_note(note: Optional[str]) -> str:
         if not note:

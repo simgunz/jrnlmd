@@ -106,3 +106,14 @@ def test_entry_from_string_with_user_input(mock_input_from_editor):
     assert "2021-11-12" == entry.date
     assert "topic1" == entry.topic
     assert "- a note\n" == entry.note
+
+
+def test_default_entry_is_not_valid():
+    entry = JournalEntry()
+    assert not entry.is_valid()
+
+
+def test_entry_with_note_is_valid():
+    note = "- a note"
+    entry = JournalEntry(note)
+    assert entry.is_valid()
