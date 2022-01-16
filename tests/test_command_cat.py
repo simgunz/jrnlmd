@@ -89,15 +89,17 @@ def test_cat_specific_topic_simplified(journal_multidate, capsys):
     command_cat(journal_multidate, "topic1", simplified=True)
     captured = capsys.readouterr()
     assert (
-        """# 2021-11-01
+        """# topic1
+
+## 2021-11-01
 
 - another note
 
-# 2021-11-05
+## 2021-11-05
 
 - second date note
 
-# 2021-11-10
+## 2021-11-10
 
 - third date note
 

@@ -64,9 +64,15 @@ class Journal:
             for v in self._j.values():
                 keys.update(v.keys())
             simplify = len(keys) == 1
+        date_marker = "##" if simplify else "#"
         output = []
+        if simplify:
+            topic = f"# {keys.pop()}"
+            output.append(topic)
+            if not compact:
+                output.append("")
         for day in sorted(self._j, reverse=date_descending):
-            output.append(f"# {day}")
+            output.append(f"{date_marker} {day}")
             if not compact:
                 output.append("")
             for topic in self._j[day]:

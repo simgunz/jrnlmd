@@ -258,11 +258,13 @@ def test_dict_to_md_simplified():
     )
     text = journal.to_md(date_descending=False, simplified=True)
     assert (
-        """# 2021-01-01
+        """# topic1
+
+## 2021-01-01
 
 - first line
 
-# 2021-01-02
+## 2021-01-02
 
 - second line
 """
