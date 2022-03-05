@@ -21,6 +21,8 @@ def main(argv: List[str]) -> None:
     elif args.command == "del":
         filter_ = " ".join(args.filter)
         command_del(journal, filter_)
+    elif args.command == "top":
+        command_top(journal)
 
 
 def get_argparser() -> ArgumentParser:
@@ -60,6 +62,7 @@ def get_argparser() -> ArgumentParser:
         "del", help="Delete an entry from the journal."
     )
     parser_delete.add_argument("filter", type=str, nargs="*", help="[[date:] [topic]")
+    subparsers.add_parser("top", help="List the topics of the journal.")
     return parser
 
 
@@ -106,6 +109,10 @@ def command_del(journal: Journal, filter_: str = ""):
     deleted_entries = journal.delete(entry_filter.date, entry_filter.topic)
     journal.save()
     print_with_external(f"Deleted entries:\n\n{deleted_entries.to_md()}")
+
+
+def command_top(journal: Journal):
+    print("\n".join(journal.topics()))
 
 
 def _detect_time_modifier(text: str) -> Tuple[str, str]:
