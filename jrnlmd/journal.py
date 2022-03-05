@@ -119,6 +119,12 @@ class Journal:
             del self._j[date]
         return deleted_entries
 
+    def topics(self):
+        topics = set()
+        for date in self._j:
+            topics.update(set(self._j[date].keys()))
+        return sorted(list(topics))
+
     def _empty_dict(self):
         return defaultdict(lambda: defaultdict(str))
 
