@@ -1,20 +1,4 @@
-from jrnlmd.parsers import (
-    _parse_date,
-    _split_list_on_delimiter,
-    parse_journal_entry_text,
-)
-
-
-def test_split_with_no_delimiter():
-    tokens = ["word1", "word2", "word3"]
-    result = _split_list_on_delimiter(tokens, delimiter=".")
-    assert [["word1", "word2", "word3"]] == result
-
-
-def test_split_with_one_delimiter():
-    tokens = ["word1", ".", "word2", "word3"]
-    result = _split_list_on_delimiter(tokens, delimiter=".")
-    assert [["word1"], ["word2", "word3"]] == result
+from jrnlmd.parsers import _parse_date, parse_journal_entry_text, split_on_separator
 
 
 def test_parse_date():
@@ -89,3 +73,15 @@ def test_input_multiple_notes_with_date_and_topic():
     assert "2021-11-12" == date
     assert "topic1 is this" == topic
     assert ["first bullet", "second bullet", "third bullet"] == notes
+
+
+def test_split_with_no_delimiter():
+    text = "word1 word2 word3"
+    result = split_on_separator(text, sep=".")
+    assert [text] == result
+
+
+def test_split_with_one_delimiter():
+    text = "word1 . word2 word3"
+    result = split_on_separator(text, sep=".")
+    assert ["word1", "word2 word3"] == result
