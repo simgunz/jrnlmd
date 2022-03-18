@@ -34,7 +34,7 @@ def parse_journal_entry_text(
     if len(maybe_topic_notes) == 1:
         return date, topic, None
     elif len(maybe_topic_notes) == 2:
-        notes = split_on_separator(maybe_topic_notes[-1], NOTE_SEP)
+        notes = split_on_separator(maybe_topic_notes[1], NOTE_SEP)
         return date, topic, notes
     else:
         raise ValueError(f"Too many {TOKEN_SEP} in input.")
