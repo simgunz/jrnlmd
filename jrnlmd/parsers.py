@@ -29,10 +29,8 @@ def parse_journal_entry_text(
     if len(maybe_datetopic_notes) > 2:
         raise ValueError(f"Too many {TOKEN_SEP} in input.")
     maybe_datetopic = maybe_datetopic_notes[0]
-    m = re.search(":(?: |$)", maybe_datetopic)
-    colon_pos = m.start() if m else -1
-    date = _parse_date(maybe_datetopic[:colon_pos]) if colon_pos > 0 else None
-    topic = maybe_datetopic[colon_pos + 1 :].strip()
+    date_txt, topic = _split_date_topic(maybe_datetopic)
+    date = _parse_date(date_txt)
     if not topic:
         return date, None, None
     elif len(maybe_datetopic_notes) == 1:
@@ -41,6 +39,14 @@ def parse_journal_entry_text(
         maybe_notes = maybe_datetopic_notes[1]
         notes = split_on_separator(maybe_notes, NOTE_SEP)
         return date, topic, notes
+
+
+def _split_date_topic(text: str) -> Tuple[str, str]:
+    m = re.search(":(?: |$)", text)
+    colon_pos = m.start() if m else -1
+    date = text[:colon_pos] if colon_pos > 0 else ""
+    topic = text[colon_pos + 1 :].strip()
+    return date, topic
 
 
 def _parse_date(text: str) -> Union[None, str]:

@@ -1,4 +1,9 @@
-from jrnlmd.parsers import _parse_date, parse_journal_entry_text, split_on_separator
+from jrnlmd.parsers import (
+    _parse_date,
+    _split_date_topic,
+    parse_journal_entry_text,
+    split_on_separator,
+)
 
 
 def test_parse_date():
@@ -105,3 +110,24 @@ def test_input_single_note_with_colon_in_note():
     assert date is None
     assert "topic1" == topic
     assert ["he said: hello"] == notes
+
+
+def test_split_date_topic():
+    text = "12 nov: topic1"
+    date, topic = _split_date_topic(text)
+    assert "12 nov" == date
+    assert "topic1" == topic
+
+
+def test_split_date_topic_only_topic():
+    text = "topic1"
+    date, topic = _split_date_topic(text)
+    assert "" == date
+    assert "topic1" == topic
+
+
+def test_split_date_topic_only_date():
+    text = "12 nov:"
+    date, topic = _split_date_topic(text)
+    assert "12 nov" == date
+    assert "" == topic
