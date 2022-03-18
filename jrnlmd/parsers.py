@@ -25,7 +25,7 @@ def parse_journal_entry_text(
     """
     if not text:
         return None, None, None
-    maybe_datetopic_notes = split_on_separator(text, TOKEN_SEP)
+    maybe_datetopic_notes = _split_on_separator(text, TOKEN_SEP)
     if len(maybe_datetopic_notes) > 2:
         raise ValueError(f"Too many {TOKEN_SEP} in input.")
     maybe_datetopic = maybe_datetopic_notes[0]
@@ -37,7 +37,7 @@ def parse_journal_entry_text(
         return date, topic, None
     else:
         maybe_notes = maybe_datetopic_notes[1]
-        notes = split_on_separator(maybe_notes, NOTE_SEP)
+        notes = _split_on_separator(maybe_notes, NOTE_SEP)
         return date, topic, notes
 
 
@@ -73,5 +73,5 @@ def _parse_date(text: str) -> Union[None, str]:
     return a_date.date().isoformat()
 
 
-def split_on_separator(text: str, sep: str) -> List[str]:
+def _split_on_separator(text: str, sep: str) -> List[str]:
     return [word.strip() for word in text.split(f" {sep} ")]

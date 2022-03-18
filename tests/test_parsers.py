@@ -1,8 +1,8 @@
 from jrnlmd.parsers import (
     _parse_date,
     _split_date_topic,
+    _split_on_separator,
     parse_journal_entry_text,
-    split_on_separator,
 )
 
 
@@ -82,25 +82,25 @@ def test_input_multiple_notes_with_date_and_topic():
 
 def test_split_with_no_delimiter():
     text = "word1 word2 word3"
-    result = split_on_separator(text, sep=".")
+    result = _split_on_separator(text, sep=".")
     assert [text] == result
 
 
 def test_split_with_one_delimiter():
     text = "word1 . word2 word3"
-    result = split_on_separator(text, sep=".")
+    result = _split_on_separator(text, sep=".")
     assert ["word1", "word2 word3"] == result
 
 
 def test_split_with_delimiter_not_surrounded_by_left_space():
     text = "word1. word2 word3"
-    result = split_on_separator(text, sep=".")
+    result = _split_on_separator(text, sep=".")
     assert ["word1. word2 word3"] == result
 
 
 def test_split_with_delimiter_not_surrounded_by_right_space():
     text = "word1 .word2 word3"
-    result = split_on_separator(text, sep=".")
+    result = _split_on_separator(text, sep=".")
     assert ["word1 .word2 word3"] == result
 
 
