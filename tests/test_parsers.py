@@ -97,3 +97,11 @@ def test_split_with_delimiter_not_surrounded_by_right_space():
     text = "word1 .word2 word3"
     result = split_on_separator(text, sep=".")
     assert ["word1 .word2 word3"] == result
+
+
+def test_input_single_note_with_colon_in_note():
+    txt_input = "topic1 . he said: hello"
+    date, topic, notes = parse_journal_entry_text(txt_input)
+    assert date is None
+    assert "topic1" == topic
+    assert ["he said: hello"] == notes

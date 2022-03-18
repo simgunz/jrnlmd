@@ -29,7 +29,7 @@ def parse_journal_entry_text(
     if len(maybe_datetopic_notes) > 2:
         raise ValueError(f"Too many {TOKEN_SEP} in input.")
     maybe_datetopic = maybe_datetopic_notes[0]
-    m = re.search(":(?: |$)", text)
+    m = re.search(":(?: |$)", maybe_datetopic)
     colon_pos = m.start() if m else -1
     date = _parse_date(maybe_datetopic[:colon_pos]) if colon_pos > 0 else None
     topic = maybe_datetopic[colon_pos + 1 :].strip()
