@@ -1,7 +1,6 @@
-from argparse import ArgumentParser
-from pathlib import Path
 from typing import List, Tuple
 
+from .args import get_argparser
 from .ioutils import print_with_external
 from .journal import Journal
 from .journal_entry import JournalEntry
@@ -23,47 +22,6 @@ def main(argv: List[str]) -> None:
         command_del(journal, filter_)
     elif args.command == "top":
         command_top(journal)
-
-
-def get_argparser() -> ArgumentParser:
-    parser = ArgumentParser()
-    subparsers = parser.add_subparsers(dest="command", help="journal actions")
-    parser.add_argument(
-        "-j",
-        "--journal",
-        type=Path,
-        required=True,
-        help="The journal file",
-    )
-    parser_add = subparsers.add_parser("add", help="Add a new note to the journal.")
-    parser_add.add_argument(
-        "text",
-        type=str,
-        nargs="*",
-        help="[date:] [topic [ . note1 [, note2 [, note3 [ ... ]]]]]",
-    )
-    parser_cat = subparsers.add_parser(
-        "cat", help="Print the journal on the standard output."
-    )
-    parser_cat.add_argument(
-        "filter", type=str, nargs="*", help="[[{from, since}] date:] [topic]"
-    )
-    parser_cat.add_argument(
-        "--simplified",
-        action="store_true",
-        help="Do not print the topic when the filter match a single topic.",
-    )
-    parser_cat.add_argument(
-        "--compact",
-        action="store_true",
-        help="Reduce the number of blank lines in the output.",
-    )
-    parser_delete = subparsers.add_parser(
-        "del", help="Delete an entry from the journal."
-    )
-    parser_delete.add_argument("filter", type=str, nargs="*", help="[[date:] [topic]")
-    subparsers.add_parser("top", help="List the topics of the journal.")
-    return parser
 
 
 def command_add(journal: Journal, text: str) -> None:
