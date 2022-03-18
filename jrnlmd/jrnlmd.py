@@ -81,11 +81,11 @@ def _detect_time_modifier(text: str) -> Tuple[str, str]:
         return "on", text
 
 
-def entrypoint() -> None:
+def cli() -> None:
     import sys
 
     main(sys.argv[1:])
 
 
 if __name__ == "__main__":
-    entrypoint()
+    cli()
