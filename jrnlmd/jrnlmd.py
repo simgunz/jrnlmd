@@ -84,7 +84,10 @@ def command_del(journal: Journal, filter_: str = ""):
     print_with_external(f"Deleted entries:\n\n{deleted_entries.to_md()}")
 
 
-def command_top(journal: Journal):
+@cli.command()
+@click.pass_context
+def top(ctx: click.Context):
+    journal = ctx.obj["JOURNAL"]
     print("\n".join(journal.topics()))
 
 

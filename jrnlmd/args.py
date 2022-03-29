@@ -23,5 +23,4 @@ def get_argparser() -> ArgumentParser:
         "del", help="Delete an entry from the journal."
     )
     parser_delete.add_argument("filter", type=str, nargs="*", help="[[date:] [topic]")
-    subparsers.add_parser("top", help="List the topics of the journal.")
     return parser
