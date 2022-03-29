@@ -1,10 +1,16 @@
-from jrnlmd.jrnlmd import command_del
+from click.testing import CliRunner
+
+from jrnlmd import jrnlmd
+from jrnlmd.journal import Journal
 
 
-def test_delete_specific_date(simple_journal, capsys):
-    command_del(simple_journal, "2021-11-12:")
-    assert {} == simple_journal._j
-    captured = capsys.readouterr()
+def test_delete_specific_date(simple_journal_file):
+    runner = CliRunner()
+    result = runner.invoke(
+        jrnlmd.cli, ["-j", str(simple_journal_file), "del", "2021-11-12:"]
+    )
+    journal = Journal(simple_journal_file)
+    assert {} == journal._j
     assert (
         """Deleted entries:
 
@@ -16,20 +22,26 @@ def test_delete_specific_date(simple_journal, capsys):
 - second bullet
 
 """
-        == captured.out
+        == result.output
     )
 
 
-def test_delete_specific_topic_on_date(journal_multidate):
-    command_del(journal_multidate, "2021-11-01: topic1")
+def test_delete_specific_topic_on_date(journal_multidate_file):
+    runner = CliRunner()
+    runner.invoke(
+        jrnlmd.cli, ["-j", str(journal_multidate_file), "del", "2021-11-01: topic1"]
+    )
+    journal = Journal(journal_multidate_file)
     assert {
         "2021-11-10": {"topic1": "- third date note\n"},
         "2021-11-05": {"topic1": "- second date note\n"},
         "2021-11-01": {"topic2": "- first date note\n"},
-    } == journal_multidate._j
+    } == journal._j
 
 
-def test_delete_specific_topic_raises(journal_multidate, capsys):
-    command_del(journal_multidate, "topic1")
-    captured = capsys.readouterr()
-    assert "ERROR" in captured.err
+def test_delete_specific_topic_raises(journal_multidate_file):
+    runner = CliRunner()
+    result = runner.invoke(
+        jrnlmd.cli, ["-j", str(journal_multidate_file), "del", "topic1"]
+    )
+    assert "ERROR" in result.output

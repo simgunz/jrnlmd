@@ -72,9 +72,13 @@ def cat(
     )
 
 
-def command_del(journal: Journal, filter_: str = ""):
+@cli.command(name="del")
+@click.argument("filter_", nargs=-1, callback=lambda x, y, z: " ".join(z))
+@click.pass_context
+def delete(ctx: click.Context, filter_: str = ""):
     import sys
 
+    journal = ctx.obj["JOURNAL"]
     entry_filter = JournalEntryFilter.from_string(filter_)
     if not entry_filter.date:
         print("ERROR: a date must be specified.", file=sys.stderr)

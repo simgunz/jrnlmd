@@ -19,8 +19,4 @@ def get_argparser() -> ArgumentParser:
         nargs="*",
         help="[date:] [topic [ . note1 [, note2 [, note3 [ ... ]]]]]",
     )
-    parser_delete = subparsers.add_parser(
-        "del", help="Delete an entry from the journal."
-    )
-    parser_delete.add_argument("filter", type=str, nargs="*", help="[[date:] [topic]")
     return parser
