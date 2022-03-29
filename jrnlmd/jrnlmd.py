@@ -26,6 +26,7 @@ def cli(ctx: click.Context, journal: Path):
 @cli.command()
 @click.argument(
     "text",
+    metavar="[DATE:] [TOPIC [ . NOTE1 [, NOTE2 [ ... ]]]]",
     nargs=-1,
     callback=lambda x, y, z: " ".join(z),
 )
@@ -51,7 +52,12 @@ def add(ctx: click.Context, text: str) -> None:
     default=False,
     help="Do not print the topic when the filter match a single topic.",
 )
-@click.argument("filter_", nargs=-1, callback=lambda x, y, z: " ".join(z))
+@click.argument(
+    "filter_",
+    metavar="[DATE:] [TOPIC]",
+    nargs=-1,
+    callback=lambda x, y, z: " ".join(z),
+)
 @click.pass_context
 def cat(
     ctx: click.Context,
@@ -81,7 +87,12 @@ def cat(
 
 
 @cli.command(name="del")
-@click.argument("filter_", nargs=-1, callback=lambda x, y, z: " ".join(z))
+@click.argument(
+    "filter_",
+    metavar="DATE: [TOPIC]",
+    nargs=-1,
+    callback=lambda x, y, z: " ".join(z),
+)
 @click.pass_context
 def delete(ctx: click.Context, filter_: str = ""):
     import sys
