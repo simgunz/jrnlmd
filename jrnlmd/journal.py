@@ -25,7 +25,7 @@ class Journal:
         return journal
 
     @classmethod
-    def from_md(cls, text: str) -> JournalDict:
+    def from_md(cls, text: str) -> "Journal":
         journal = cls()
         journal._from_md(text)
         return journal
@@ -102,7 +102,7 @@ class Journal:
     def add(self, entry: JournalEntry) -> None:
         self._j[entry.date][entry.topic] += entry.note
 
-    def delete(self, date: str, topic: str = None) -> JournalDict:
+    def delete(self, date: str, topic: str = None) -> "Journal":
         if date not in self._j:
             raise KeyError(f"{date} missing from journal.")
         if topic:
