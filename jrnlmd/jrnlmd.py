@@ -9,7 +9,7 @@ from .journal_entry import JournalEntry
 from .journal_entry_filter import JournalEntryFilter
 
 
-@click.group(name="jrnlmd")
+@click.group(name="jrnlmd", invoke_without_command=True)
 @click.option(
     "-j",
     "--journal",
@@ -21,6 +21,8 @@ from .journal_entry_filter import JournalEntryFilter
 def cli(ctx: click.Context, journal: Path):
     ctx.ensure_object(dict)
     ctx.obj["JOURNAL"] = Journal(journal)
+    if ctx.invoked_subcommand is None:
+        ctx.invoke(cat, filter_="")
 
 
 @cli.command()
