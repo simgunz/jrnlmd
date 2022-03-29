@@ -1,17 +1,18 @@
 import pytest
+from click.testing import CliRunner
 
-from jrnlmd.jrnlmd import command_cat
-
-
-def test_cat_new_journal(new_journal, capsys):
-    command_cat(new_journal)
-    captured = capsys.readouterr()
-    assert "\n" == captured.out
+from jrnlmd import jrnlmd
 
 
-def test_cat_full_journal(journal_multidate, capsys):
-    command_cat(journal_multidate)
-    captured = capsys.readouterr()
+def test_cat_new_journal(new_journal_file):
+    runner = CliRunner()
+    result = runner.invoke(jrnlmd.cli, ["-j", str(new_journal_file), "cat"])
+    assert "\n" == result.output
+
+
+def test_cat_full_journal(journal_multidate_file):
+    runner = CliRunner()
+    result = runner.invoke(jrnlmd.cli, ["-j", str(journal_multidate_file), "cat"])
     assert (
         """# 2021-11-01
 
@@ -36,13 +37,15 @@ def test_cat_full_journal(journal_multidate, capsys):
 - third date note
 
 """
-        == captured.out
+        == result.output
     )
 
 
-def test_cat_specific_date(journal_multidate, capsys):
-    command_cat(journal_multidate, "2021-11-05:")
-    captured = capsys.readouterr()
+def test_cat_specific_date(journal_multidate_file):
+    runner = CliRunner()
+    result = runner.invoke(
+        jrnlmd.cli, ["-j", str(journal_multidate_file), "cat", "2021-11-05:"]
+    )
     assert (
         """# 2021-11-05
 
@@ -51,13 +54,15 @@ def test_cat_specific_date(journal_multidate, capsys):
 - second date note
 
 """
-        == captured.out
+        == result.output
     )
 
 
-def test_cat_specific_topic(journal_multidate, capsys):
-    command_cat(journal_multidate, "topic2")
-    captured = capsys.readouterr()
+def test_cat_specific_topic(journal_multidate_file):
+    runner = CliRunner()
+    result = runner.invoke(
+        jrnlmd.cli, ["-j", str(journal_multidate_file), "cat", "topic2"]
+    )
     assert (
         """# 2021-11-01
 
@@ -66,13 +71,15 @@ def test_cat_specific_topic(journal_multidate, capsys):
 - first date note
 
 """
-        == captured.out
+        == result.output
     )
 
 
-def test_cat_specific_date_and_topic(journal_multidate, capsys):
-    command_cat(journal_multidate, "1 11 2021: topic1")
-    captured = capsys.readouterr()
+def test_cat_specific_date_and_topic(journal_multidate_file):
+    runner = CliRunner()
+    result = runner.invoke(
+        jrnlmd.cli, ["-j", str(journal_multidate_file), "cat", "1 11 2021: topic1"]
+    )
     assert (
         """# 2021-11-01
 
@@ -81,13 +88,15 @@ def test_cat_specific_date_and_topic(journal_multidate, capsys):
 - another note
 
 """
-        == captured.out
+        == result.output
     )
 
 
-def test_cat_specific_topic_simplified(journal_multidate, capsys):
-    command_cat(journal_multidate, "topic1", simplified=True)
-    captured = capsys.readouterr()
+def test_cat_specific_topic_simplified(journal_multidate_file):
+    runner = CliRunner()
+    result = runner.invoke(
+        jrnlmd.cli, ["-j", str(journal_multidate_file), "cat", "--simplified", "topic1"]
+    )
     assert (
         """# topic1
 
@@ -104,14 +113,23 @@ def test_cat_specific_topic_simplified(journal_multidate, capsys):
 - third date note
 
 """
-        == captured.out
+        == result.output
     )
 
 
 @pytest.mark.parametrize("mod", ["from", "since"])
-def test_cat_journal_since(mod, journal_multidate, capsys):
-    command_cat(journal_multidate, f"{mod} 2021-11-05:")
-    captured = capsys.readouterr()
+def test_cat_journal_since(mod, journal_multidate_file):
+    runner = CliRunner()
+    result = runner.invoke(
+        jrnlmd.cli,
+        [
+            "-j",
+            str(journal_multidate_file),
+            "cat",
+            "--simplified",
+            f"{mod} 2021-11-05:",
+        ],
+    )
     assert (
         """# 2021-11-05
 
@@ -126,5 +144,5 @@ def test_cat_journal_since(mod, journal_multidate, capsys):
 - third date note
 
 """
-        == captured.out
+        == result.output
     )

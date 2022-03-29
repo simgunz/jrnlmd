@@ -1,27 +1,26 @@
-from typing import List, Tuple
+from pathlib import Path
+from typing import Tuple
 
-from .args import get_argparser
+import click
+
 from .ioutils import print_with_external
 from .journal import Journal
 from .journal_entry import JournalEntry
 from .journal_entry_filter import JournalEntryFilter
 
 
-def main(argv: List[str]) -> None:
-    parser = get_argparser()
-    args = parser.parse_args(argv)
-    journal = Journal(args.journal)
-    if args.command == "add":
-        text = " ".join(args.text)
-        command_add(journal, text)
-    elif args.command == "cat":
-        filter_ = " ".join(args.filter)
-        command_cat(journal, filter_, args.simplified, args.compact)
-    elif args.command == "del":
-        filter_ = " ".join(args.filter)
-        command_del(journal, filter_)
-    elif args.command == "top":
-        command_top(journal)
+@click.group(name="jrnlmd")
+@click.option(
+    "-j",
+    "--journal",
+    type=click.Path(path_type=Path),
+    required=True,
+    help="The journal file",
+)
+@click.pass_context
+def cli(ctx: click.Context, journal: Path):
+    ctx.ensure_object(dict)
+    ctx.obj["JOURNAL"] = Journal(journal)
 
 
 def command_add(journal: Journal, text: str) -> None:
@@ -33,13 +32,29 @@ def command_add(journal: Journal, text: str) -> None:
     print_with_external(journal.on(entry.date).about(entry.topic).to_md())
 
 
-def command_cat(
-    journal: Journal, filter_: str = "", simplified=False, compact=False
+@cli.command()
+@click.option(
+    "--compact/--no-compact",
+    default=False,
+    help="Reduce the number of blank lines in the output.",
+)
+@click.option(
+    "--simplified/--no-simplified",
+    default=False,
+    help="Do not print the topic when the filter match a single topic.",
+)
+@click.argument("filter_", nargs=-1, callback=lambda x, y, z: " ".join(z))
+@click.pass_context
+def cat(
+    ctx: click.Context,
+    filter_: str = "",
+    simplified=False,
+    compact=False,
 ) -> None:
     filter_time_modifier, filter_ = _detect_time_modifier(filter_)
     entry_filter = JournalEntryFilter.from_string(filter_)
     simplify = False
-    journal_filtered = journal
+    journal_filtered = ctx.obj["JOURNAL"]
     if entry_filter.date:
         if filter_time_modifier == "since":
             journal_filtered = journal_filtered.since(entry_filter.date)
@@ -79,12 +94,6 @@ def _detect_time_modifier(text: str) -> Tuple[str, str]:
         return "since", " ".join(tokens[1:])
     else:
         return "on", text
-
-
-def cli() -> None:
-    import sys
-
-    main(sys.argv[1:])
 
 
 if __name__ == "__main__":

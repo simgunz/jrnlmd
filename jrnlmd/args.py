@@ -19,22 +19,6 @@ def get_argparser() -> ArgumentParser:
         nargs="*",
         help="[date:] [topic [ . note1 [, note2 [, note3 [ ... ]]]]]",
     )
-    parser_cat = subparsers.add_parser(
-        "cat", help="Print the journal on the standard output."
-    )
-    parser_cat.add_argument(
-        "filter", type=str, nargs="*", help="[[{from, since}] date:] [topic]"
-    )
-    parser_cat.add_argument(
-        "--simplified",
-        action="store_true",
-        help="Do not print the topic when the filter match a single topic.",
-    )
-    parser_cat.add_argument(
-        "--compact",
-        action="store_true",
-        help="Reduce the number of blank lines in the output.",
-    )
     parser_delete = subparsers.add_parser(
         "del", help="Delete an entry from the journal."
     )
