@@ -37,6 +37,12 @@ def cli(ctx: click.Context, journal: Path):
 )
 @click.pass_context
 def add(ctx: click.Context, text: str) -> None:
+    """Add one or multiple entries to the journal.
+
+    \b
+    - If DATE is not specified, the current date is used.
+    - If TOPIC is not specified, the topic is set to "ungrouped".
+    - If a NOTE is not specified, the EDITOR is opened to allow writing the entries."""
     entry = JournalEntry.from_string(text, prompt_for_input=True)
     if not entry.is_valid():
         return
@@ -72,6 +78,9 @@ def cat(
     compact: bool = False,
     default_filter: str = "",
 ) -> None:
+    """Print the journal to standard output.
+
+    Accepts a DATE and/or a TOPIC to filter the journal entries."""
     filter_text = filter_
     if not filter_text:
         filter_text = default_filter
@@ -105,6 +114,10 @@ def cat(
 )
 @click.pass_context
 def delete(ctx: click.Context, filter_: str = ""):
+    """Delete entries from the journal.
+
+    A DATE and an optional TOPIC can be specified to filter the entries to delete.
+    """
     import sys
 
     journal = ctx.obj["JOURNAL"]
@@ -120,6 +133,7 @@ def delete(ctx: click.Context, filter_: str = ""):
 @cli.command()
 @click.pass_context
 def top(ctx: click.Context):
+    """Print the topics of the journal."""
     journal = ctx.obj["JOURNAL"]
     print("\n".join(journal.topics()))
 
