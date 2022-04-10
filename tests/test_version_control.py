@@ -15,3 +15,12 @@ def test_git_version_control_detect_repo(journal_multidate):
     vc = JournalGitVersionControl(journal_multidate.file_path)
 
     assert isinstance(vc._repo, git.Repo)
+
+
+def test_git_commit(journal_multidate, capsys):
+    git.Repo.init(str(journal_multidate.file_path.parent))
+    vc = JournalGitVersionControl(journal_multidate.file_path)
+
+    result = vc.commit("test commit")
+
+    assert result is True
