@@ -17,7 +17,7 @@ from .journal_entry_filter import JournalEntryFilter
     "--journal",
     type=click.Path(path_type=Path),
     required=True,
-    help="The journal file",
+    help="The journal file.",
 )
 @click.pass_context
 @click_config_file.configuration_option(config_file_name=config.DEFAULT_CONFIG_FILE)
@@ -80,7 +80,11 @@ def cat(
 ) -> None:
     """Print the journal to standard output.
 
-    Accepts a DATE and/or a TOPIC to filter the journal entries."""
+    Accepts a DATE and/or a TOPIC to filter the journal entries.
+
+    \b
+    Config file:
+      default-filter        The default filter to use if no filter is specified."""
     filter_text = filter_
     if not filter_text:
         filter_text = default_filter
