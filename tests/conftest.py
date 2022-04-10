@@ -5,6 +5,9 @@ import pytest
 
 from jrnlmd.journal import Journal
 
+# Avoid reading the user custom config file
+mock.patch("jrnlmd.config.DEFAULT_CONFIG_FILE", new="dummy_config_file").start()
+
 
 @pytest.fixture()
 def new_journal_file(tmp_path):

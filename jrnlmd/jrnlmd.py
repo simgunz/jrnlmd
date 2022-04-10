@@ -2,7 +2,9 @@ from pathlib import Path
 from typing import Tuple
 
 import click
+import click_config_file
 
+from . import config
 from .ioutils import print_with_external
 from .journal import Journal
 from .journal_entry import JournalEntry
@@ -18,6 +20,7 @@ from .journal_entry_filter import JournalEntryFilter
     help="The journal file",
 )
 @click.pass_context
+@click_config_file.configuration_option(config_file_name=config.DEFAULT_CONFIG_FILE)
 def cli(ctx: click.Context, journal: Path):
     ctx.ensure_object(dict)
     ctx.obj["JOURNAL"] = Journal(journal)
