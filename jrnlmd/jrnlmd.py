@@ -72,10 +72,11 @@ def cat(
     compact=False,
     default_filter: str = "",
 ) -> None:
-    if not filter_:
-        filter_ = default_filter
-    filter_time_modifier, filter_ = _detect_time_modifier(filter_)
-    entry_filter = JournalEntryFilter.from_string(filter_)
+    filter_text = filter_
+    if not filter_text:
+        filter_text = default_filter
+    filter_time_modifier, filter_text_no_modifiers = _detect_time_modifier(filter_text)
+    entry_filter = JournalEntryFilter.from_string(filter_text_no_modifiers)
     simplify = False
     journal_filtered = ctx.obj["JOURNAL"]
     if entry_filter.date:
