@@ -47,6 +47,7 @@ def add(ctx: click.Context, text: str) -> None:
 
 
 @cli.command()
+@click.option("--default-filter", default="", hidden=True)
 @click.option(
     "--compact/--no-compact",
     default=False,
@@ -69,7 +70,10 @@ def cat(
     filter_: str = "",
     simplified=False,
     compact=False,
+    default_filter: str = "",
 ) -> None:
+    if not filter_:
+        filter_ = default_filter
     filter_time_modifier, filter_ = _detect_time_modifier(filter_)
     entry_filter = JournalEntryFilter.from_string(filter_)
     simplify = False
