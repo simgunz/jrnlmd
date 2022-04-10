@@ -85,3 +85,34 @@ simplified = True
 """
         == result.output
     )
+
+
+def test_cat_filter_read_from_config_file(config_file, journal_multidate_file):
+    config_file.write_text(
+        f"""
+journal = "{str(journal_multidate_file)}"
+[ cat ]
+filter_ = "2021-11-10:"
+"""
+    )
+    runner = CliRunner()
+
+    result = runner.invoke(
+        jrnlmd.cli,
+        [
+            "--config",
+            str(config_file),
+            "cat",
+        ],
+    )
+
+    assert (
+        result.output
+        == """# 2021-11-10
+
+## topic1
+
+- third date note
+
+"""
+    )
