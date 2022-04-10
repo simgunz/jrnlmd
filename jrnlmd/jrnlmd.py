@@ -68,8 +68,8 @@ def add(ctx: click.Context, text: str) -> None:
 def cat(
     ctx: click.Context,
     filter_: str = "",
-    simplified=False,
-    compact=False,
+    simplified: bool = False,
+    compact: bool = False,
     default_filter: str = "",
 ) -> None:
     filter_text = filter_
