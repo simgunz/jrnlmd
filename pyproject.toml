@@ -11,6 +11,7 @@ dateparser = "^1.1.0"
 click = "^8.0.4"
 appdirs = "^1.4.4"
 click-config-file = "^0.6.0"
+GitPython = "^3.1.27"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

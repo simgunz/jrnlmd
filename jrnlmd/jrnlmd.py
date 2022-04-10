@@ -1,8 +1,10 @@
+import sys
 from pathlib import Path
 from typing import Tuple
 
 import click
 import click_config_file
+import git
 
 from . import config
 from .ioutils import print_with_external
@@ -35,8 +37,12 @@ def cli(ctx: click.Context, journal: Path):
     nargs=-1,
     callback=lambda x, y, z: " ".join(z),
 )
+@click.option(
+    "--commit-message",
+    help="If set, the journal will be committed with this message.",
+)
 @click.pass_context
-def add(ctx: click.Context, text: str) -> None:
+def add(ctx: click.Context, text: str, commit_message: str) -> None:
     """Add one or multiple entries to the journal.
 
     \b
@@ -50,6 +56,8 @@ def add(ctx: click.Context, text: str) -> None:
     journal.add(entry)
     journal.save()
     print_with_external(journal.on(entry.date).about(entry.topic).to_md())
+    if commit_message:
+        _commit_journal(journal, commit_message)
 
 
 @cli.command()
@@ -148,6 +156,22 @@ def _detect_time_modifier(text: str) -> Tuple[str, str]:
         return "since", " ".join(tokens[1:])
     else:
         return "on", text
+
+
+def _commit_journal(journal: Journal, commit_message: str) -> None:
+    if not journal.file_path:
+        return
+    git_repo_dir = journal.file_path.parent
+    try:
+        repo = git.Repo(git_repo_dir, search_parent_directories=True)
+    except git.InvalidGitRepositoryError:
+        print(
+            f"ERROR: {git_repo_dir} is not a git repository. Skipping commit.",
+            file=sys.stderr,
+        )
+        return
+    repo.index.add(str(journal.file_path))
+    repo.index.commit(commit_message)
 
 
 if __name__ == "__main__":
