@@ -40,8 +40,14 @@ def cli(ctx: click.Context, journal: Path):
     "--commit-message",
     help="If set, the journal will be committed with this message.",
 )
+@click.option(
+    "--git-remote",
+    help=(
+        "If set, the journal will be pushed to the remote repository after the commit."
+    ),
+)
 @click.pass_context
-def add(ctx: click.Context, text: str, commit_message: str) -> None:
+def add(ctx: click.Context, text: str, commit_message: str, git_remote: str) -> None:
     """Add one or multiple entries to the journal.
 
     \b
@@ -57,7 +63,9 @@ def add(ctx: click.Context, text: str, commit_message: str) -> None:
     print_with_external(journal.on(entry.date).about(entry.topic).to_md())
     if commit_message:
         vc = JournalGitVersionControl(journal.file_path)
-        vc.commit(commit_message)
+        commit_status = vc.commit(commit_message)
+        if git_remote and commit_status is True:
+            vc.push(git_remote)
 
 
 @cli.command()

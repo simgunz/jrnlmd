@@ -1,3 +1,5 @@
+from unittest import mock
+
 import git
 
 from jrnlmd.version_control import JournalGitVersionControl
@@ -24,3 +26,14 @@ def test_git_commit(journal_multidate, capsys):
     result = vc.commit("test commit")
 
     assert result is True
+
+
+@mock.patch("jrnlmd.version_control.git.Repo.remote")
+def test_git_push(mock_remote, journal_multidate):
+    git.Repo.init(str(journal_multidate.file_path.parent))
+    vc = JournalGitVersionControl(journal_multidate.file_path)
+
+    result = vc.push("origin")
+
+    assert result is True
+    mock_remote.return_value.push.assert_called_once()

@@ -25,3 +25,15 @@ class JournalGitVersionControl:
         self._repo.index.add(self._journal_path)
         self._repo.index.commit(message)
         return True
+
+    def push(self, remote_name: str) -> bool:
+        push_status = False
+        try:
+            if self._repo is not None:
+                self._repo.remote(name=remote_name).push()
+                push_status = True
+        except ValueError:
+            pass
+        if push_status is False:
+            print("ERROR: remote repository not found. Skipping push.", file=sys.stderr)
+        return push_status
