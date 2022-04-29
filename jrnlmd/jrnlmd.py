@@ -26,7 +26,7 @@ def cli(ctx: click.Context, journal: Path):
     ctx.ensure_object(dict)
     ctx.obj["JOURNAL"] = Journal(journal)
     if ctx.invoked_subcommand is None:
-        ctx.invoke(cat, filter_="")
+        ctx.invoke(cat, filter_=None)
 
 
 @cli.command()
@@ -91,7 +91,7 @@ def add(ctx: click.Context, text: str, commit_message: str, git_remote: str) -> 
 @click.pass_context
 def cat(
     ctx: click.Context,
-    filter_: str = "",
+    filter_: str,
     simplified: bool = False,
     compact: bool = False,
     default_filter: str = "",
@@ -103,9 +103,12 @@ def cat(
     \b
     Config file:
       default-filter        The default filter to use if no filter is specified."""
-    filter_text = filter_
-    if not filter_text:
+    if filter_ is None:
+        filter_text = ""
+    elif filter_ == "":
         filter_text = default_filter
+    else:
+        filter_text = filter_
     filter_time_modifier, filter_text_no_modifiers = _detect_time_modifier(filter_text)
     entry_filter = JournalEntryFilter.from_string(filter_text_no_modifiers)
     simplify = False

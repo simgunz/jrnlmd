@@ -10,7 +10,7 @@ def test_nocommand_and_no_arguments_invoke_cat(mocker, journal_multidate_file):
 
     runner.invoke(jrnlmd.cli, ["-j", str(journal_multidate_file)])
 
-    mock_cat.assert_called_with(filter_="")
+    mock_cat.assert_called_with(filter_=None)
 
 
 def test_nocommand_and_arguments_invoke_add(today, new_journal_file):
