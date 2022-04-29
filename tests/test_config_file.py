@@ -92,7 +92,7 @@ def test_cat_filter_read_from_config_file(config_file, journal_multidate_file):
         f"""
 journal = "{str(journal_multidate_file)}"
 [ cat ]
-default_filter = "2021-11-10:"
+no_command_filter = "2021-11-10:"
 """
     )
     runner = CliRunner()
@@ -123,7 +123,7 @@ def test_cat_filter_read_from_config_file_2(config_file, journal_multidate_file)
         f"""
 journal = "{str(journal_multidate_file)}"
 [ cat ]
-default_filter = "2021-11-10:"
+no_command_filter = "2021-11-10:"
 """
     )
     runner = CliRunner()

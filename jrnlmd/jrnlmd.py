@@ -71,7 +71,7 @@ def add(ctx: click.Context, text: str, commit_message: str, git_remote: str) -> 
 
 
 @cli.command()
-@click.option("--default-filter", default="", hidden=True)
+@click.option("--no-command-filter", default="", hidden=True)
 @click.option(
     "--compact/--no-compact",
     default=False,
@@ -94,7 +94,7 @@ def cat(
     filter_: str,
     simplified: bool = False,
     compact: bool = False,
-    default_filter: str = "",
+    no_command_filter: str = "",
 ) -> None:
     """Print the journal to standard output.
 
@@ -106,7 +106,7 @@ def cat(
     if filter_ is None:
         filter_text = ""
     elif filter_ == "":
-        filter_text = default_filter
+        filter_text = no_command_filter
     else:
         filter_text = filter_
     filter_time_modifier, filter_text_no_modifiers = _detect_time_modifier(filter_text)
