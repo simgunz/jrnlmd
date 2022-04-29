@@ -104,9 +104,9 @@ def cat(
     Config file:
       default-filter        The default filter to use if no filter is specified."""
     if filter_ is None:
-        filter_text = ""
-    elif filter_ == "":
         filter_text = no_command_filter
+    elif filter_ == "":
+        filter_text = ""
     else:
         filter_text = filter_
     filter_time_modifier, filter_text_no_modifiers = _detect_time_modifier(filter_text)

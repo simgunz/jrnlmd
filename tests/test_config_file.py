@@ -87,12 +87,14 @@ simplified = True
     )
 
 
-def test_cat_filter_read_from_config_file(config_file, journal_multidate_file):
+def test_nocommand_cat_filter_read_from_config_file(
+    config_file, journal_multidate_file
+):
     config_file.write_text(
         f"""
 journal = "{str(journal_multidate_file)}"
 [ cat ]
-no_command_filter = "2021-11-10:"
+no_command_filter = "since 2021-11-10:"
 """
     )
     runner = CliRunner()
@@ -102,7 +104,6 @@ no_command_filter = "2021-11-10:"
         [
             "--config",
             str(config_file),
-            "cat",
         ],
     )
 
@@ -118,22 +119,19 @@ no_command_filter = "2021-11-10:"
     )
 
 
-def test_cat_filter_read_from_config_file_2(config_file, journal_multidate_file):
+def test_cat_filter_read_from_config_file(config_file, journal_multidate_file):
     config_file.write_text(
         f"""
 journal = "{str(journal_multidate_file)}"
 [ cat ]
-no_command_filter = "2021-11-10:"
+no_command_filter = "since 2021-11-10:"
 """
     )
     runner = CliRunner()
 
     result = runner.invoke(
         jrnlmd.cli,
-        [
-            "--config",
-            str(config_file),
-        ],
+        ["--config", str(config_file), "cat"],
     )
 
     assert (
