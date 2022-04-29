@@ -160,3 +160,34 @@ no_command_filter = "since 2021-11-10:"
 
 """
     )
+
+
+def test_nocommand_cat_reads_all_options_from_config_file(
+    config_file, journal_multidate_file
+):
+    config_file.write_text(
+        f"""
+journal = "{str(journal_multidate_file)}"
+[ cat ]
+no_command_filter = "since 2021-11-10:"
+compact = True
+"""
+    )
+    runner = CliRunner()
+
+    result = runner.invoke(
+        jrnlmd.cli,
+        [
+            "--config",
+            str(config_file),
+        ],
+    )
+
+    assert (
+        result.output
+        == """# 2021-11-10
+## topic1
+- third date note
+
+"""
+    )
