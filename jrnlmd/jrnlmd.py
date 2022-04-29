@@ -4,7 +4,7 @@ from typing import Tuple
 import click
 import click_config_file
 
-from . import config
+from . import clickutils, config
 from .ioutils import print_with_external
 from .journal import Journal
 from .journal_entry import JournalEntry
@@ -12,7 +12,7 @@ from .journal_entry_filter import JournalEntryFilter
 from .version_control import JournalGitVersionControl
 
 
-@click.group(name="jrnlmd", invoke_without_command=True)
+@click.group(name="jrnlmd", cls=clickutils.AliasedGroup, invoke_without_command=True)
 @click.option(
     "-j",
     "--journal",
@@ -54,6 +54,8 @@ def add(ctx: click.Context, text: str, commit_message: str, git_remote: str) -> 
     - If DATE is not specified, the current date is used.
     - If TOPIC is not specified, the topic is set to "ungrouped".
     - If a NOTE is not specified, the EDITOR is opened to allow writing the entries."""
+    if "PRE-TEXT" in ctx.obj:
+        text = f"{ctx.obj['PRE-TEXT']} {text}"
     entry = JournalEntry.from_string(text, prompt_for_input=True)
     if not entry.is_valid():
         return
